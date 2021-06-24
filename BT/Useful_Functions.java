@@ -74,11 +74,12 @@ public class Useful_Functions {
     }
 
     private static void kLevelDown(Node node, Node block, int k) {
-        if (node == null || node == block || k < 0)
+        if (node == null || node == block || k < 0) // user may self negative k
             return;
 
         if (k == 0) {
             System.out.println(node.data);
+            // proactively stopping unnecessary calls(k<0)
             return;
         }
 
@@ -90,7 +91,7 @@ public class Useful_Functions {
     // K nodes away
 
     /* Method 1 => Time : O(n) Space: O(n) */
-    // here in node2root we return arrlist of nodes
+    // here in node2root we return boolean reflecting arrlist of nodes
     private static boolean node2root(Node node, int data, ArrayList<Node> path) {
         if (node == null)
             return false;
@@ -112,7 +113,9 @@ public class Useful_Functions {
     public static void printKNodesFar(Node node, int data, int k) {
         ArrayList<Node> path = new ArrayList<>(); // O(n) space
         node2root(node, data, path);
-
+        // if path is empty => the given node doesn't exits here we are printing nothin:
+        // no op in problem it may be mentioned to print -1
+        // if(path.length==0) syso(-1); return;
         Node block = null;
 
         for (int i = 0; i < path.size(); i++) {
