@@ -144,7 +144,21 @@ public class BinaryTree {
         return left + right + status;
     }
 
-    // TODO: Remove Leaves
+    // Remove Leaves : faith left,right subtree will removeleaves from them
+    // I will attach them as left and right subtree
+
+    public static Node removeLeaves(Node node) {
+        // in case of leaves we should return null else return head;
+        if (node == null || (node.left == null && node.right == null))
+            return null;
+
+        Node left = removeLeaves(node.left);
+        Node right = removeLeaves(node.right);
+        node.left = left;
+        node.right = right;
+
+        return node;
+    }
 
     public static void main(String[] args) {
         // Node root = new Node(7);

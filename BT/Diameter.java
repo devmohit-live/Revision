@@ -1,5 +1,5 @@
 public class Diameter {
-
+    // Leetcode 543
     /* Method 1: O(n*n) => calling height at each stage */
     public int diameter(Node node) {
         if (node == null)
