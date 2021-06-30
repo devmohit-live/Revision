@@ -1,3 +1,5 @@
+package Graph.Tree_LevelOrder;
+
 public class LevelOrderOfBT {
 
     public static void levelOrder(Node node) {
@@ -26,5 +28,34 @@ public class LevelOrderOfBT {
 
         }
 
+    }
+
+
+    //Leetcode: 102
+
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        if (root == null)
+            return res;
+
+        LinkedList<TreeNode> q = new LinkedList<>();
+        q.addLast(root);
+        while (q.size() > 0) {
+            List<Integer> smallAns = new ArrayList<>();
+            int curr = q.size();
+            while (curr-- > 0) {
+                TreeNode rm = q.removeFirst();
+                // syso node.data
+                smallAns.add(rm.val);
+                // /add children
+                if (rm.left != null)
+                    q.addLast(rm.left);
+                if (rm.right != null)
+                    q.addLast(rm.right);
+            }
+            res.add(smallAns);
+
+        }
+        return res;
     }
 }
