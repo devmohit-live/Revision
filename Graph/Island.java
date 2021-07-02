@@ -66,15 +66,16 @@ public class Island {
     }
 
     static void dfs01(int[][] arr, int i, int j, int[][] dir) {
-        if (i < 0 || j < 0 || i >= arr.length || j >= arr[0].length || arr[i][j] != 0)
-            return;
-        else {
-            arr[i][j] = 2; // inplace change acts as visited flag
-        }
+        // if (i < 0 || j < 0 || i >= arr.length || j >= arr[0].length || arr[i][j] !=
+        // 0)
+        // return;
+        arr[i][j] = 2; // inplace change acts as visited flag
         for (int[] d : dir) {
             int r = i + d[0];
             int c = j + d[1];
-            dfs01(arr, r, c, dir);
+
+            if (i >= 0 && j >= 0 && i < arr.length && j < arr[0].length && arr[i][j] == 0) // pro active check
+                dfs01(arr, r, c, dir);
         }
     }
 
