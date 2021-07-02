@@ -33,6 +33,28 @@ public class Path {
         visited[src] = false;
     }
 
+    //If you also want to return the number of path along with printing: 
+    public static int allPaths(ArrayList<Edge>[] graph, int src, int des, boolean visited[], String psf, int wsf) {
+        if (src == des) {
+            System.out.println(psf);
+            return 1; //1 path found
+        }
+
+        int count =0;
+        visited[src] = true;
+
+        for (Edge e : graph[src]) {
+            if (!visited[e.nbr]) {
+                count+=allPaths(graph, e.nbr, des, visited, psf + e.nbr, wsf + e.wt);
+            }
+        }
+
+        visited[src] = false;
+        return count;
+    }
+
+    // System.out.println("No of paths: "+ allPath(graph,src,des,visited,""+src,0));
+
     // int vtces=7;
     // boolean[] visited=new boolean[vtces];
 

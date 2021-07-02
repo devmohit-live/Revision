@@ -14,7 +14,7 @@ public class Island {
             }
         }
 
-        // no of island
+        // no of island Leetcode 200
         noIsland(arr, m, n);
 
         maxArear(arr, m, n);
@@ -36,6 +36,7 @@ public class Island {
         System.out.println(count);
        }
 
+    // leetcode 695
     public static maxArea(int[][]arr,int m,int n){
             boolean[][] visited = new boolean[m][n];
              int area = Integer.MIN_VALUE;

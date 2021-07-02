@@ -30,32 +30,33 @@ public class Graph {
     }
 
     // : TODO:
+    public static int findEdge(ArrayList<Edge>[] graph, int u, int v) {
+        ArrayList<Edge> list = graph[u];
+        for (int i = 0; i < list.size(); i++) {
+            Edge e = list.get(i);
+            if (e.nbr == v)
+                return i;
+        }
+
+        return -1;
+    }
+
     public static void removeEdge(ArrayList<Edge>[] graph, int u, int v) {
-        ArrayList<Edge> tmp = new ArrayList<>();
-        for (Edge e : graph[u]) {
-            if (e.nbr != v)
-                tmp.add(e);
-        }
-        ArrayList<Edge> tmp2 = new ArrayList<>();
-        graph[u] = tmp;
-        for (Edge e : graph[v]) {
-            if (e.nbr != u)
-                tmp2.add(e);
-        }
-        graph[v] = tmp2;
+        int i1 = findEdge(graph, u, v);
+        int i2 = findEdge(graph, v, u);
+
+        graph[u].remove(i1);
+        graph[v].remove(i2);
     }
 
+    public static void removeVtx(ArrayList<Edge>[] graph, int u) {
+        ArrayList<Edge> list = graph[u];
+        for (int i = list.size() - 1; i >= 0; i--) {
+            Edge e = list.get(i);
+            removeEdge(graph, e.src, e.nbr);
+        }
+    }
     // : TODO:
-    private static void remove(ArrayList<Edge> arr, ArrayList<Edge> graph[], int src, int des) {
-        ArrayList<Edge> tmp = new ArrayList<>();
-        for (Edge e : arr) {
-            if (e.nbr != des)
-                tmp.add(e);
-        }
-
-        graph[src] = tmp;
-        arr = null;
-    }
 
     public static ArrayList<Edge>[] construction() {
         int N = 7;
