@@ -88,6 +88,8 @@ public class Graph {
 
     // is connected
 
+    // if connnected => kisi bhi ek point se dfs/traverse pe wo saare vtces visit
+    // krlega
     public static boolean isConnected(ArrayList<Edge>[] graph) {
         boolean[] visited = new boolean[graph.length];
         int count = dfs(graph, 0, visited);
@@ -95,6 +97,7 @@ public class Graph {
     }
 
     public static int dfs(ArrayList<Edge>[] graph, int src, boolean visited[]) {
+        // src counts to a single vtces
         int count = 1;
         visited[src] = true;
         for (Edge e : graph[src]) {
