@@ -33,19 +33,19 @@ public class Path {
         visited[src] = false;
     }
 
-    //If you also want to return the number of path along with printing: 
+    // If you also want to return the number of path along with printing:
     public static int allPaths(ArrayList<Edge>[] graph, int src, int des, boolean visited[], String psf, int wsf) {
         if (src == des) {
             System.out.println(psf);
-            return 1; //1 path found
+            return 1; // 1 path found
         }
 
-        int count =0;
+        int count = 0;
         visited[src] = true;
 
         for (Edge e : graph[src]) {
             if (!visited[e.nbr]) {
-                count+=allPaths(graph, e.nbr, des, visited, psf + e.nbr, wsf + e.wt);
+                count += allPaths(graph, e.nbr, des, visited, psf + e.nbr, wsf + e.wt);
             }
         }
 
@@ -63,12 +63,8 @@ public class Path {
 
     static class pathPair2 {
         String psf = "";
-        int wsf = Integer.MAX_VALUE;
-    }
-
-    static class pathPair {
-        String psf = "";
-        int wsf = -1;
+        int wsf = Integer.MAX_VALUE; // -1 would work for path checking but on comparsion rec.wsf+e.wt< ans.wsf(-1)
+                                     // would cause problem (ans would never be update)
     }
 
     public static pathPair2 lightest(ArrayList<Edge>[] graph, int src, int dest, boolean[] vis) {
@@ -99,6 +95,11 @@ public class Path {
         pathPair2 ans = lightest(graph, src, dest, visited);
 
         System.out.println("Lightest Path: " + ans.psf + " of weight: " + ans.wsf);
+    }
+
+    static class pathPair {
+        String psf = "";
+        int wsf = -1;
     }
 
     public static pathPair heaviestPath(ArrayList<Edge>[] graph, int src, int dest, boolean[] vis) {

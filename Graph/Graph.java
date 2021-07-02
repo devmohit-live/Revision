@@ -86,7 +86,6 @@ public class Graph {
         // lightestPath(graph, src, dest);
     }
 
-    // ceil and florr: TODO:
     // is connected
 
     public static boolean isConnected(ArrayList<Edge>[] graph) {
