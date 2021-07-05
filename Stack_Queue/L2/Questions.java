@@ -20,6 +20,28 @@ public class Questions {
         return ans;
     }
 
+    // Leetcode 739 : Daily Temperature
+
+    public int[] dailyTemperatures(int[] arr) {
+        // ngor
+        int n = arr.length;
+        int[] ans = new int[n];
+        Stack<Integer> st = new Stack<>();
+        st.push(-1); // represents no element is there
+
+        for (int i = 0; i < n; i++) {
+            while (st.peek() != -1 && arr[st.peek()] < arr[i]) {
+                // ..only this line is modified
+                int idx = st.pop();
+                ans[idx] = i - idx;
+            }
+
+            st.push(i);
+        }
+
+        return ans;
+    }
+
     // Leetcode : 901
     class StockSpanner {
         private Stack<int[]> st;
