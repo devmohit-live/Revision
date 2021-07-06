@@ -88,7 +88,7 @@ public class Island {
             for (int j = 0; j < n; j++) {
                 if (!visited[i][j] && arr[i][j] == 0) {
                     int curr = dfs2(arr, i, j, visited, m, n);
-                    area = Math.max(area, curr);
+                    area = Math.max(area, curr); // get max area of islands
                 }
             }
         }
@@ -111,9 +111,12 @@ public class Island {
     public static int dfs2(int[][] graph, int i, int j, boolean visited[][], int m, int n) {
         if (i < 0 || i >= m || j >= n || j < 0 || visited[i][j] || graph[i][j] == 1)
             return Integer.MIN_VALUE;
-        int area = 1;
-        visited[i][j] = true;
 
+        int area = 1;
+        // add 1(size of self to the actual size)
+
+        visited[i][j] = true;
+        // faith : get size of all your childrens/neighbours
         area += dfs2(graph, i + 1, j, visited, m, n);
         area += dfs2(graph, i - 1, j, visited, m, n);
         area += dfs2(graph, i, j - 1, visited, m, n);
