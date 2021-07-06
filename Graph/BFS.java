@@ -4,6 +4,7 @@ import Graph.Edge;
 
 import java.nio.IntBuffer;
 import java.util.*;
+
 public class BFS {
 
     public static void bfs(ArrayList<Edge>[] graph, int src, int des) {
@@ -108,5 +109,47 @@ public class BFS {
         }
 
     }
-    
+
+    // spread of infection:
+    public static int bfs(ArrayList<Edge>[] graph, int src, int t) {
+        boolean visited[] = new boolean[graph.length];
+        int lv = 1;
+
+        int count = 0;
+        LinkedList<Integer> q = new LinkedList<>();
+        q.addLast(src);
+
+        while (!q.isEmpty()) {
+
+            int curr = q.size();
+
+            while (curr-- > 0) {
+
+                int rm = q.removeFirst();
+                if (visited[rm])
+                    continue;
+
+                visited[rm] = true;
+                count++;
+
+                for (Edge e : graph[rm]) {
+                    if (!visited[e.nbr]) {
+                        q.addLast(e.nbr);
+
+                    }
+                }
+
+            }
+
+            if (lv == t) {
+                return count;
+            }
+
+            lv++;
+        }
+
+        return -1;
+    }
+
+
 }
