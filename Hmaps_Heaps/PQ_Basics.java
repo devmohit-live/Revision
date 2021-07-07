@@ -6,6 +6,9 @@ public class PQ_Basics {
         printArray();
     }
 
+    // this - other, default behaviour.
+    // other - this, reverse of default behaviour.
+
     // sort on bases of second column data
 
     static void printArray() {
@@ -47,8 +50,8 @@ public class PQ_Basics {
             sb.append("Comapy: " + this.comp + "\n");
             sb.append("Modal : " + this.modal + "\n");
             sb.append("Ram: " + this.ram + "GB\n");
-            sb.append("Battery : " + this.comp + "Mah\n");
-            sb.append("Storage : " + this.comp + "GB\n");
+            sb.append("Battery : " + this.battery + "Mah\n");
+            sb.append("Storage : " + this.storage + "GB\n");
             return sb.toString();
         }
     }
