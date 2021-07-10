@@ -1,5 +1,5 @@
 public class LongestSubstringWORC {
-    // Leetcode 3:
+    // Leetcode 3: Longest Substring Without Repeating Characters
 
     // O(2n) => visiting each char twice in worst case (each time doing l++) for
     // already existing char in set
