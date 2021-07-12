@@ -123,7 +123,7 @@ public class Bipartite {
     // 2).
     // colors are marked on the basis of levels => even leve =>0, odd level =1
 
-    // It is recommended to return at least if possible in mid way use break
+    // It is recommended to return at last if possible in mid way use break
     // statements
     public boolean isBipartite(int[][] graph) {
         boolean res = true;
