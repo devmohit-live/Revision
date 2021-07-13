@@ -1,6 +1,8 @@
 import java.util.*;
 
 public class PQ_Basics {
+    static final Scanner sc = new Scanner(System.in);
+
     public static void main(String[] args) {
         classSort();
         printArray();
@@ -75,14 +77,13 @@ public class PQ_Basics {
         mobile u = new mobile("G", "G", 8, 512, 5500);
         mobile v = new mobile("H", "H", 8, 512, 5500);
         mobile w = new mobile("I", "I", 8, 512, 5500);
-        pq.add(p);
-        pq.add(q);
-        pq.add(r);
-        pq.add(s);
-        pq.add(t);
-        pq.add(u);
-        pq.add(v);
-        pq.add(w);
+
+        // for (int i = 0; i < 10; i++) {
+        // mobile mb = new mobile(sc.next(), sc.next(), sc.nextInt(), sc.nextInt(),
+        // sc.nextInt());
+        // sc.nextLine();
+        // }
+
         System.out.println();
 
         while (pq.size() > 0) {

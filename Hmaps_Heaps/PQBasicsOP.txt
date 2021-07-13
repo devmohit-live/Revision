@@ -1,0 +1,53 @@
+
+Comapy: C
+Modal : C
+Ram: 32GB
+Battery : 5000Mah
+Storage : 256GB
+
+Comapy: A
+Modal : A
+Ram: 32GB
+Battery : 5000Mah
+Storage : 128GB
+
+Comapy: B
+Modal : B
+Ram: 32GB
+Battery : 4500Mah
+Storage : 128GB
+
+Comapy: F
+Modal : F
+Ram: 16GB
+Battery : 5000Mah
+Storage : 512GB
+
+Comapy: E
+Modal : E
+Ram: 16GB
+Battery : 5500Mah
+Storage : 128GB
+
+Comapy: G
+Modal : G
+Ram: 8GB
+Battery : 5500Mah
+Storage : 512GB
+
+Comapy: I
+Modal : I
+Ram: 8GB
+Battery : 5500Mah
+Storage : 512GB
+
+Comapy: H
+Modal : H
+Ram: 8GB
+Battery : 5500Mah
+Storage : 512GB
+
+[8, 3, 12, 11]
+[8, 5, 16, 4]
+[2, 6, 11, 13]
+[9, 7, 11, 13]

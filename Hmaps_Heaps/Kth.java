@@ -1,12 +1,15 @@
 import java.util.*;
 
 public class Kth {
+
     // In kth largest or smallest we just have to make a PQ of reverse nature
 
     // kth largest -> min PQ(default)
     // kth smallest -> max PQ(revrese) return b-a;
 
     // ALog: add elent to pq if pq.size at any moment > k remove element from pq
+
+    // Time : N log(k)
 
     public static int kthLargest(int[] arr, int k) {
         PriorityQueue<Integer> pq = new PriorityQueue<>();
