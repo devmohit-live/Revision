@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.*;
 
+// Same approach is used in merger K sorted LinkedList Using PQ => Leetcode 23
 public class Merge_K_Sorted_LIsts {
 
     static class Pair {
