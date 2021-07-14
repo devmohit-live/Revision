@@ -1,5 +1,8 @@
- public class Sort_K_Sorted {
-
+public class Sort_K_Sorted_Array {
+    /*
+     * Works only in case pf arrays of m*n , not on list as in lists each row is of
+     * different size, for that use Merge K SOrted Lists
+     */
     // 2d array to 1d mapping -> (n*m)
     // Encode to a single idx for 1 d : (i,j) -> i*m + j
     // Decode into i,j of 2d array x -> i = x/m, j=x%m
