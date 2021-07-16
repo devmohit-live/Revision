@@ -1,5 +1,3 @@
-package HeapConstruction;
-
 import java.util.*;
 
 public class Heap {
