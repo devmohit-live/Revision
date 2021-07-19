@@ -69,9 +69,9 @@ public class FirstAndLastIndex {
                 // equal
 
                 // more elements are present to right
-                if (mid   +   1 < arr.length && arr [ mi d+ 1]==d
+                if (mid + 1 < arr.length && arr[mid + 1] == data)
+                    si = mid + 1;
 
-                    
                 else
                     return mid;
             }
