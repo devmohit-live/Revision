@@ -98,11 +98,6 @@ public class PQ {
         this.arr.set(j, a);
     }
 
-    // one liner swap => using memory stack and left to right evaluation concept
-    private void swap2(int i, int j) {
-
-    }
-
     private int compareTo(int t, int o) {
         // compare on basis of type of PQ
         // normally -> min PQ
