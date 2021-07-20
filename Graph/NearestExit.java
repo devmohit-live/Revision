@@ -20,7 +20,7 @@ public class NearestExit {
 
             while (curr-- > 0) {
                 int[] rm = q.removeFirst();
-                System.out.println(Arrays.toString(rm));
+                // System.out.println(Arrays.toString(rm));
                 int i = rm[0];
                 int j = rm[1];
                 boolean edges = (i == 0 || j == 0 || i == maze.length - 1 || j == maze[i].length - 1);
@@ -49,7 +49,7 @@ public class NearestExit {
                 }
 
             }
-            System.out.println(level);
+            // System.out.println(level);
             level++;
         }
 
