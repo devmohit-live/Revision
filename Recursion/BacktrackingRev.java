@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class BacktracingRev {
+public class BacktrackingRev {
 
     static int[][] dir2 = { { 1, 0 }, { 0, 1 } };
     static String dirs2 = "dr";
@@ -13,10 +13,9 @@ public class BacktracingRev {
 
     static int[][] dir8 = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 }, { -1, 1 }, { 1, 1 }, { 1, -1 }, { -1, -1 } };
     static String[] dirs8 = { "north", "south", "west", "east", "nort-east", "soth-east", "south-west", "north-west" };
-
-    public static void main(String[] args) {
-
-    }
+    // knight direction
+    static int dirX[] = { 2, 1, -1, -2, -2, -1, 1, 2 };
+    static int dirY[] = { 1, 2, 2, 1, -1, -2, -2, -1 };
 
     // complete floodfill just return on finding the first path
     public static boolean pathExists(int sr, int sc, int[][] board, String ans, int[][] dir, String[] dirS) {
@@ -169,5 +168,55 @@ public class BacktracingRev {
         // unmark
         board[sr][sc] = 0;
         return shortestLen;
+    }
+
+    // Knight tour board path
+    static boolean knigtTour(int[][] maze, int sr, int sc, int move) {
+        // as we have to do this for base case to so mark staement is putted at 1st line
+        maze[sr][sc] = move; // mark
+
+        if (move == 63) {
+            return true;
+            // all moves done
+        }
+        int n = maze.length, m = maze[0].length;
+
+        boolean res = false;
+
+        // maze[i][j]==-1 means not visited
+        for (int i = 0; i < dirX.length; i++) {
+            int r = sr + dirX[i];
+            int c = sc + dirY[i];
+            if (r >= 0 && c >= 0 && r < n && c < m && maze[r][c] == -1) {
+                res = res || knigtTour(maze, r, c, move + 1);
+                if (res)
+                    return res;
+                // return on the spot to avoid bactracking to remove changes into maze matrix
+            }
+        }
+
+        maze[sr][sc] = -1; // unmark
+        return res;
+    }
+
+    public static void main(String[] args) {
+        // int[][] dir4 = { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } };
+        // String[] dir4S = { "t", "r", "d", "l" };
+
+        // int[][] board = { { 0, 0, 0 }, { 0, 0, 1 }, { 0, 0, 0 } };
+
+        // int[][] dir8 = { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, -1 }, { 1,
+        // -1 }, { 1, 1 }, { -1, 1 } };
+        // String[] dir8S = { "u", "r", "d", "l", "n", "w", "s", "e" };
+
+        // int n = 3, m = 3;
+        // System.out.println(floodFill_2(0, 0, board, "", dir4, dir4S));
+        // System.out.println(floodFill_longestLen(0, 0, board, dir4));
+        int n = 8;
+        int[][] board = new int[n][n];
+        Arrays.stream(board).forEach(ar -> Arrays.fill(ar, -1));
+        knigtTour(board, 0, 0, 0);
+        System.out.println("Board after Knight visits: ");
+        Arrays.stream(board).forEach(arr -> System.out.println(Arrays.toString(arr)));
     }
 }
