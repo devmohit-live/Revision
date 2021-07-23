@@ -3,13 +3,13 @@ import java.util.*;
 public class BacktrackingRev {
 
     static int[][] dir2 = { { 1, 0 }, { 0, 1 } };
-    static String dirs2 = "dr";
+    static String[] dirs2 = { "d", "r" };
 
     static int[][] dir3 = { { 0, 1 }, { 1, 0 }, { 1, 1 } };
-    static String dirs3 = "HVD";
+    static String[] dirs3 = { "H", "V", "D" };
 
     static int[][] dir4 = { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 } };
-    static String dirs4 = "ldrt";
+    static String[] dirs4 = { "L", "D", "R", "T" };
 
     static int[][] dir8 = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 }, { -1, 1 }, { 1, 1 }, { 1, -1 }, { -1, -1 } };
     static String[] dirs8 = { "north", "south", "west", "east", "nort-east", "soth-east", "south-west", "north-west" };
@@ -200,20 +200,23 @@ public class BacktrackingRev {
     }
 
     public static void main(String[] args) {
-        // int[][] dir4 = { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } };
-        // String[] dir4S = { "t", "r", "d", "l" };
+        int[][] maze = { { 0, 0, 0 }, { 0, 0, 1 }, { 0, 0, 0 } };
+        int n = 3, m = 3;
+        System.out.println("FloodFill on 2 dir " + floodFill(0, 0, maze, "", dir2, dirs2) + "\n");
+        System.out.println("FloodFill on 3 dir " + floodFill(0, 0, maze, "", dir3, dirs3) + "\n");
+        System.out.println("FloodFill on 4 dir " + floodFill(0, 0, maze, "", dir4, dirs4) + "\n");
 
-        // int[][] board = { { 0, 0, 0 }, { 0, 0, 1 }, { 0, 0, 0 } };
+        System.out.println("Longest path in 4 dirs " + floodFill_longestLen(0, 0, maze, dir4));
 
-        // int[][] dir8 = { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, -1 }, { 1,
-        // -1 }, { 1, 1 }, { -1, 1 } };
-        // String[] dir8S = { "u", "r", "d", "l", "n", "w", "s", "e" };
+        System.out.println(
+                "FloodFill with jumps in 3 dir " + floodFill_Jump(0, 0, maze, "", dir3, dirs3, Math.max(n, m)) + "\n");
+        System.out.println(
+                "FloodFill with jumps in 4 dir " + floodFill_Jump(0, 0, maze, "", dir4, dirs4, Math.max(n, m)) + "\n");
+        System.out.println(
+                "FloodFill with jumps in 8 dir " + floodFill_Jump(0, 0, maze, "", dir8, dirs8, Math.max(n, m)) + "\n");
 
-        // int n = 3, m = 3;
-        // System.out.println(floodFill_2(0, 0, board, "", dir4, dir4S));
-        // System.out.println(floodFill_longestLen(0, 0, board, dir4));
-        int n = 8;
-        int[][] board = new int[n][n];
+        int N = 8;
+        int[][] board = new int[N][N];
         Arrays.stream(board).forEach(ar -> Arrays.fill(ar, -1));
         knigtTour(board, 0, 0, 0);
         System.out.println("Board after Knight visits: ");
