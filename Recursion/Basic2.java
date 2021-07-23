@@ -227,4 +227,38 @@ public class Basic2 {
 
     }
 
+    // print Emcodings
+    public static int printEncodings(String str, String ans) {
+        if (str.length() == 0) {
+            System.out.println(ans);
+            return 1;
+        }
+
+        char ch = str.charAt(0);
+        if (ch == '0')
+            return 0;
+
+        int count = 0;
+        // taking 1 number at a time
+
+        // -'1' bcz staring point is not 0 here its 1
+        // '2'-'1'=> 1(int) +'a' => ascii code of b
+        char charToadd = (char) (ch - '1' + 'a');
+
+        count += printEncodings(str.substring(1), ans + charToadd);
+        // taking 2 numer at a time -> already checked for first char =0
+        if (str.length() > 1) {
+            char ch2 = str.charAt(1);
+
+            int num = (int) ((ch - '0') * 10 + ch2 - '0');
+            // here we already have a num(starting from 1), so num -1 => 0 +'a' =>a
+            char charToadd2 = (char) (num - 1 + 'a');
+
+            if (num <= 26)
+                count += printEncodings(str.substring(2), ans + charToadd2);
+        }
+
+        return count;
+    }
+
 }
