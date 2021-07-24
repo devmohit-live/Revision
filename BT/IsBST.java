@@ -43,8 +43,11 @@ class IsBST {
             mypair.bstH = Math.max(left.ht, right.ht) + 1;
             mypair.node = node;
             mypair.bstSize = left.bstSize + right.bstSize + 1;
-            mypair.min = Math.min(left.min, Math.min(right.min, node.data));
-            mypair.max = Math.max(left.max, Math.max(right.max, node.data));
+            mypair.bstH = Math.max(left.ht, right.ht) + 1;
+            mypair.node = node;
+            mypair.bstSize = left.bstSize + right.bstSize + 1;
+            mypair.min = Math.min(left.min, node.data);
+            mypair.max = Math.max(right.max, node.data);
             return mypair;
         }
         if (left.bstH > right.bstH)
