@@ -2,6 +2,7 @@ class IsBST {
     // Method 1 : USing inorder property of BST => inorder is sorted (Using static
     // variable ) , Time: O(n)
     static Node prev = null;
+    
 
     public static boolean isBST(Node node) {
 
@@ -28,7 +29,6 @@ class IsBST {
         return true;
     }
 
-    // TODO: Largest BST Subtreee
     public static BSTPair largestBst(Node node) {
         if (node == null)
             return new BSTPair();

@@ -15,5 +15,14 @@ public class Swap {
         int i = 3, j = 5;
         arr[j] = swap(arr[i], arr[i] = arr[j]);
         display(arr);
+        test();
+    }
+
+    public static void test() {
+        int a = 10, b = 20;
+        System.out.println("before Swapping " + a + " " + b);
+        b = swap(a, a = b);
+        System.out.println("after Swapping " + a + " " + b);
+
     }
 }

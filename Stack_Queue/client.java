@@ -1,3 +1,5 @@
+package Stack_Queue;
+
 public class client {
     public static void main(String[] args) throws Exception {
         stack s1 = new stack();

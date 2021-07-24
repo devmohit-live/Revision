@@ -1,9 +1,12 @@
-public class dynamicStack extends stack{
-    public dynamicStack(){
+package Stack_Queue;
+
+public class dynamicStack extends stack {
+    public dynamicStack() {
         super();
     }
-    public dynamicStack(int limit){
+
+    public dynamicStack(int limit) {
         super(limit);
     }
-    
+
 }

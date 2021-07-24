@@ -1,3 +1,5 @@
+package Stack_Queue;
+
 public class stack {
     private int top;
     private int size;
@@ -30,15 +32,14 @@ public class stack {
     }
 
     public boolean isEmpty() {
-        if (this.size == 0)
-            return true;
-        return false;
+       return (this.size==0);
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         int ctop = this.top;
+        sb.append('[');
         if (isEmpty()) {
             return "Stack is Empty";
         }
@@ -46,13 +47,15 @@ public class stack {
         while (ctop > -1) {
             sb.append(arr[ctop--] + " ");
         }
+        sb.append(']');
         return sb.toString();
     }
 
     public int size() {
         return this.size;
     }
-    public int getMaxsize(){
+
+    public int getMaxsize() {
         return this.maxsize;
     }
 
