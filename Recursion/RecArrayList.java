@@ -156,4 +156,44 @@ public class RecArrayList {
         return count;
     }
 
+    // subsequnce -> return type
+    public static ArrayList<String> gss(String str) {
+        if (str.length() == 0) {
+            ArrayList<String> base = new ArrayList<>();
+            base.add("");
+            return base;
+        }
+
+        char ch = str.charAt(0);
+
+        ArrayList<String> res = new ArrayList<>();
+
+        ArrayList<String> small = gss(str.substring(1));
+        for (String s : small) {
+            res.add(s);
+        }
+        for (String s : small) {
+            res.add(ch + s);
+        }
+
+        return res;
+
+    }
+
+    // void type:
+    public static int gss(String str, int idx, String psf, ArrayList<String> res) {
+        if (str.length() == idx) {
+            res.add(psf);
+            return 1;
+        }
+
+        int count = 0;
+        char ch = str.charAt(idx);
+        count += gss(str, idx + 1, psf, res);
+        count += gss(str, idx + 1, psf + ch, res);
+
+        return count;
+
+    }
+
 }
