@@ -196,6 +196,28 @@ public class nQueenSet {
         return count;
     }
 
+    // RECURSION OPTIMISED
+    static boolean[] rows, cols, diags, antidiags;
+
+    static int nqueenRecOpComb(int n, int m, int floor, int tnq) {
+
+        if (tnq == 0)
+            return 1;
+
+        int count = 0;
+        // floor is fixed
+        for (int room = 0; room < n; room++) {
+            int r = floor, c = room;
+            if (!rows[r] && !cols[c] && !diags[r + c] && !antidiags[r - c + m - 1]) {
+                rows[r] = cols[c] = diags[r + c] = antidiag[r - c + m - 1] = true;
+                count += nqueenRecOpComb(n, m, floor + 1, tnq - 1);
+                rows[r] = cols[c] = diags[r + c] = antidiag[r - c + m - 1] = false;
+            }
+        }
+
+        return count;
+    }
+
     // DRIVERS AND MAIN
     public static void nqueenCombs() {
         int n = 4, tnq = 4;
@@ -222,10 +244,16 @@ public class nQueenSet {
         System.out.println("Is safe optimized N queen First Path " + nQueen_02_firstWay(r, c, 4, "", 0));
     }
 
+    public static void recopti() {
+        System.out.println("Recursion Opti Comb " + nqueenRecOpComb(4, 4, 0, 4));
+
+    }
+
     public static void main(String[] args) {
         // nqueenPerms();
         // nqueenCombs();
-        issafeopt();
+        // issafeopt();
+        recOpti()
     }
 
 }
