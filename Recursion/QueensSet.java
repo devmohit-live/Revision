@@ -75,9 +75,7 @@ public class QueensSet {
         // System.out.println(queenPermutation1D_sub(tnb, 1, tnq, 1, vis, ""));
     }
 
-    // 2QueenSet.=============================================================================
-
-    // Queen_Set.=========================================================================================
+    // 2DQueenSet.=============================================================================
 
     // tnb : total no boxes, bno : box no, tnq : total No queen, qpsf : queen placed
     // so far
@@ -165,4 +163,5 @@ public class QueensSet {
     public static void main(String[] args) {
         System.out.println(queenCombination1D(5, 0, 3, 0, ""));
     }
+
 }

@@ -1,9 +1,11 @@
 import java.util.*;
 
-// NCR solutions
 public class RecursionTree {
-    // INFINTE SUPPLY
+    // ***************** */ NCR solutions
 
+
+    
+    // INFINTE SUPPLY
     static int infinietePermutations(int[] coins, String asf, int tar) {
         if (tar <= 0) {
             System.out.println(asf);
@@ -56,8 +58,6 @@ public class RecursionTree {
         return count;
     }
 
-    // TODO: limited supply permutation
-
     public static int singlePermutation(int[] coins, int tar, boolean[] vis, String asf) {
         if (tar == 0) {
             System.out.println(asf);
@@ -75,10 +75,8 @@ public class RecursionTree {
         return count;
     }
 
-    // SUBSEQUENCE METHOD (EQUIVALENT)
-    // TODO: Dry Run and tree/euler analysis
+    // ************** */ SUBSEQUENCE METHOD (EQUIVALENT)
 
-    
     public static int singleCombination_subseq(int[] coins, int tar, int idx, String asf) {
         if (tar == 0 || idx >= coins.length) {
             if (tar == 0) {
@@ -130,8 +128,25 @@ public class RecursionTree {
         return count;
     }
 
-    public static int singlePermutation_subseq(int[] coins, int tar, boolean[] vis, String asf) {
+    public static int singlePermutation_subseq(int[] coins, int tar, boolean[] vis, int idx, String asf) {
+        if (tar == 0 || idx >= coins.length) {
+            if (tar == 0) {
+                System.out.println(asf);
+                return 1;
+            }
+            return 0;
+        }
 
+        int count = 0;
+        if (tar - coins[idx] >= 0 && !vis[idx]) {
+            vis[idx] = true;
+            count += singlePermutation_subseq(coins, tar - coins[idx], vis, 0, asf + coins[idx] + " ");
+            vis[idx] = false;
+
+        }
+        count += singlePermutation_subseq(coins, tar, vis, idx + 1, asf);
+
+        return count;
     }
 
     public static void main(String[] args) {
@@ -140,7 +155,8 @@ public class RecursionTree {
         // System.out.println(infinieteCombinations(nums, "", 10, 0));
         // System.out.println(limitedCombinations(nums, "", 10, 0));
         boolean[] visited = new boolean[nums.length];
-        System.out.println(limitedPermutations(nums, "", 10, 0));
+        System.out.println("NCR " + singlePermutation(nums, 10, visited, ""));
+        System.out.println("Subseq " + singlePermutation_subseq(nums, 10, visited, 0, ""));
 
     }
 

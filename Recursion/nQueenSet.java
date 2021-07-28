@@ -59,6 +59,30 @@ public class nQueenSet {
         return count;
     }
 
+    public static int nQueen_01Subseq(boolean[][] box, int tnq, String asf, int idx, int m, int n) {
+        if (tnq == 0 || idx == n * m) {
+            if (tnq == 0) {
+                System.out.println(asf);
+                return 1;
+            }
+            return 0;
+        }
+
+        int count = 0;
+
+        int r = idx / m;
+        int c = idx % m;
+
+        if (isSafeToPlaceQueenFullDirection(box, r, c) && !box[r][c]) {
+            box[r][c] = true;
+            count += nQueen_01Subseq(box, tnq - 1, asf + "(" + r + "," + c + ") ", idx + 1, m, n);
+            box[r][c] = false;
+        }
+        count += nQueen_01Subseq(box, tnq, asf, idx + 1, m, n);
+
+        return count;
+    }
+
     public static int nQueenPerm_01(boolean[][] box, int tnq, String asf) {
         if (tnq == 0) {
             System.out.println(asf);
@@ -87,7 +111,8 @@ public class nQueenSet {
     public static void nqueen() {
         int n = 4, tnq = 4;
         boolean[][] box = new boolean[n][n];
-        System.out.println(nQueen_01(box, 0, tnq, ""));
+        System.out.println("NQueen comb ncr " + nQueen_01(box, 0, tnq, ""));
+        System.out.println("NQueen comb Sunseq " + nQueen_01Subseq(box, 4, "", 0, 4, 4));
     }
 
     public static void nqueen2() {
@@ -97,8 +122,8 @@ public class nQueenSet {
     }
 
     public static void main(String[] args) {
-        // nqueen();
-        nqueen2();
+        nqueen();
+        // nqueen2();
     }
 
 }
