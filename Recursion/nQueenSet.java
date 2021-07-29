@@ -199,21 +199,52 @@ public class nQueenSet {
     // RECURSION OPTIMISED
     static boolean[] rows, cols, diags, antidiags;
 
-    static int nqueenRecOpComb(int n, int m, int floor, int tnq) {
+    static int nqueenRecOpComb(int n, int m, int floor, int tnq, String asf) {
 
-        if (tnq == 0)
+        if (tnq == 0) {
+            System.out.println(asf);
             return 1;
+        }
 
         int count = 0;
         // floor is fixed
         for (int room = 0; room < n; room++) {
             int r = floor, c = room;
-            if (!rows[r] && !cols[c] && !diags[r + c] && !antidiags[r - c + m - 1]) {
-                rows[r] = cols[c] = diags[r + c] = antidiag[r - c + m - 1] = true;
-                count += nqueenRecOpComb(n, m, floor + 1, tnq - 1);
-                rows[r] = cols[c] = diags[r + c] = antidiag[r - c + m - 1] = false;
+            if (!cols[c] && !diags[r + c] && !antidiags[r - c + m - 1]) {
+                cols[c] = diags[r + c] = antidiags[r - c + m - 1] = true;
+                count += nqueenRecOpComb(n, m, floor + 1, tnq - 1, asf + "(" + r + "," + c + ") ");
+                cols[c] = diags[r + c] = antidiags[r - c + m - 1] = false;
             }
         }
+
+        return count;
+    }
+
+    static int nqueenRecOpPerm(int n, int m, int floor, int tnq, String asf) {
+
+        if (tnq == 0 || floor == n) {
+            if (tnq == 0) {
+                System.out.println(asf);
+                return 1;
+            }
+            return 0;
+        }
+
+        int count = 0;
+        // floor is not fixed
+        for (int room = 0; room < n; room++) {
+            int r = floor, c = room;
+            // now also check for row/floor as we are coming back again
+            if (!rows[r] && !cols[c] && !diags[r + c] && !antidiags[r - c + m - 1]) {
+                rows[r] = cols[c] = diags[r + c] = antidiags[r - c + m - 1] = true;
+                // send floor = 0 -> go back
+                count += nqueenRecOpPerm(n, m, 0, tnq - 1, asf + "(" + r + "," + c + ") ");
+                rows[r] = cols[c] = diags[r + c] = antidiags[r - c + m - 1] = false;
+            }
+        }
+        // have to seperately made a call when queen doesn't chooses any room in that
+        // floor
+        count += nqueenRecOpPerm(n, m, floor + 1, tnq, asf);
 
         return count;
     }
@@ -244,8 +275,14 @@ public class nQueenSet {
         System.out.println("Is safe optimized N queen First Path " + nQueen_02_firstWay(r, c, 4, "", 0));
     }
 
-    public static void recopti() {
-        System.out.println("Recursion Opti Comb " + nqueenRecOpComb(4, 4, 0, 4));
+    public static void recOpti() {
+        int n = 4, m = 4, tnq = 4;
+        rows = new boolean[n];
+        cols = new boolean[m];
+        diags = new boolean[n + m - 1];
+        antidiags = new boolean[n + m - 1];
+        System.out.println("Recursion Opti Comb " + nqueenRecOpComb(n, m, 0, tnq, ""));
+        System.out.println("Recursion Opti Permu " + nqueenRecOpPerm(n, m, 0, tnq, ""));
 
     }
 
@@ -253,7 +290,7 @@ public class nQueenSet {
         // nqueenPerms();
         // nqueenCombs();
         // issafeopt();
-        recOpti()
+        recOpti();
     }
 
 }
