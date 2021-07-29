@@ -64,7 +64,6 @@ public class Basic2 {
     }
 
     // HW :
-    // TODO:
 
     public static int boardPath(int n, String psf, ArrayList<String> ans) {
         if (n == 0) {
@@ -261,41 +260,40 @@ public class Basic2 {
         return count;
     }
 
-
-    //leetcode 47
-    public static void permute(int[] nums,int count,List<List<Integer>> res,List<Integer> ans) {
-        if(count == nums.length){
+    // leetcode 47
+    public static void permute(int[] nums, int count, List<List<Integer>> res, List<Integer> ans) {
+        if (count == nums.length) {
             List<Integer> base = new ArrayList<>();
-            for(int ele : ans) base.add(ele);
+            for (int ele : ans)
+                base.add(ele);
             res.add(base);
-            return; 
+            return;
         }
-        
-        for(int i=0;i<nums.length;i++){
-            
-            if(nums[i]>= -10 && nums[i] <= 10){
+
+        for (int i = 0; i < nums.length; i++) {
+
+            if (nums[i] >= -10 && nums[i] <= 10) {
                 int val = nums[i];
-                
+
                 nums[i] = -11;
                 ans.add(val);
-                
-                permute(nums,count + 1,res,ans);
-                
+
+                permute(nums, count + 1, res, ans);
+
                 ans.remove(ans.size() - 1);
                 nums[i] = val;
             }
         }
-        
+
     }
-    
+
     public List<List<Integer>> permute(int[] nums) {
         List<List<Integer>> res = new ArrayList<>();
         List<Integer> ans = new ArrayList<>();
-        
-        permute(nums,0,res,ans);
-        
+
+        permute(nums, 0, res, ans);
+
         return res;
     }
-
 
 }
