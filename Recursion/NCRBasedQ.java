@@ -62,8 +62,6 @@ public class NCRBasedQ {
         return count;
     }
 
-
-
-    //Leetcode 
+    // Leetcode
 
 }
