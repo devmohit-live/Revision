@@ -220,6 +220,39 @@ public class nQueenSet {
         return count;
     }
 
+    // Lookup Optimized (max optimized using bits)
+    public int nqueenRecCombBits(int n) {
+        int row = 0, col = 0, diag = 0, adiag = 0; // can be declared global
+        return nqueenComb(n, n, 0, row, col, diag, adiag);
+
+    }
+
+    public int nqueenComb(int n, int tnq, int floor, int row, int col, int diag, int adaig) {
+        if (tnq == 0)
+            return 1;
+
+        int count = 0;
+        int m = n;
+        for (int room = 0; room < n; room++) {
+            int r = floor, c = room;
+
+            if ((col & (1 << c)) == 0 && (diag & (1 << (r + c))) == 0 && (adiag & (1 << (r - c + m - 1))) == 0) {
+                // section here means col,row,doag,adiag were false;
+                col ^= (1 << c);
+                diag ^= (1 << (r + c));
+                adiag ^= (1 << (r - c + m - 1));
+                // col[c] = diag[r + c] = antidiag[r - c + n - 1] = true;
+                count += nqueenComb(n, tnq - 1, floor + 1, row, col, diag, adiag);
+                // col[c] = diag[r + c] = antidiag[r - c + n - 1] = false;
+                col ^= (1 << c);
+                diag ^= (1 << (r + c));
+                adiag ^= (1 << (r - c + m - 1));
+            }
+        }
+        return count;
+
+    }
+
     static int nqueenRecOpPerm(int n, int m, int floor, int tnq, String asf) {
 
         if (tnq == 0 || floor == n) {

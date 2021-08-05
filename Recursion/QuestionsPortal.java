@@ -58,6 +58,8 @@ public class QuestionsPortal {
 
     }
 
+    // TODO: max after k swaps,
+
     public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
         int n = sc.nextInt();
