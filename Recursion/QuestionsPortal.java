@@ -58,7 +58,84 @@ public class QuestionsPortal {
 
     }
 
-    // TODO: max after k swaps,
+    // max after k swaps
+    static String max;
+
+    public static void findMaximum(String str, int k, int idx) {
+        // atmost k swap -> if swap aren;t possible(not beneficial then idx will handle
+        // base case)
+        if (k == 0 || idx > str.length())
+            return;
+
+        // get the max number possible after current number
+
+        for (int i = idx; i < str.length() - 1; i++) {
+            int maxidx = -1;
+            char maxnum = str.charAt(i);
+
+            for (int j = i + 1; j < str.length(); j++) {
+                if (str.charAt(j) > maxnum) {
+                    maxnum = str.charAt(j);
+                    maxidx = j;
+                }
+                // istead of swapping, call recursion here for every num>char(i) we find the
+                // maxnum and do the swapping for each num==maxnum in other loop
+            }
+
+            // for all num == maxnum in string do swaps, since we update max strictly >
+            // oldmax so we get the first index of maxnum
+
+            if (maxidx != -1) {
+                for (int m = maxidx; m < str.length(); m++) {
+                    if (str.charAt(m) == maxnum) {
+
+                        String pms = swap(str, i, m); // potential maximum string
+
+                        // Integer.parseInt(pms) > Integer.parseInt(max)
+
+                        if (isGreater(pms, max)) {
+                            max = pms;
+                            // check for further swaps/calls
+                            findMaximum(pms, k - 1, i + 1);
+
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+
+    private static String swap(String str, int i, int j) {
+        StringBuilder sb = new StringBuilder(str);
+        char a = str.charAt(i);
+        char b = str.charAt(j);
+        sb.setCharAt(i, b);
+        sb.setCharAt(j, a);
+        return sb.toString();
+    }
+
+    private static boolean isGreater(String t, String o) {
+        int l1 = t.length();
+        int l2 = o.length();
+
+        if (l1 > l2)
+            return true;
+        else if (l2 > l1)
+            return false;
+
+        // equal
+        for (int i = 0; i < l1; i++) {
+            if (t.charAt(i) > o.charAt(i))
+                return true;
+            else if (t.charAt(i) < o.charAt(i))
+                return false;
+        }
+        return false;
+    }
 
     public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
