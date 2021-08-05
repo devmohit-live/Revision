@@ -69,6 +69,84 @@ public class Basics {
         return x;
     }
 
+    // Leetcode 342 : Power of 4
+    public boolean isPowerOfFour(int n) {
+        if (n <= 0 || (n & (n - 1)) != 0)
+            return false;
+        int count = 0;
+        while (n != 1) {
+            count++;
+            n >>>= 1;
+        }
+
+        return (count & 1) == 0;
+    }
+
+    // Reverse Bits : Leetcode 190
+    public int reverseBits(int n) {
+        int result = 0;
+
+        // remove last from orgin -> add last to new after shifting the data in result
+        // to rightwards, reduce the n
+        for (int i = 0; i < 32; ++i) {
+            // get the last bit
+            int lastbit = (n & 1);
+            result = ((result << 1) | lastbit);
+            // reduce the n
+            n >>>= 1;
+        }
+        return result;
+    }
+
+    // leetcode 260
+    public int[] singleNumber(int[] nums) {
+        int x = 0;
+
+        for (int el : nums) {
+            x ^= el;
+        }
+
+        int xor_mask = (x & (-x)); // get the last set bit => setbit means noth number were didderent at that bit
+                                   // location
+
+        int a = 0, b = 0;
+        for (int el : nums) {
+            if ((el & xor_mask) == 0)
+                a ^= el;
+            else
+                b ^= el;
+        }
+
+        return new int[] { a, b };
+
+    }
+
+    // leetcode 137:
+    public int singleNumber(int[] nums) {
+        int k = 3;
+        return solveGeneric(k, nums);
+
+    }
+
+    private int solveGeneric(int k, int[] nums) {
+        int ans = 0;
+        for (int i = 0; i < 32; i++) {
+            int mask = (1 << i);
+            int count = 0;
+
+            for (int el : nums) {
+                if ((el & mask) != 0)
+                    count++;
+            }
+
+            int ithbit = count % k == 0 ? 0 : 1;
+            ans |= (ithbit << i);
+
+        }
+
+        return ans;
+    }
+
     public static void main(String[] args) {
         int n = 13;
         onToOff(n, 2);
