@@ -1,13 +1,15 @@
 public class Basics {
 
     // set the kth bit
+    // 0 -> 1, 1 -> 1 / false -> true, true -> true // -> arr[idx] = true;
     static void offToOn(int n, int k) {
         int num = (1 << k);
         n = (n | num);
         System.out.println(n);
     }
 
-    // unset the kth bit
+    // unset the kth bit ->
+    // 1 -> 0, 0 -> 0 / true -> false, false -> false // ->arr[idx] = false;
     static void onToOff(int n, int k) {
         int num = (1 << k);
         num = (~num);
@@ -27,7 +29,7 @@ public class Basics {
         return count;
     }
 
-    // karinghan algo
+    // karinghan algo ->unsets the last set bit
     static int karninghan(int n) {
         int count = 0;
         while (n > 0) {
@@ -122,7 +124,7 @@ public class Basics {
     }
 
     // leetcode 137:
-    public int singleNumber(int[] nums) {
+    public int singleNumberinKOccurance(int[] nums) {
         int k = 3;
         return solveGeneric(k, nums);
 

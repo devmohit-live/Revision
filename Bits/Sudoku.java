@@ -84,4 +84,88 @@ public class Sudoku {
 
     }
 
+    class UsingBits {
+
+        class Pair {
+            int r, c;
+
+            Pair(int r, int c) {
+                this.r = r;
+                this.c = c;
+            }
+            // public String toString(){
+            // return "(" + this.r +" " + this.c + ")";
+            // }
+        }
+
+        int[] rows, cols;
+        int[][] mat;
+
+        public void solveSudoku(char[][] board) {
+            // to get the list of empty places to avoid going to thet places ehich are
+            // already filled
+            ArrayList<Pair> arr = new ArrayList<>();
+            rows = new int[9];
+            cols = new int[9];
+            mat = new int[3][3];
+            for (int i = 0; i < 9; i++) {
+                for (int j = 0; j < 9; j++) {
+                    int digit = board[i][j] - '0';
+                    // setting setbit values
+                    rows[i] |= (1 << digit);
+                    cols[j] |= (1 << digit);
+                    mat[i / 3][j / 3] |= (1 << digit);
+                    if (board[i][j] == '.')
+                        arr.add(new Pair(i, j));
+                }
+            }
+
+            solve(arr, 0, board);
+
+        }
+
+        private boolean isValidToPlaceNumber(int num, int r, int c) {
+            int i = r / 3;
+            int j = c / 3;
+            int mask = (1 << num);
+
+            if ((rows[r] & mask) != 0 || (cols[c] & mask) != 0 || (mat[i][j] & mask) != 0)
+                return false;
+
+            return true;
+        }
+
+        private boolean solve(ArrayList<Pair> arr, int idx, char[][] board) {
+            if (idx == arr.size()) {
+                return true;
+            }
+
+            Pair p = arr.get(idx);
+            int r = p.r;
+            int c = p.c;
+
+            for (int num = 1; num <= 9; num++) {
+                if (isValidToPlaceNumber(num, r, c)) {
+                    // marking and setting number
+                    board[r][c] = (char) (num + '0');
+                    rows[r] ^= (1 << num);
+                    cols[c] ^= (1 << num);
+                    mat[r / 3][c / 3] ^= (1 << num);
+
+                    boolean validboard = solve(arr, idx + 1, board);
+                    if (validboard)
+                        return true;
+
+                    // unsetting,unmarking
+                    board[r][c] = '.';
+                    rows[r] ^= (1 << num);
+                    cols[c] ^= (1 << num);
+                    mat[r / 3][c / 3] ^= (1 << num);
+                }
+
+            }
+            return false;
+        }
+
+    }
 }
