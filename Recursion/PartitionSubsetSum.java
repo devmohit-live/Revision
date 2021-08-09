@@ -3,7 +3,8 @@ import java.util.*;
 public class PartitionSubsetSum {
 
     // 2 set of equal sum
-    public static int equalSet(int[] arr, int idx, int sum1, String set1, int sum2, String set2) {
+    static int equal(int[] arr, int idx, int sum1, String set1, int sum2, String set2) {
+
         if (idx == arr.length) {
             if (sum1 == sum2) {
                 System.out.println(set1 + " = " + set2);
@@ -13,54 +14,41 @@ public class PartitionSubsetSum {
         }
 
         int count = 0;
-        count += equalSet(arr, idx + 1, sum1 + arr[idx], set1 + arr[idx] + " ", sum2, set2);
-        count += equalSet(arr, idx + 1, sum1, set1, sum2 + arr[idx], set2 + arr[idx] + " ");
-
+        count += equal(arr, idx + 1, sum1 + arr[idx], set1 + arr[idx] + " ", sum2, set2);
+        count += equal(arr, idx + 1, sum1, set1, sum2 + arr[idx], set2 + arr[idx] + " ");
         return count;
     }
 
-    // public static int equalSet(int[] arr, int idx, int sum, int ssf, ArrayList<Integer> small,
-    //         ArrayList<ArrayList<Integer>> ans) {
-    //     if (idx == arr.length || sum == ssf) {
-    //         if (sum == ssf) {
-    //             ArrayList<Integer> base = new ArrayList<>(small);
-    //             if (base.size() > 0) {
-    //                 ans.add(base);
-    //                 return 1;
-    //             }
-    //         }
-    //         return 0;
-    //     }
-    //     int count = 0;
-    //     small.add(arr[idx]);
-    //     count += equalSet(arr, idx + 1, sum, ssf + arr[idx], small, ans);
-    //     small.remove(small.size() - 1);
-    //     count += equalSet(arr, idx + 1, sum, ssf, small, ans);
-    //     return count;
-    // }
+    public static int equalSet(int[] arr, int idx, int sum, ArrayList<ArrayList<Integer>> ans) {
+        if (idx == arr.length) {
+            int sum1 = 0;
+            Set<Integer> set1 = new HashSet<Integer>(ans.get(0));
+            Set<Integer> set2 = new HashSet<Integer>(ans.get(1));
+            for (int i = 0; i < arr.length; i++) {
+                if (set1.contains(arr[i]))
+                    sum1 += arr[i];
+                else
+                    set2.add(arr[i]);
+            }
+            if (sum1 == sum) {
+                System.out.println(set1 + " = " + set2);
+                return 1;
+            }
+            return 0;
+        }
+        int count = 0;
+        ArrayList<Integer> set1 = ans.get(0);
+        ArrayList<Integer> set2 = ans.get(1);
+        for (int i = idx; i < arr.length; i++) {
+            set1.add(arr[idx]);
+            count += equalSet(arr, idx + 1, sum, ans);
+            set1.remove(set1.size() - 1);
 
-    // public static void equalSet(int[] arr) {
-    //     ArrayList<Integer> small = new ArrayList<>();
-    //     ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
-    //     int sum = 0;
-    //     for (int ele : arr)
-    //         sum += ele;
-
-    //     if ((sum & 1) != 0)
-    //         return;
-
-    //     int sols = equalSet(arr, 0, sum / 2, 0, small, ans);
-    //     System.out.println(" No of solutions :  " + sols);
-    //     for (ArrayList<Integer> res : ans)
-    //         System.out.println(res);
-    // }
-
-
-    public static void equalSet(int[] arr, int idx, int sum, ArrayList<ArrayList<Integer>> ans) {
-
+        }
+        return count;
     }
 
-    public static void equalSet(int[] arr, int idx) {
+    public static int equalSet(int[] arr) {
         ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
         for (int i = 0; i < 2; i++)
             ans.add(new ArrayList<>());
@@ -70,10 +58,11 @@ public class PartitionSubsetSum {
             sum += ele;
 
         if ((sum & 1) != 0)
-            return;
+            return 0;
 
-        equalSet(arr, 0, sum / 2, ans);
+        int sols = equalSet(arr, 0, sum / 2, ans);
         System.out.println(ans);
+        return sols;
     }
 
     static int kSumPartition(int[] arr, int idx, int sum, int ssf, String ans) {
@@ -105,11 +94,12 @@ public class PartitionSubsetSum {
         int[] arr = { 10, 20, 30, 40, 50, 60, 70, 80 };
         // equalSet(arr, 0, 0, " ", 0, ""); //-> creates mirror image
 
-        equalSet(arr, 1, 10, "10 ", 0, ""); // -> fixed first value positin to avoid mirror image
+        int sol = equal(arr, 1, 10, "10 ", 0, ""); // -> fixed first value positin to avoid mirror image
+        System.out.println(sol + " answers");
         System.out.println("Arraylist");
-        equalSet(arr);
-        int[] a = { 1, 2, 3, 4, 5, 6 };
-        kSumSol(a, 3);
+        System.out.println(equalSet(arr));
+        // int[] a = { 1, 2, 3, 4, 5, 6 };
+        // kSumSol(a, 3);
     }
 
 }

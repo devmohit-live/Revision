@@ -38,6 +38,8 @@ public class QuestionsPortal {
         return answers;
     }
 
+    // leetcode 139
+    // NOTE: never check if str == "" , always check str.length()==0
     public static int wordBreak(String str, String asf, HashSet<String> dict) {
 
         if (str.length() == 0) {
