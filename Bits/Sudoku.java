@@ -1,6 +1,9 @@
-public class Sudoku {
-    class withoutBits {
+import java.util.ArrayList;
 
+public class Sudoku {
+
+    // Leetcode :37
+    class withoutBits {
         class Pair {
             int r, c;
 
@@ -168,4 +171,97 @@ public class Sudoku {
         }
 
     }
+
+    // IsValidSudokuBoard : Leetcode 36
+
+    // without bits:
+    class Pair {
+        int r, c;
+
+        Pair(int r, int c) {
+            this.r = r;
+            this.c = c;
+        }
+    }
+
+    public boolean isValidSudoku(char[][] board) {
+        ArrayList<Pair> arr = new ArrayList<>();
+
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++)
+                if (board[i][j] != '.')
+                    arr.add(new Pair(i, j));
+        }
+
+        boolean res = true;
+
+        for (Pair p : arr) {
+            int r = p.r, c = p.c;
+            res = res && valid(r, c, board[r][c], board);
+            if (!res)
+                return false;
+
+        }
+
+        return res;
+    }
+
+    private boolean valid(int r, int c, char num, char[][] board) {
+        for (int i = 0; i < 9 && i != c; i++)
+            if (board[r][i] == num)
+                return false;
+
+        for (int i = 0; i < 9 && i != r; i++)
+            if (board[i][c] == num)
+                return false;
+
+        int matr = r / 3 * 3;
+        int matc = c / 3 * 3;
+
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
+                if (matr + i != r && matc + j != c && num == board[matr + i][matc + j])
+                    return false;
+
+        return true;
+    }
+
+    // USING BITS:
+    int[] row, col;
+    int[][] mat;
+
+    public boolean isValidSudokuBits(char[][] board) {
+        col = new int[9];
+        row = new int[9];
+        mat = new int[3][3];
+        boolean res = true;
+
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (board[i][j] != '.') {
+                    int digit = board[i][j] - '0';
+                    res = res && valid(i, j, digit, board);
+                    if (res) {
+                        row[i] |= (1 << digit);
+                        col[j] |= (1 << digit);
+                        mat[i / 3][j / 3] |= (1 << digit);
+                    }
+                }
+            }
+        }
+        return res;
+    }
+
+    private boolean valid(int r, int c, int digit, char[][] board) {
+
+        if ((row[r] & (1 << digit)) != 0)
+            return false;
+        if ((col[c] & (1 << digit)) != 0)
+            return false;
+        if ((mat[r / 3][c / 3] & (1 << digit)) != 0)
+            return false;
+
+        return true;
+    }
+
 }
