@@ -19,75 +19,96 @@ public class PartitionSubsetSum {
         return count;
     }
 
-    public static int equalSet(int[] arr, int idx, int sum, ArrayList<ArrayList<Integer>> ans) {
+    public static int ksubsets(int[] arr, int idx, int sum, int[] subsetSum, ArrayList<ArrayList<Integer>> ans) {
         if (idx == arr.length) {
-            int sum1 = 0;
-            Set<Integer> set1 = new HashSet<Integer>(ans.get(0));
-            Set<Integer> set2 = new HashSet<Integer>(ans.get(1));
-            for (int i = 0; i < arr.length; i++) {
-                if (set1.contains(arr[i]))
-                    sum1 += arr[i];
-                else
-                    set2.add(arr[i]);
+            int s = subsetSum[0];
+            if (s != sum)
+                return 0;
+            // checking for other k-1 sums to be same
+            for (int ele : subsetSum) {
+                if (s != ele) {
+                    return 0;
+                }
             }
-            if (sum1 == sum) {
-                System.out.println(set1 + " = " + set2);
-                return 1;
+            for (ArrayList<Integer> a : ans) {
+                System.out.print(a + " ");
             }
-            return 0;
+            System.out.println();
+
+            return 1;
         }
         int count = 0;
-        ArrayList<Integer> set1 = ans.get(0);
-        ArrayList<Integer> set2 = ans.get(1);
-        for (int i = idx; i < arr.length; i++) {
-            set1.add(arr[idx]);
-            count += equalSet(arr, idx + 1, sum, ans);
-            set1.remove(set1.size() - 1);
+        for (int k = 0; k < subsetSum.length; k++) {
+            ArrayList<Integer> set = ans.get(k);
+            set.add(arr[idx]);
+            subsetSum[k] += arr[idx];
 
+            count += ksubsets(arr, idx + 1, sum, subsetSum, ans);
+
+            subsetSum[k] -= arr[idx];
+            set.remove(set.size() - 1);
+            if (set.size() == 0)
+                break;
         }
+
         return count;
     }
 
-    public static int equalSet(int[] arr) {
+    // ArrayLists
+    public static int ksubsets2(int[] arr, int idx, int sum, int[] subsetSum, ArrayList<ArrayList<Integer>> ans,
+            List<List<List<Integer>>> res) {
+        if (idx == arr.length) {
+            int s = subsetSum[0];
+            if (s != sum)
+                return 0;
+
+            for (int ele : subsetSum) {
+                if (s != ele) {
+                    return 0;
+                }
+            }
+            List<List<Integer>> small = new ArrayList<>();
+            for (ArrayList<Integer> a : ans) {
+                small.add(new ArrayList<>(a));
+            }
+            res.add(small);
+
+            return 1;
+        }
+        int count = 0;
+        for (int k = 0; k < subsetSum.length; k++) {
+            ArrayList<Integer> set = ans.get(k);
+            set.add(arr[idx]);
+            subsetSum[k] += arr[idx];
+
+            count += ksubsets2(arr, idx + 1, sum, subsetSum, ans, res);
+
+            subsetSum[k] -= arr[idx];
+            set.remove(set.size() - 1);
+            if (set.size() == 0)
+                break;
+        }
+
+        return count;
+    }
+
+    public static void kSet(int[] arr, int k) {
         ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < k; i++)
             ans.add(new ArrayList<>());
 
         int sum = 0;
         for (int ele : arr)
             sum += ele;
 
-        if ((sum & 1) != 0)
-            return 0;
-
-        int sols = equalSet(arr, 0, sum / 2, ans);
-        System.out.println(ans);
-        return sols;
-    }
-
-    static int kSumPartition(int[] arr, int idx, int sum, int ssf, String ans) {
-        if (idx == arr.length || sum == ssf) {
-            if (sum == ssf) {
-                System.out.println("{ " + ans + " }");
-                return 1;
-            }
-            return 0;
-        }
-
-        int count = 0;
-        count += kSumPartition(arr, idx + 1, sum, ssf + arr[idx], ans + arr[idx] + " ");
-        count += kSumPartition(arr, idx + 1, sum, ssf, ans);
-        return count;
-    }
-
-    static void kSumSol(int[] arr, int k) {
-        int s = 0;
-        for (int i : arr)
-            s += i;
-        if (s % k != 0)
+        if (sum % k != 0)
             return;
-        int sum = s / k;
-        System.out.println(kSumPartition(arr, 0, sum, 0, ""));
+
+        int[] sumArray = new int[k];
+        // System.out.println("Sols = " + ksubsets(arr, 0, sum / k, sumArray, ans));
+        List<List<List<Integer>>> res = new ArrayList<>();
+        int sols = ksubsets2(arr, 0, sum / k, sumArray, ans, res);
+        res.stream().forEach(a -> System.out.println(a));
     }
 
     public static void main(String[] args) {
@@ -97,9 +118,9 @@ public class PartitionSubsetSum {
         int sol = equal(arr, 1, 10, "10 ", 0, ""); // -> fixed first value positin to avoid mirror image
         System.out.println(sol + " answers");
         System.out.println("Arraylist");
-        System.out.println(equalSet(arr));
+        kSet(arr, 2);
         // int[] a = { 1, 2, 3, 4, 5, 6 };
-        // kSumSol(a, 3);
+        // kSumSol(arr, 2);
     }
 
 }
