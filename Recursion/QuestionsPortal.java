@@ -137,17 +137,108 @@ public class QuestionsPortal {
         return false;
     }
 
+    public static void crytarithmetic() {
+        String s1 = "send";
+        String s2 = "more";
+        String s3 = "money";
+
+        HashMap<Character, Integer> charIntMap = new HashMap<>();
+        String unique = "";
+        for (int i = 0; i < s1.length(); i++) {
+            if (!charIntMap.containsKey(s1.charAt(i))) {
+                charIntMap.put(s1.charAt(i), -1);
+                unique += s1.charAt(i);
+            }
+        }
+
+        for (int i = 0; i < s2.length(); i++) {
+            if (!charIntMap.containsKey(s2.charAt(i))) {
+                charIntMap.put(s2.charAt(i), -1);
+                unique += s2.charAt(i);
+            }
+        }
+
+        for (int i = 0; i < s3.length(); i++) {
+            if (!charIntMap.containsKey(s3.charAt(i))) {
+                charIntMap.put(s3.charAt(i), -1);
+                unique += s3.charAt(i);
+            }
+        }
+
+        boolean[] usedNumbers = new boolean[10];
+        int sols = solution(unique, 0, charIntMap, usedNumbers, s1, s2, s3);
+        System.out.println("No of sols " + sols);
+    }
+
+    private static int encode(String s, HashMap<Character, Integer> charIntMap) {
+        int res = 0;
+
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            int num = charIntMap.get(c);
+            res = res * 10 + num;
+        }
+        return res;
+    }
+
+    public static int solution(String unique, int idx, HashMap<Character, Integer> charIntMap, boolean[] usedNumbers,
+            String s1, String s2, String s3) {
+
+        if (idx == unique.length()) {
+            int num1 = encode(s1, charIntMap);
+            int num2 = encode(s2, charIntMap);
+            int num3 = encode(s3, charIntMap);
+
+            if (num1 + num2 == num3) {
+                for (int i = 0; i < 26; i++) {
+                    char c = (char) ('a' + i);
+                    if (charIntMap.containsKey(c)) {
+                        int n = charIntMap.get(c);
+                        System.out.print(c + "-" + n + " ");
+                    }
+                }
+                System.out.println();
+                return 1;
+            }
+            return 0;
+
+        }
+
+        int count = 0;
+        char ch = unique.charAt(idx);
+
+        for (int i = 0; i < 10; i++) {
+            if (!usedNumbers[i]) {
+                usedNumbers[i] = true;
+                charIntMap.put(ch, i);
+
+                count += solution(unique, idx + 1, charIntMap, usedNumbers, s1, s2, s3);
+
+                charIntMap.remove(ch);
+                usedNumbers[i] = false;
+
+            }
+        }
+
+        return count;
+    }
+
     public static void main(String[] args) throws Exception {
+        // inp:
+        // 11
+        // i like pep coding pepper eating mango man go in pepcoding
+        // ilikepeppereatingmangoinpepcoding
         Scanner sc = new Scanner(System.in);
         int n = sc.nextInt();
         boolean[] used = new boolean[n + 1];
         System.out.println(friendPairing(0, n, used, ""));
-        int m = scn.nextInt();
+        int m = sc.nextInt();
         HashSet<String> dict = new HashSet<>();
         for (int i = 0; i < m; i++) {
-            dict.add(scn.next());
+            dict.add(sc.next());
         }
-        String sentence = scn.next();
+        String sentence = sc.next();
         int sols = wordBreak(sentence, "", dict);
+        crytarithmetic();
     }
 }
