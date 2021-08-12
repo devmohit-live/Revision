@@ -19,79 +19,6 @@ public class PartitionSubsetSum {
         return count;
     }
 
-    public static int ksubsets(int[] arr, int idx, int sum, int[] subsetSum, ArrayList<ArrayList<Integer>> ans) {
-        if (idx == arr.length) {
-            int s = subsetSum[0];
-            if (s != sum)
-                return 0;
-            // checking for other k-1 sums to be same
-            for (int ele : subsetSum) {
-                if (s != ele) {
-                    return 0;
-                }
-            }
-            for (ArrayList<Integer> a : ans) {
-                System.out.print(a + " ");
-            }
-            System.out.println();
-
-            return 1;
-        }
-        int count = 0;
-        for (int k = 0; k < subsetSum.length; k++) {
-            ArrayList<Integer> set = ans.get(k);
-            set.add(arr[idx]);
-            subsetSum[k] += arr[idx];
-
-            count += ksubsets(arr, idx + 1, sum, subsetSum, ans);
-
-            subsetSum[k] -= arr[idx];
-            set.remove(set.size() - 1);
-            if (set.size() == 0)
-                break;
-        }
-
-        return count;
-    }
-
-    // ArrayLists
-    public static int ksubsets2(int[] arr, int idx, int sum, int[] subsetSum, ArrayList<ArrayList<Integer>> ans,
-            List<List<List<Integer>>> res) {
-        if (idx == arr.length) {
-            int s = subsetSum[0];
-            if (s != sum)
-                return 0;
-
-            for (int ele : subsetSum) {
-                if (s != ele) {
-                    return 0;
-                }
-            }
-            List<List<Integer>> small = new ArrayList<>();
-            for (ArrayList<Integer> a : ans) {
-                small.add(new ArrayList<>(a));
-            }
-            res.add(small);
-
-            return 1;
-        }
-        int count = 0;
-        for (int k = 0; k < subsetSum.length; k++) {
-            ArrayList<Integer> set = ans.get(k);
-            set.add(arr[idx]);
-            subsetSum[k] += arr[idx];
-
-            count += ksubsets2(arr, idx + 1, sum, subsetSum, ans, res);
-
-            subsetSum[k] -= arr[idx];
-            set.remove(set.size() - 1);
-            if (set.size() == 0)
-                break;
-        }
-
-        return count;
-    }
-
     public static void kSet(int[] arr, int k) {
         ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
         for (int i = 0; i < k; i++)
@@ -107,8 +34,119 @@ public class PartitionSubsetSum {
         int[] sumArray = new int[k];
         // System.out.println("Sols = " + ksubsets(arr, 0, sum / k, sumArray, ans));
         List<List<List<Integer>>> res = new ArrayList<>();
-        int sols = ksubsets2(arr, 0, sum / k, sumArray, ans, res);
+        int sols = ksubsets(arr, 0, sumArray, ans);
         res.stream().forEach(a -> System.out.println(a));
+    }
+
+    public static int ksubsets(int[] arr, int idx, int[] subsetSum, ArrayList<ArrayList<Integer>> ans) {
+        if (idx == arr.length) {
+            int sum = subsetSum[0];
+            // if all the sets make same sum then we got the answer
+            for (int s : subsetSum)
+                if (s != sum)
+                    return 0;
+
+            // else we got the answer so print the sets
+            for (ArrayList<Integer> set : ans)
+                System.out.print(set + " ");
+            System.out.println();
+
+            return 1;
+        }
+
+        int count = 0;
+
+        for (int i = 0; i < subsetSum.length; i++) {
+            // get the current list
+            ArrayList<Integer> set = ans.get(i);
+            set.add(arr[idx]);
+            subsetSum[i] += arr[idx];
+
+            count += ksubsets(arr, idx + 1, subsetSum, ans);
+
+            subsetSum[i] -= arr[idx];
+            set.remove(set.size() - 1);
+            // if we removed the leader from an element we have to stop it going to next
+            // empty set to avoid mirror image
+            if (set.size() == 0)
+                break; // stop making a recursive call for this next empty set -> move to next element
+
+        }
+        return count;
+    }
+
+    static int counter = 1;
+
+    public static int kPartitionUsingArray(int[] arr, int idx, int n, ArrayList<ArrayList<Integer>> ans) {
+        if (idx == arr.length) {
+
+            // check if any set in ans is empty
+            // for (ArrayList<Integer> set : ans) {
+            // // as we are also getting the case were every element was in 1st set ans rest
+            // // set were empty
+            // // also we were getting some cases where atlest 1 set remoins empty
+            // if (set.size() == 0)
+            // return 0;
+            // }
+
+            // if any list is empty then we havn't got the answer
+            // just check the last list is empty or not as we are coming from list1 to k,
+            if (ans.get(ans.size() - 1).size() == 0)
+                return 0;
+
+            System.out.print(counter++ + ". ");
+            for (ArrayList<Integer> set : ans)
+                System.out.print(set + " ");
+            System.out.println();
+
+            return 1;
+        }
+
+        int count = 0;
+        for (int i = 0; i < ans.size(); i++) {
+            ArrayList<Integer> set = ans.get(i);
+            set.add(arr[idx]);
+
+            count += kPartitionUsingArray(arr, idx + 1, n, ans);
+
+            set.remove(set.size() - 1);
+
+            if (set.size() == 0)
+                break;
+
+        }
+
+        return count;
+    }
+
+    public static int kPartition(int currNum, int n, ArrayList<ArrayList<Integer>> ans) {
+        if (currNum > n) {
+            if (ans.get(ans.size() - 1).size() == 0)
+                return 0;
+
+            System.out.print(counter++ + ". ");
+            for (ArrayList<Integer> set : ans)
+                System.out.print(set + " ");
+            System.out.println();
+
+            return 1;
+        }
+
+        int count = 0;
+        for (int i = 0; i < ans.size(); i++) {
+            ArrayList<Integer> set = ans.get(i);
+            set.add(currNum);
+
+            count += kPartition(currNum + 1, n, ans);
+
+            set.remove(set.size() - 1);
+
+            if (set.size() == 0)
+                break;
+
+        }
+
+        return count;
     }
 
     public static void main(String[] args) {
