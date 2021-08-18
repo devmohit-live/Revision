@@ -311,6 +311,172 @@ public class Basics {
         return res;
     }
 
+    private static int length(ListNode head) {
+        int size = 0;
+        if (head == null || head.next == null)
+            return size;
+        ListNode curr = head;
+
+        while (curr != null) {
+            size++;
+            curr = curr.next;
+        }
+        return size;
+    }
+
+    private static ListNode th = null, tt = null;
+
+    private static void addFirstNode(ListNode node) {
+        if (th == null) {
+            th = tt = node;
+        } else {
+            node.next = th;
+            th = node;
+        }
+    }
+
+    public static ListNode reverseInKGroup(ListNode head, int k) {
+        if (head == null || head.next == null || k <= 1)
+            return head;
+
+        int len = length(head);
+        ListNode curr = head, oh = null, ot = null;
+        while (len >= k) {
+            int tempK = k;
+            while (tempK-- > 0) {
+                ListNode forw = curr.next;
+                curr.next = null;
+                addFirstNode(curr);
+                curr = forw;
+            }
+
+            if (oh == null) {
+                oh = th;
+                ot = tt;
+            } else {
+                ot.next = th;
+                ot = tt;
+            }
+
+            th = tt = null;
+            len -= k;
+        }
+
+        ot.next = curr;
+        return oh;
+    }
+
+    public static ListNode reverseInRange(ListNode head, int n, int m) {
+        if (head == null || head.next == null || n == m)
+            return head;
+
+        ListNode dummy = new ListNode(-1), prev = dummy, curr = head;
+        prev.next = head;
+        int i = 1;
+        while (i <= m) {
+            while (i >= n && i <= m) {
+                ListNode forw = curr.next;
+                curr.next = null;
+                addFirstNode(curr);
+                curr = forw;
+                i++;
+            }
+
+            if (i > m) {
+                prev.next = th;
+                tt.next = curr;
+                break;
+            }
+
+            i++;
+            prev = curr;
+            curr = curr.next;
+        }
+
+        return dummy.next;
+    }
+
+    public static ListNode removeDuplicates(ListNode head) {
+      if(head==null || head.next==null) return head;
+      
+     ListNode ans = new ListNode(-1), itr=ans, prev= null, curr=head;
+     
+     while(curr!=null){
+         //backup
+         ListNode forw = curr.next;
+         int data = prev==null?-1:prev.val;
+         if(data!=curr.val){
+             itr.next = curr;
+             itr=itr.next;
+             prev=curr;
+         }
+         
+         //break the links between the nodes(duplicate nodes)
+         curr.next= null;
+         curr=forw;
+     }
+      
+      
+      return ans.next;
+    }
+
+    public static ListNode removeDuplicatesClass(ListNode head) {
+        if (head == null || head.next == null)
+            return head;
+
+        ListNode curr = head.next, prev = head;
+        while (curr != null) {
+            while (curr != null && curr.val == prev.val) {
+                ListNode forw = curr.next;
+                curr.next = null;
+                curr = forw;
+            }
+
+            prev.next = curr;
+            prev = prev.next;
+            if (curr != null)
+                curr = curr.next;
+        }
+
+        return head;
+    }
+
+    public static ListNode removeAllDuplicates(ListNode head) {
+        if (head == null || head.next == null)
+            return head;
+        ListNode ans = new ListNode(-1), itr = ans;
+        ListNode curr = head.next;
+        itr.next = head;
+
+        while (curr != null) {
+            boolean isLoopRun = false;
+            ListNode forw;
+
+            while (curr != null && curr.val == itr.next.val) {
+
+                forw = curr.next;
+                // break the links between same val nodes
+                curr.next = null;
+                curr = forw;
+                isLoopRun = true;
+            }
+            if (isLoopRun) {
+                // break the links between uniq node & first node that will be repeated
+                itr.next = null;
+                itr.next = curr;
+            } else {
+                itr = itr.next;
+                itr.next = curr;
+            }
+
+            if (curr != null) {
+                forw = curr.next;
+                curr.next = null;
+                curr = forw;
+            }
+        }
+        return ans.next;
+    }
 
     static void printList(ListNode node) {
         while (node != null) {

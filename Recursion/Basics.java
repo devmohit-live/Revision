@@ -176,7 +176,7 @@ public class Basics {
 
         if (arr[idx] == count)
             ans[count - 1] = idx;
-
+        return ans;
     }
 
     // Return type: ex : ArrayList,String
@@ -238,7 +238,6 @@ public class Basics {
 
         return false;
     }
-
 
     public static void main(String[] args) {
         int[] arr = new int[] { 1, 2, 3, 4, 5, 6, 7, 7, 7, 8, 9, 10 };

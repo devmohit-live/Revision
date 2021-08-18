@@ -10,6 +10,8 @@ class PathWithMaxGold {
         int m = grid.length, n = grid[0].length;
 
         int max = 0;
+        // no start and end point is given so we have to check for each cell as start
+
         for (int i = 0; i < m; i++)
             for (int j = 0; j < n; j++)
                 max = Math.max(max, findMaxGold(grid, m, n, i, j));
