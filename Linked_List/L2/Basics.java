@@ -608,6 +608,65 @@ public class Basics {
 
     }
 
+    // add two list (got after multiplication) // here we will makes changes to
+    // original list only => inplace
+    public static void addList(ListNode prev, ListNode list) {
+        // checking for prev.next , here prev represents => x in addition process of
+        // multiplication
+        int carry = 0;
+        while (list != null || carry != 0) {
+            int sum = carry + (list != null ? list.val : 0) + (prev.next != null ? prev.next.val : 0);
+            int digit = sum % 10;
+            carry = sum / 10;
+
+            // make changes to the original list at it's correct place
+            if (prev.next != null)
+                prev.next.val = digit;
+            else
+                prev.next = new ListNode(digit);
+
+            prev = prev.next;
+            if (list != null)
+                list = list.next;
+        }
+    }
+
+    // multiply list 1 with a sibgle digit of l2
+    public static ListNode multiplyDigit(ListNode list, int d) {
+        ListNode dummy = new ListNode(-1), curr = list, prev = dummy;
+
+        int carry = 0;
+        while (curr != null || carry != 0) {
+            int ans = carry + (curr != null ? curr.val : 0) * d;
+            int digit = ans % 10;
+            carry = ans / 10;
+
+            prev.next = new ListNode(digit);
+            // moving the cross (x)
+            prev = prev.next;
+
+            if (curr != null)
+                curr = curr.next;
+        }
+
+        return dummy.next;
+    }
+
+    public static ListNode multiplyTwoLL(ListNode l1, ListNode l2) {
+        l1 = reverse(l1);
+        l2 = reverse(l2);
+
+        ListNode ans = new ListNode(-1), prev = ans;
+        while (l2 != null) {
+            ListNode multipliedList = multiplyDigit(l1, l2.val);
+            addList(prev, multipliedList);
+            prev = prev.next;
+            l2 = l2.next;
+        }
+
+        return reverse(ans.next);
+    }
+
     static void printList(ListNode node) {
         while (node != null) {
             System.out.print(node.val + " ");
