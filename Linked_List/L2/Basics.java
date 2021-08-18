@@ -397,27 +397,27 @@ public class Basics {
     }
 
     public static ListNode removeDuplicates(ListNode head) {
-      if(head==null || head.next==null) return head;
-      
-     ListNode ans = new ListNode(-1), itr=ans, prev= null, curr=head;
-     
-     while(curr!=null){
-         //backup
-         ListNode forw = curr.next;
-         int data = prev==null?-1:prev.val;
-         if(data!=curr.val){
-             itr.next = curr;
-             itr=itr.next;
-             prev=curr;
-         }
-         
-         //break the links between the nodes(duplicate nodes)
-         curr.next= null;
-         curr=forw;
-     }
-      
-      
-      return ans.next;
+        if (head == null || head.next == null)
+            return head;
+
+        ListNode ans = new ListNode(-1), itr = ans, prev = null, curr = head;
+
+        while (curr != null) {
+            // backup
+            ListNode forw = curr.next;
+            int data = prev == null ? -1 : prev.val;
+            if (data != curr.val) {
+                itr.next = curr;
+                itr = itr.next;
+                prev = curr;
+            }
+
+            // break the links between the nodes(duplicate nodes)
+            curr.next = null;
+            curr = forw;
+        }
+
+        return ans.next;
     }
 
     public static ListNode removeDuplicatesClass(ListNode head) {
@@ -476,6 +476,136 @@ public class Basics {
             }
         }
         return ans.next;
+    }
+
+    public static ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        int carry = 0;
+        ListNode res = new ListNode(-1);
+        ListNode tmp = res;
+        ListNode c1 = reverse(l1), c2 = reverse(l2);
+
+        while (c1 != null || c2 != null || carry != 0) {
+            int sum = 0;
+            if (c1 != null) {
+                sum += c1.val;
+                c1 = c1.next;
+            }
+            if (c2 != null) {
+                sum += c2.val;
+                c2 = c2.next;
+            }
+            sum += carry;
+            carry = sum / 10;
+            int data = sum % 10;
+            ListNode node = new ListNode(data);
+            tmp.next = node;
+            tmp = tmp.next;
+        }
+        return reverse(res.next);
+    }
+
+    private static int getLength(ListNode head) {
+        if (head == null)
+            return 0;
+        int len = 0;
+        ListNode curr = head;
+        while (curr != null) {
+            len++;
+            curr = curr.next;
+        }
+
+        return len;
+
+    }
+
+    private static boolean isBigger(ListNode head1, ListNode head2) {
+        ListNode c1 = head1, c2 = head2;
+
+        int l1 = getLength(c1);
+        int l2 = getLength(c2);
+        if (l1 > l2)
+            return true;
+        if (l1 < l2)
+            return false;
+
+        while (c1 != null) {
+            if (c1.val > c2.val)
+                return true;
+            else if (c1.val < c2.val)
+                return false;
+
+            c1 = c1.next;
+            c2 = c2.next;
+        }
+
+        return true; // both lists are exactly same
+
+    }
+
+    public static ListNode subtractTwoNumbers(ListNode l1, ListNode l2) {
+        if (l1 == null || l2 == null)
+            return null; // not possible
+
+        ListNode dummy = new ListNode(-1), curr = dummy;
+        ListNode c1 = l1, c2 = l2;
+
+        if (!isBigger(l1, l2)) {
+            // swap;
+            ListNode tmp = c1;
+            c1 = c2;
+            c2 = tmp;
+        }
+
+        // reverse
+        c1 = reverse(c1);
+        c2 = reverse(c2);
+        int borrow = 0;
+
+        while (c1 != null || c2 != null) {
+            int digit = borrow + (c1 == null ? 0 : c1.val) - (c2 == null ? 0 : c2.val);
+
+            if (digit < 0) {
+                borrow = -1;
+                digit += 10;
+            } else {
+                // always set borrow to 0 again for next itr
+                borrow = 0;
+            }
+
+            curr.next = new ListNode(digit);
+            curr = curr.next;
+
+            if (c1 != null)
+                c1 = c1.next;
+            if (c2 != null)
+                c2 = c2.next;
+        }
+
+        ListNode ans = reverse(dummy.next);
+        // return ans;
+
+        // check for preceding zeros in answer
+        ListNode myans = new ListNode(-1), itr = ans;
+        myans.next = null;
+
+        while (itr != null) {
+            ListNode forw = itr.next;
+            if (itr.val != 0) {
+                // found the first non zero element;
+                myans.next = itr;
+                break;
+            }
+            // break the links for starting zeros
+            itr.next = null;
+            itr = forw;
+        }
+
+        // nothing is attached to myans => all were zeroes
+        if (myans.next == null)
+            return new ListNode(0);
+
+        return myans.next;
+
     }
 
     static void printList(ListNode node) {
