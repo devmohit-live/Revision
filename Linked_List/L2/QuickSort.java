@@ -49,33 +49,26 @@ public class QuickSort {
         return l;
     }
 
-    public static ListNode[] mergeLists(ListNode[] left, ListNode pivot, ListNode[] right) {
-        ListNode dummy = new ListNode(-1), curr = dummy;
-        ListNode newLeft = left[0];
-        ListNode newRight = right[0];
-
-        ListNode head = dummy, tail = right[1];
-
-        if (newRight == null) {
-            newRight = dummy;
-        }
-        if (pivot == null) {
-            pivot = right[0];
-        }
-        if (newLeft == null) {
-            newLeft = pivot;
-        }
-
-        newLeft.next = pivot;
-        if (newLeft.next == pivot.next) {
-            dummy.next = pivot;
-        }
-        pivot.next = newRight;
-        if (pivot.next == newRight.next) {
-            dummy.next = newRight;
+    public static ListNode[] mergeLists(ListNode[] left, ListNode pivotNode, ListNode[] right) {
+        ListNode fh = null, ft = null;
+        if (left[0] != null && right[0] != null) {
+            fh = left[0];
+            left[1].next = pivotNode;
+            pivotNode.next = right[0];
+            ft = right[1];
+        } else if (left[0] == null && right[0] == null) {
+            fh = ft = pivotNode;
+        } else if (left[0] == null) {
+            fh = pivotNode;
+            pivotNode.next = right[0];
+            ft = right[1];
+        } else {
+            fh = left[0];
+            left[1].next = pivotNode;
+            ft = pivotNode;
         }
 
-        return new ListNode[] { dummy.next, tail };
+        return new ListNode[] { fh, ft };
     }
 
     // {head,tail}
@@ -91,6 +84,5 @@ public class QuickSort {
 
         return mergeLists(left, segregateNodes[1], right);
     }
-
 
 }
