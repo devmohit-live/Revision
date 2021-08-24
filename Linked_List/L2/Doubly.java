@@ -17,7 +17,6 @@ public class Doubly {
     private Node head;
     private Node tail;
 
-   
     // Exceptions========================================
 
     private boolean ListIsEmptyException() {
@@ -45,7 +44,7 @@ public class Doubly {
     public boolean isEmpty() {
         return this.size == 0;
     }
-    
+
     public String toString() {
         StringBuilder sb = new StringBuilder();
         Node curr = this.head;
@@ -59,6 +58,40 @@ public class Doubly {
         sb.append("]");
 
         return sb.toString();
+    }
+
+    public void displayForw() {
+        if (ListIsEmptyException())
+            return;
+
+        System.out.print("[");
+        Node curr = this.head;
+        while (curr != null) {
+            if (curr.next != null) {
+                System.out.print(curr.data + ", ");
+            } else
+                System.out.print(curr.data);
+
+            curr = curr.next;
+        }
+        System.out.println("]");
+
+    }
+
+    public void displayBack() {
+        ListIsEmptyException();
+
+        System.out.print("[");
+        Node curr = this.tail;
+        while (curr != null) {
+            if (curr.prev != null) {
+                System.out.print(curr.data + ", ");
+            } else
+                System.out.print(curr.data);
+
+            curr = curr.prev;
+        }
+        System.out.println("]");
     }
 
     // ds functions ======================================
@@ -360,6 +393,32 @@ public class Doubly {
         // get node hadles the excpetion
         Node node = getNodeAt(idx);
         return removeAfter(node);
+    }
+
+    // remove self
+    public int removeNode(Node refNode) {
+        Node prev = refNode.prev;
+        Node forw = refNode.next;
+
+        if (this.size == 1) {
+            this.head = this.tail = null;
+            this.size--;
+        }
+
+        if (prev == null)
+            return removeFirstNode().data;
+        else if (forw == null)
+            return removeLastNode().data;
+        else {
+            prev.next = forw;
+            forw.prev = prev;
+
+            refNode.next = refNode.prev = null;
+
+            this.size--;
+
+            return refNode.data;
+        }
     }
 
 }

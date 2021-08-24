@@ -1,7 +1,11 @@
+import java.util.HashMap;
+import java.util.PriorityQueue;
+
 public class Basics {
     public static class ListNode {
         int val = 0;
         ListNode next = null;
+        ListNode random = null;
 
         ListNode(int val) {
             this.val = val;
@@ -665,6 +669,42 @@ public class Basics {
         }
 
         return reverse(ans.next);
+    }
+
+    // copy list with random pointers ->leetcode 138
+    public ListNode copyRandomListWithSpace(ListNode head) {
+        HashMap<ListNode, ListNode> map = new HashMap<>();
+        ListNode curr1 = head;
+        ListNode curr2 = head;
+        // ListNode curr = null;
+        ListNode dummy = new ListNode(-1);
+        ListNode itr = dummy;
+        ListNode itr2 = dummy;
+
+        if (head == null)
+            return head;
+
+        // normal deep copy with next link is made
+        while (curr1 != null) {
+            ListNode x = new ListNode(curr1.val);
+            itr.next = x;
+            map.put(curr1, x);
+            curr1 = curr1.next;
+            itr = itr.next;
+        }
+
+        // random pointers
+        while (curr2 != null) {
+            ListNode origListRandom = curr2.random;
+            // respective new list ListNode
+            ListNode newListRandom = map.get(origListRandom);
+            itr2.next.random = newListRandom;
+
+            itr2 = itr2.next;
+            curr2 = curr2.next;
+        }
+
+        return dummy.next;
     }
 
     static void printList(ListNode node) {
