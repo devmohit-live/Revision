@@ -1,4 +1,5 @@
 public class QuickSort {
+    // TODO:
 
     static class ListNode {
         int val;
@@ -9,6 +10,86 @@ public class QuickSort {
             next = null;
         }
     }
+
+    // Base =>
+
+    // Segregate LinkedList with last index elemet as pivot
+    public static ListNode segregateOnLastIndex(ListNode head) {
+        ListNode pivot = head, curr = head;
+        ListNode left = new ListNode(-1), litr = left, right = new ListNode(-1), ritr = right;
+
+        // get the pivot => here the pivot is last element (given in question)
+        while (pivot.next != null)
+            pivot = pivot.next;
+
+        // segregating
+        while (curr != null) {
+            ListNode forw = curr.next;
+
+            if (curr != pivot && curr.val <= pivot.val) {
+                litr.next = curr;
+                litr = litr.next;
+            } else if (curr != pivot) {
+                ritr.next = curr;
+                ritr = ritr.next;
+            }
+
+            curr.next = null;
+            curr = forw;
+        }
+
+        // releasing any connection to avoid cycle
+        pivot.next = litr.next = ritr.next = null;
+
+        // making proper connections
+        litr.next = pivot;
+        pivot.next = right.next;
+
+        // return left.next; //if want to return the segregated list
+
+        // returning pivot
+        return pivot;
+
+    }
+
+    // Segregate LinkedList with given index elemet as pivot
+
+    public static ListNode segregate(ListNode head, int pivotIdx) {
+        ListNode pivot = head, curr = head;
+        ListNode left = new ListNode(-1), litr = left, right = new ListNode(-1), ritr = right;
+
+        // get the pivot
+        while (pivotIdx-- > 0)
+            pivot = pivot.next;
+
+        // segregating
+        while (curr != null) {
+            ListNode forw = curr.next;
+
+            if (curr != pivot && curr.val <= pivot.val) {
+                litr.next = curr;
+                litr = litr.next;
+            } else if (curr != pivot) {
+                ritr.next = curr;
+                ritr = ritr.next;
+            }
+
+            curr.next = null;
+            curr = forw;
+        }
+
+        // releasing any connection to avoid cycle
+        pivot.next = litr.next = ritr.next = null;
+
+        // making proper connections
+        litr.next = pivot;
+        pivot.next = right.next;
+
+        return left.next;
+
+    }
+
+    // Base ends here
 
     public static ListNode[] getSegregateNodes(ListNode head, int pivotIdx) {
         if (head == null || head.next == null)

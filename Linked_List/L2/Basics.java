@@ -612,6 +612,8 @@ public class Basics {
 
     }
 
+    // TODO: multiplication of ll
+
     // add two list (got after multiplication) // here we will makes changes to
     // original list only => inplace
     public static void addList(ListNode prev, ListNode list) {
@@ -672,6 +674,7 @@ public class Basics {
     }
 
     // copy list with random pointers ->leetcode 138
+    // TODO: copy random pointers optimised space
     public ListNode copyRandomListWithSpace(ListNode head) {
         HashMap<ListNode, ListNode> map = new HashMap<>();
         ListNode curr1 = head;
@@ -702,6 +705,89 @@ public class Basics {
 
             itr2 = itr2.next;
             curr2 = curr2.next;
+        }
+
+        return dummy.next;
+    }
+
+    public ListNode copyRandomList(ListNode head) {
+        if (head == null)
+            return head;
+
+        ListNode curr = head;
+        copyList(curr);
+        setRandomPointer(curr);
+
+        return extractList(curr);
+    }
+
+    private void copyList(ListNode head) {
+        if (head == null)
+            return;
+
+        ListNode curr = head;
+        while (curr != null) {
+            ListNode forw = curr.next;
+            ListNode node = new ListNode(curr.val);
+            curr.next = node;
+            node.next = forw;
+
+            curr = forw;
+        }
+
+    }
+
+    private void setRandomPointer(ListNode head) {
+
+        ListNode curr = head;
+
+        while (curr != null) {
+            ListNode forw = curr.next.next;
+            ListNode copiedNode = curr.next;
+
+            if (curr.random != null)
+                curr.next.random = curr.random.next;
+
+            curr = forw;
+        }
+
+    }
+
+    private ListNode extractListMy(ListNode head) {
+
+        ListNode dummy = new ListNode(-1);
+        ListNode curr = head;
+        ListNode ans = curr.next;
+        dummy.next = ans;
+
+        while (curr != null) {
+            ListNode forw = curr.next.next;
+            ListNode copiedForw = null;
+            if (ans.next != null)
+                copiedForw = ans.next.next;
+
+            curr.next = ans.next = null;
+
+            curr.next = forw;
+            ans.next = copiedForw;
+
+            curr = forw;
+            ans = copiedForw;
+        }
+
+        return dummy.next;
+    }
+
+    public ListNode extractList(ListNode head) {
+        ListNode curr = head, dummy = new ListNode(-1), prev = dummy;
+        while (curr != null) {
+            ListNode forw = curr.next.next; // backup
+
+            prev.next = curr.next; // links
+            curr.next = forw;
+
+            curr = forw; // move
+            prev = prev.next;
         }
 
         return dummy.next;
