@@ -71,6 +71,8 @@ public class Base {
     }
 
     // partiton over a given data that may or may not be present in array
+    // here th eproblem is if the data is present in array then it will not be at
+    // it's coreect postion as it should be in sorted array
     static void partitionOverData(int[] arr, int pivot) {
         int p1 = -1, undef = 0, n = arr.length;
         while (undef < n) {
@@ -85,23 +87,44 @@ public class Base {
         System.out.println(Arrays.toString(arr));
     }
 
+    // using two pointer to return thr pivot index => the place where the partion is
+    // done
+    static int partitionOverData2(int[] arr, int pivot) {
+        int n = arr.length, p = n - 1, itr = 0;
+        while (itr <= p) {
+            if (arr[itr] <= pivot)
+                itr++;
+            else
+                swap(arr, p--, itr);
+        }
+        System.out.println(Arrays.toString(arr));
+        return p;
+    }
+
     static void partitionOverPivot(int[] arr, int pivotIdx) {
 
         // we have also to fix the pivot to its correct place -> just put that pivot
         // elemtn at last postion
-        // just to make the regions distinguihable
+        // just to make the regions distinguihable => fix the pivot
         int pivot = arr[pivotIdx], n = arr.length;
-        int p1 = -1, undef = 0;
+        int p = -1, undef = 0, li = n - 1;
+
+        // fixing the pivot so that we can put it at it's correct pos
         swap(arr, pivotIdx, n - 1);
-        while (undef < n) {
+
+        // < li bcz pivot is at li and is fixed
+        while (undef < li) {
             if (arr[undef] <= pivot) {
-                p1++;
-                swap(arr, undef, p1);
-                undef++;
-            } else {
-                undef++;
+                p++;
+                swap(arr, undef, p);
             }
+            undef++;
         }
+
+        // putting pivot at it's correct pos
+
+        swap(arr, p + 1, li); // we can also do while(undef<=li) then we don't need to swap it explicitly
+
         System.out.println(Arrays.toString(arr));
     }
 
@@ -128,14 +151,25 @@ public class Base {
 
         // partitionOverData(ar.clone(), 7);
         // partitionOverData(ar.clone(), 4);
-        System.out.println("Patitioning over " + ar[3] + " ");
-        partitionOverPivot(ar.clone(), 3);
-        System.out.println("Patitioning over " + ar[ar.length - 1] + " ");
-        partitionOverPivot(ar.clone(), ar.length - 1);
-        System.out.println("Patitioning over " + ar[5] + " ");
-        partitionOverPivot(ar.clone(), 5);
-        System.out.println("Patitioning over " + arSorted[5] + " ");
-        partitionOverPivot(arSorted.clone(), 5);
+        // System.out.println(
+        // "Partiioning over data " + 7 + " partition is done at index " +
+        // partitionOverData2(ar.clone(), 7));
+        // System.out.println(
+        // "Partiioning over data " + 4 + " partition is done at index " +
+        // partitionOverData2(ar.clone(), 4));
+
+        // System.out.println("Patitioning over " + ar[3] + " ");
+        // partitionOverPivot(ar.clone(), 3);
+        // System.out.println("Patitioning over " + ar[ar.length - 1] + " ");
+        // partitionOverPivot(ar.clone(), ar.length - 1);
+        // System.out.println("Patitioning over " + ar[5] + " ");
+        // partitionOverPivot(ar.clone(), 5);
+        // System.out.println("Patitioning over " + arSorted[5] + " ");
+        // partitionOverPivot(arSorted.clone(), 5);
+
+        QuickSort quick = new QuickSort();
+        quick.sort(ar.clone());
+        quick.sort(arSorted.clone());
 
     }
 }
