@@ -1,9 +1,12 @@
 import java.util.Arrays;
+import java.util.Random;
 
 public class QuickSort {
     QuickSort() {
         System.out.println("\nCalling QuickSort\n");
     }
+
+    Random random = new Random();
 
     private void swap(int[] arr, int i, int j) {
         int tmp = arr[i];
@@ -17,12 +20,12 @@ public class QuickSort {
     }
 
     private int partitonInRange(int[] arr, int si, int ei, int pivotIdx) {
-        if (pivotIdx > arr.length || pivotIdx < 0)
+        if (pivotIdx >= arr.length || pivotIdx < 0)
             return -1;
 
         int p = si - 1, itr = si;
-        swap(arr, pivotIdx, ei);
         int data = arr[pivotIdx];
+        swap(arr, pivotIdx, ei);
 
         while (itr <= ei) {
             if (arr[itr] <= data) {
@@ -38,10 +41,15 @@ public class QuickSort {
         if (si > ei)
             return;
 
-        int pivot = ei;
-        int pivotIdx = partitonInRange(arr, si, ei, pivot);
-        quickSort(arr, si, pivotIdx - 1);
-        quickSort(arr, pivotIdx + 1, ei);
+        // int pivotIdx = ei; // quicksort with ending index as pivot;
+
+        // int pivotIdx = si; // quicksort with ending index as pivot;
+
+        int pivotIdx = random.nextInt(ei - si + 1) + si; // quicksort with Random index as
+        // pivot;
+        int p = partitonInRange(arr, si, ei, pivotIdx);
+        quickSort(arr, si, p - 1);
+        quickSort(arr, p + 1, ei);
 
     }
 }
