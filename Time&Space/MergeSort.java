@@ -22,6 +22,9 @@ public class MergeSort {
     }
 
     private int[] merger2SortedArrays(int[] left, int[] right) {
+        if (left.length == 0 || right.length == 0)
+            return left.length == 0 ? right : left;
+
         int i = 0, j = 0, itr = 0;
         int n = left.length, m = right.length;
         int[] res = new int[m + n];

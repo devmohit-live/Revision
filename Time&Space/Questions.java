@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Questions {
     // find kth largest element => Time: klogn(average), kn(worst)
 
@@ -38,6 +40,71 @@ public class Questions {
             itr++;
         }
         return p;
+    }
+
+    public static void targetSumPair(int[] arr, int target) {
+
+        int n = arr.length;
+        QuickSort ob = new QuickSort();
+        ob.sort(arr);
+
+        int i = 0, j = arr.length - 1;
+
+        while (i < j) {
+            int sum = arr[i] + arr[j];
+            if (sum == target) {
+                System.out.println(arr[i] + ", " + arr[j]);
+                i++;
+                j--;
+            } else if (sum > target)
+                j--;
+            else
+                i++;
+        }
+
+    }
+
+    public static void threeSum(int[] arr, int target) {
+        QuickSort ob = new QuickSort();
+        ob.sort(arr);
+
+        int prev = (int) 1e9;
+        for (int i = 0; i < arr.length; i++) {
+            int a = arr[i];
+            if (a != prev) { // to avoid duplicates
+                int subTarget = target - a;
+
+                ArrayList<int[]> sublist = twoSum(arr, subTarget, i + 1, arr.length-1);
+                for (int[] ans : sublist)
+                    System.out.println(a + " " + ans[0] + " " + ans[1]);
+
+                prev = a;
+            }
+
+        }
+
+    }
+
+    private static ArrayList<int[]> twoSum(int[] arr, int target, int si, int ei) {
+        if (si >= ei || si >= arr.length)
+            return new ArrayList<int[]>();
+
+        int i = si, j = ei;
+        ArrayList<int[]> res = new ArrayList<>();
+
+        while (i < j) {
+            int sum = arr[i] + arr[j];
+            if (sum == target) {
+                res.add(new int[] { arr[i], arr[j] });
+                i++;
+                j--;
+            } else if (sum > target)
+                j--;
+            else
+                i++;
+        }
+
+        return res;
     }
 
 }

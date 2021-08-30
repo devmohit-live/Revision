@@ -171,14 +171,20 @@ public class Base {
         // quick.sort(ar.clone());
         // quick.sort(arSorted.clone());
 
-        // Questions ques = new Questions();
+        Questions ques = new Questions();
         // int kthLargest[] = { -12, 2, 7, 4, 34, 23, 0, 1, -1, -50, 16, 23, 7, 4, 2, 3
         // };
         // int k = 4;
+        // int[] kk = { 12, 9, -48, 100, 43, 84, 74, 86, 34, -37, 60, -29, 44, 160 };
+        // ques.targetSumPair(kk,160);
+
         // System.out.printf("%d largest element in an array is %d", k,
         // ques.quickSelect(kthLargest, k));
-        MergeSort merge = new MergeSort();
-        merge.sort(ar);
+        int[] kk = { -2, -3, 7, 5, 8, 15, 3, 2, 9, 10, 19 };
+        ques.threeSum(kk, 25);
+
+        // MergeSort merge = new MergeSort();
+        // merge.sort(ar);
 
     }
 }
