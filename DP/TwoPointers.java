@@ -1,5 +1,8 @@
 import java.util.Arrays;
 
+import jdk.nashorn.internal.IntDeque;
+import jdk.nashorn.internal.runtime.regexp.joni.encoding.IntHolder;
+
 public class TwoPointers {
     public static void display(int[] dp) {
         System.out.println(Arrays.toString(dp));
@@ -177,6 +180,37 @@ public class TwoPointers {
         return dp[SR][SC];
     }
 
+    public static int boardPathMem(int n, int[] dp) {
+        if (n == 0)
+            return dp[n] = 1;
+
+        if (dp[n] != 0)
+            return dp[n];
+
+        int count = 0;
+        for (int dice = 1; dice <= 6 && n - dice >= 0; dice++) {
+            count += boardPathMem(n - dice, dp);
+        }
+        return dp[n] = count;
+    }
+
+    public static int boardPathTab(int N, int[] dp) {
+        for (int n = 0; n <= N; n++) {
+            if (n == 0) {
+                dp[n] = 1;
+                continue;
+            }
+
+            // if dp[n] is dependent on last 6 states if exists ie dp[n] = summation
+            // (dp[n-x]) if n-x exists x=>[1,6]
+            for (int dice = 1; dice <= 6 && n - dice >= 0; dice++) {
+                dp[n] += dp[n - dice]; //
+            }
+
+        }
+        return dp[N];
+    }
+
     static void maze_run() {
         int[][] dir = { { 0, 1 }, { 1, 0 }, { 1, 1 } };
         // String[] dirS = { "H", "V", "D" };
@@ -186,18 +220,6 @@ public class TwoPointers {
         display2d(dp);
         System.out.println(mazePathTab(dp, 0, 0, m, n, dir));
         int[][] dp2 = new int[m + 1][n + 1];
-        display2d(dp2);
-    }
-
-    static void board_run() {
-        int[][] dir = { { 0, 1 }, { 1, 0 }, { 1, 1 } };
-        // String[] dirS = { "H", "V", "D" };
-        int m = 5, n = 5;
-        int[][] dp = new int[m + 1][n + 1];
-        System.out.println(boardPathMem(dp, 0, 0, m, n, dir));
-        display2d(dp);
-        int[][] dp2 = new int[m + 1][n + 1];
-        System.out.println(boardPathTab(dp, 0, 0, m, n, dir));
         display2d(dp2);
     }
 
@@ -214,25 +236,35 @@ public class TwoPointers {
         display2d(dp2);
     }
 
-    static void boardPathVar_run() {
-        int[][] dir = { { 0, 1 }, { 1, 0 }, { 1, 1 } };
-        int m = 3, n = 3;
-        int[] jumps = {};
+    static void board_run() {
+        int n = 10;
+        int[] dp = new int[n + 1];
+        System.out.println(boardPathMem(n, dp));
+        display(dp);
 
-        int[][] dp = new int[m + 1][n + 1];
-        System.out.println(boardPathJumpsMem(dp, 0, 0, m, n, dir,jumps));
-        display2d(dp);
-        System.out.println();
-        int[][] dp2 = new int[m + 1][n + 1];
-        System.out.println(boardPathJumpsTab(dp2, 0, 0, m, n, dir,jumps));
-        display2d(dp2);
+        int[] dp2 = new int[n + 1];
+        System.out.println(boardPathTab(n, dp2));
+        display(dp2);
     }
+
+    // static void boardPathVar_run() {
+    // int n = 10;
+    // int[] jumps = {};
+
+    // int[] dp = new int[n + 1];
+    // System.out.println(boardPathJumpsMem(n, dp, jumps));
+    // display(dp);
+    // int[] dp2 = new int[n + 1];
+    // System.out.println(boardPathJumpsTab(n, dp2, jumps));
+    // display(dp2);
+    // }
 
     public static void main(String[] args) {
         // fibo_run();
 
         // maze_run();
         // mazeJump_run();
+        board_run();
 
     }
 
