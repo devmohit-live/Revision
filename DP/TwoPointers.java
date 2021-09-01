@@ -211,6 +211,37 @@ public class TwoPointers {
         return dp[N];
     }
 
+    public static int boardPathJumpsMem(int n, int[] dp, int[] jumps) {
+        if (n == 0)
+            return dp[n] = 1;
+
+        if (dp[n] != 0)
+            return dp[n];
+
+        int count = 0;
+        for (int jump : jumps) {
+            if (jump != 0 && n - jump >= 0)
+                count += boardPathJumpsMem(n - jump, dp, jumps);
+        }
+        return dp[n] = count;
+    }
+
+    public static int boardPathJumpsTab(int N, int[] dp, int[] jumps) {
+        for (int n = 0; n <= N; n++) {
+            if (n == 0) {
+                dp[n] = 1;
+                continue;
+            }
+
+            for (int jump : jumps) {
+                if (jump != 0 && n - jump >= 0)
+                    dp[n] += dp[n - jump]; // dependent on previos jump value
+            }
+
+        }
+        return dp[N];
+    }
+
     static void maze_run() {
         int[][] dir = { { 0, 1 }, { 1, 0 }, { 1, 1 } };
         // String[] dirS = { "H", "V", "D" };
@@ -247,24 +278,25 @@ public class TwoPointers {
         display(dp2);
     }
 
-    // static void boardPathVar_run() {
-    // int n = 10;
-    // int[] jumps = {};
+    static void boardPathVar_run() {
+        int n = 10;
+        int[] allPossibleJumps = { 0, 1, 2, 3, 8, 9, 6, 10 }; // 0 jmp pe infinite call lg skti h
 
-    // int[] dp = new int[n + 1];
-    // System.out.println(boardPathJumpsMem(n, dp, jumps));
-    // display(dp);
-    // int[] dp2 = new int[n + 1];
-    // System.out.println(boardPathJumpsTab(n, dp2, jumps));
-    // display(dp2);
-    // }
+        int[] dp = new int[n + 1];
+        System.out.println(boardPathJumpsMem(n, dp, allPossibleJumps));
+        display(dp);
+        int[] dp2 = new int[n + 1];
+        System.out.println(boardPathJumpsTab(n, dp2, allPossibleJumps));
+        display(dp2);
+    }
 
     public static void main(String[] args) {
         // fibo_run();
 
         // maze_run();
         // mazeJump_run();
-        board_run();
+        // board_run();
+        boardPathVar_run();
 
     }
 
