@@ -1,3 +1,5 @@
+import java.util.*;
+
 public class Questions {
 
     public static void display(int[] dp) {
@@ -65,6 +67,60 @@ public class Questions {
     }
 
     // Leetcode 746
+    class start_to_end {
+        public int minCostClimbingStairs(int[] cost) {
+            int[] dp = new int[cost.length + 2];
+            Arrays.fill(dp, -1);
+            solve(cost, dp, 0);
+            return Math.min(dp[0], dp[1]);
+        }
+
+        int solve(int[] cost, int[] dp, int idx) {
+            if (idx > cost.length)
+                return 0;
+            if (idx == cost.length)
+                return dp[idx] = 0;
+
+            if (dp[idx] != -1)
+                return dp[idx];
+
+            int a = cost[idx] + solve(cost, dp, idx + 1); // 1 jump
+            int b = cost[idx] + solve(cost, dp, idx + 2); // 2 jump
+            int ans = Math.min(a, b);
+
+            return dp[idx] = ans;
+
+        }
+    }
+
+    class end_to_start_and_tab {
+        public int minCostClimbingStairs(int[] cost) {
+            int n = cost.length;
+            int[] dp = new int[n + 1];
+            Arrays.fill(dp, -1);
+            // solve(cost,dp,0);
+            // return Math.min(dp[0],dp[1]);
+            minJumps(cost, dp, n);
+            return Math.min(dp[n - 1], dp[n - 2]);
+        }
+
+        int minJumpsTab(int[] cost, int[] dp, int n) {
+            for (int idx = 0; idx <= n; idx++) {
+
+                if (idx == 0 || idx == 1) {
+                    dp[idx] = cost[idx];
+                    continue;
+                }
+
+                int singleJump = dp[idx - 1];
+                int doubleJump = dp[idx - 2];
+                int selfCost = idx < cost.length ? cost[idx] : 0;
+                int minCost = Math.min(singleJump, doubleJump) + selfCost;
+                dp[idx] = minCost;
+            }
+            return dp[n];
+        }
+    }
 
     // Leetcode 91 Decode Ways I --------
     // 0 ms
@@ -139,8 +195,8 @@ public class Questions {
             if (ch != '0')
                 sum += a;
 
-                //since we can't return directly from here on seeing zero(iteratind from last)
-            if (ch!='0' && idx < s.length() - 1) {
+            // since we can't return directly from here on seeing zero(iteratind from last)
+            if (ch != '0' && idx < s.length() - 1) {
                 char ch2 = s.charAt(idx + 1);
                 int num = (ch - '0') * 10 + (ch2 - '0');
                 if (num <= 26)
@@ -158,5 +214,13 @@ public class Questions {
     // -------
 
     // Leetcode 639. Decode Ways II
+
+    public static void main(String[] args) {
+        String s = "212311";
+        int[] dp = new int[s.length() + 1];
+        Arrays.fill(dp, -1);
+        System.out.println(numDecodingsMemo(s, 0, dp));
+        display(dp);
+    }
 
 }
