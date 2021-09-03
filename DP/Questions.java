@@ -2,6 +2,8 @@ import java.util.*;
 
 public class Questions {
 
+    static int mod = (int) 1e9 + 7;
+
     public static void display(int[] dp) {
         System.out.println(Arrays.toString(dp));
     }
@@ -100,7 +102,7 @@ public class Questions {
             Arrays.fill(dp, -1);
             // solve(cost,dp,0);
             // return Math.min(dp[0],dp[1]);
-            minJumps(cost, dp, n);
+            minJumpsTab(cost, dp, n);
             return Math.min(dp[n - 1], dp[n - 2]);
         }
 
@@ -214,13 +216,81 @@ public class Questions {
     // -------
 
     // Leetcode 639. Decode Ways II
+    // if there is a mod operation alaways take dp,storage as long
+
+    static long decode2(String s, int idx, long[] dp) {
+        int n = s.length();
+
+        if (idx == n) {
+            return dp[idx] = 1;
+        }
+
+        if (dp[idx] != -1)
+            return dp[idx];
+
+        char ch1 = s.charAt(idx);
+        if (ch1 == '0')
+            return dp[idx] = 0;
+
+        long count = 0;
+        if (ch1 == '*') {
+            // single character call
+            count = (count + (9 * decode2(s, idx + 1, dp))) % mod;
+
+            // double character call
+            if (idx < n - 1) {
+                char ch2 = s.charAt(idx + 1);
+                if (ch2 >= '0' && ch2 <= '6') {
+                    count = (count + (2 * decode2(s, idx + 2, dp))) % mod;
+                } else if (ch2 >= '7' && ch2 <= '9') {
+                    count = (count + (1 * decode2(s, idx + 2, dp))) % mod;
+                } else {
+                    // 2nd charcater is also a star
+                    count = (count + (15 * decode2(s, idx + 2, dp))) % mod;
+                }
+            }
+
+        } else {
+            // first character is a character
+
+            // single call
+            count = (count + (1 * decode2(s, idx + 1, dp))) % mod;
+
+            // double character call
+            if (idx < n - 1) {
+                char ch2 = s.charAt(idx + 1);
+                if (ch1 == '1' && ch2 == '*') {
+                    // second character id a star
+                    count = (count + (9 * decode2(s, idx + 2, dp))) % mod;
+
+                } else if (ch1 == '2' && ch2 == '*') {
+                    // second character is a star
+                    count = (count + (6 * decode2(s, idx + 2, dp))) % mod;
+
+                } else if (ch2 != '*') {
+                    // compulsory to check ch2!='*' else ch2-'0' will give some lesser number so
+                    // num<=26 and unnceaary wrong call will bw made
+                    // normal character
+                    int num = (ch1 - '0') * 10 + (ch2 - '0');
+                    if (num <= 26)
+                        count = (count + (1 * decode2(s, idx + 2, dp))) % mod;
+                }
+
+            }
+
+        }
+
+        return dp[idx] = count;
+    }
 
     public static void main(String[] args) {
-        String s = "212311";
-        int[] dp = new int[s.length() + 1];
-        Arrays.fill(dp, -1);
-        System.out.println(numDecodingsMemo(s, 0, dp));
-        display(dp);
+        String s[] = { "3*", "212311", "*", "1*", "2*", "*3", "**", "*3525**56*" };
+        for (String st : s) {
+            long[] dp = new long[st.length() + 1];
+            Arrays.fill(dp, -1);
+            System.out.println(decode2(st, 0, dp));
+            System.out.println(Arrays.toString(dp));
+        }
     }
 
 }
