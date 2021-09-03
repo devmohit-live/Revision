@@ -1,7 +1,5 @@
 import java.util.Arrays;
-
-import jdk.nashorn.internal.IntDeque;
-import jdk.nashorn.internal.runtime.regexp.joni.encoding.IntHolder;
+import java.util.LinkedList;
 
 public class TwoPointers {
     public static void display(int[] dp) {
@@ -219,7 +217,7 @@ public class TwoPointers {
             return dp[n];
 
         int count = 0;
-        for (int jump : jumps) {
+        for (int jump : jumps) { // jump of 0 => remains at same pos => infi call
             if (jump != 0 && n - jump >= 0)
                 count += boardPathJumpsMem(n - jump, dp, jumps);
         }
@@ -240,6 +238,40 @@ public class TwoPointers {
 
         }
         return dp[N];
+    }
+
+    public static int boardPathOpti(int N) {
+
+        if (N == 0 || N == 1)
+            return 1;
+        LinkedList<Integer> states = new LinkedList<>();
+        states.addLast(1); // 0
+        states.addLast(1); // 1;
+        // states.addLast(2); // 2;
+        int sum = 2;
+        for (int i = 2; i < Math.min(6, N); i++) {
+            // we don't have to remove older states before getting states>=6
+            states.addLast(sum);
+            int prev = sum;
+            sum += prev;
+        }
+
+        // for (Integer integer : states) {
+        // System.out.print(integer + ", ");
+        // }
+
+        states.add(sum); // add the last state for which we don't need to subtract anything
+
+        for (int i = N - 6; i >= 1; i--) {
+            int tosub = states.removeFirst();
+            int prev = sum - tosub;
+            sum += prev;
+            states.add(sum);
+            // System.out.print(sum + ", ");
+        }
+
+        return states.getLast();
+
     }
 
     static void maze_run() {
@@ -268,14 +300,20 @@ public class TwoPointers {
     }
 
     static void board_run() {
-        int n = 10;
-        int[] dp = new int[n + 1];
-        System.out.println(boardPathMem(n, dp));
-        display(dp);
+        int[] samples = { 0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 21, 36 };
+        for (int n : samples) {
+            System.out.println("\n N is : " + n);
+            int[] dp = new int[n + 1];
+            System.out.println(boardPathMem(n, dp));
+            display(dp);
 
-        int[] dp2 = new int[n + 1];
-        System.out.println(boardPathTab(n, dp2));
-        display(dp2);
+            int[] dp2 = new int[n + 1];
+            System.out.println(boardPathTab(n, dp2));
+            display(dp2);
+
+            System.out.println("Board Opti " + boardPathOpti(n));
+        }
+
     }
 
     static void boardPathVar_run() {
@@ -295,8 +333,8 @@ public class TwoPointers {
 
         // maze_run();
         // mazeJump_run();
-        // board_run();
-        boardPathVar_run();
+        board_run();
+        // boardPathVar_run();
 
     }
 
