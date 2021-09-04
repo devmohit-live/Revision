@@ -13,6 +13,15 @@ public class Questions {
             display(ar);
     }
 
+    public static void display(long[] dp) {
+        System.out.println(Arrays.toString(dp));
+    }
+
+    public static void display2d(long[][] dp) {
+        for (long[] ar : dp)
+            display(ar);
+    }
+
     public static int uniquePathsWithObstacles(int[][] obstacleGrid) {
         int[][] dir = { { 1, 0 }, { 0, 1 } };
         int m = obstacleGrid.length, n = obstacleGrid[0].length;
@@ -283,14 +292,136 @@ public class Questions {
         return dp[idx] = count;
     }
 
-    public static void main(String[] args) {
-        String s[] = { "3*", "212311", "*", "1*", "2*", "*3", "**", "*3525**56*" };
-        for (String st : s) {
-            long[] dp = new long[st.length() + 1];
-            Arrays.fill(dp, -1);
-            System.out.println(decode2(st, 0, dp));
-            System.out.println(Arrays.toString(dp));
+    // = Friends Pairing GFG =>
+
+    public long countFriendsPairings(int n) {
+        if (n == 0)
+            return 0;
+        long[] dp = new long[n + 1];
+        Arrays.fill(dp, -1);
+        return pair_tab(n, dp);
+
+    }
+
+    long pair_Mem(int n, long[] dp) {
+        if (n == 0)
+            return dp[n] = 1;
+
+        if (dp[n] != -1)
+            return dp[n];
+
+        long single = pair_Mem(n - 1, dp);
+        long paired = (n - 2) >= 0 ? pair_Mem(n - 2, dp) * (n - 1) : 0;
+        long ans = (single + paired) % mod;
+        return dp[n] = ans;
+
+    }
+
+    long pair_tab(int N, long[] dp) {
+        for (int n = 0; n <= N; n++) {
+
+            if (n == 0) {
+                dp[n] = 1;
+                continue;
+            }
+
+            long single = dp[n - 1];
+            long paired = (n - 2) >= 0 ? dp[n - 2] * (n - 1) : 0;
+            long ans = (single + paired) % mod;
+            dp[n] = ans;
         }
+
+        return dp[N];
+    }
+
+    long pair_opti(int N, long[] dp) {
+        int a = 1, b = 1, sum = 0;
+        if (N < 2)
+            return b;
+
+        for (int i = 2; i <= N; i++) {
+            // long single = a;
+            // long pair =((i-1) * b )%mod;
+
+            sum = (a) + ((i - 1) * b) % mod;
+            a = b;
+            b = sum;
+        }
+        return b;
+    }
+
+    // We have done this as we just need no of ways , so we used the concept that n
+    // similar calls will give same result so net = n*x
+    // we can't
+
+    // https://
+    // www.geeksforgeeks.org/count-number-of-ways-to-partition-a-set-into-k-subsets/
+    static long divideInKSubsetsMem(int n, int k, long[][] dp) {
+        if (n == 0 || k == 0)
+            return 0;
+        // n==k n people n groups => 1 in each group, k==1 all people in 1 group
+        if (n == k || k == 1)
+            return dp[n][k] = 1;
+
+        if (dp[n][k] != 0)
+            return dp[n][k];
+
+        // we made 1 group of self(group-1, peopel-1);
+        long selfGroup = divideInKSubsetsMem(n - 1, k - 1, dp);
+        // we will pair with other groups formed ny rest of memebers, no we can choose
+        // any of those k groups formed by n-1 members
+        long pairWithOtherFormedGroups = divideInKSubsetsMem(n - 1, k, dp) * k;
+        long ans = selfGroup + pairWithOtherFormedGroups;
+        return dp[n][k] = ans;
+    }
+    // TODO: TO ask why tab and mem gives different answers
+
+    static long divideInKSubsetsTab(int N, int K, long[][] dp) {
+        // dependent on previous row's data , we have handled the n=k=0 in main already
+        // and also in memoization there is no concpet of n=k=0
+
+        for (int n = 0; n <= N; n++) {
+            for (int k = 0; k <= K; k++) {
+                if (n == 0 || k == 0) {
+                    dp[n][k] = 0;
+                    continue;
+                }
+                if (n == k || k == 1) {
+                    dp[n][k] = 1;
+                    continue;
+                }
+
+                long selfGroup = dp[n - 1][k - 1]; // divideInKSubsetsMem(n - 1, k - 1, dp);
+                long pairWithOtherFormedGroups = dp[n - 1][k] * k; // divideInKSubsetsMem(n - 1, k, dp) * k;
+                long ans = selfGroup + pairWithOtherFormedGroups;
+                dp[n][k] = ans;
+            }
+        }
+        return dp[N][K];
+    }
+
+    static long divideInKGroups(int n, int k) {
+        if (n == 0 || k == 0)
+            return 0; // no people or no group
+        long[][] dp = new long[n + 1][k + 1];
+        long ans = divideInKSubsetsMem(n, k, dp);
+        display2d(dp);
+        long[][] dp2 = new long[n + 1][k + 1];
+        long ans2 = divideInKSubsetsTab(n, k, dp2);
+        display2d(dp2);
+        return ans2;
+    }
+
+    public static void main(String[] args) {
+        // String s[] = { "3*", "212311", "*", "1*", "2*", "*3", "**", "*3525**56*" };
+        // for (String st : s) {
+        // long[] dp = new long[st.length() + 1];
+        // Arrays.fill(dp, -1);
+        // System.out.println(decode2(st, 0, dp));
+        // System.out.println(Arrays.toString(dp));
+        // }
+
+        System.out.println(divideInKGroups(5, 3));
     }
 
 }
