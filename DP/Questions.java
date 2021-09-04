@@ -292,6 +292,74 @@ public class Questions {
         return dp[idx] = count;
     }
 
+    // GFG MaxGold:
+    static int[][] dir = { { -1, 1 }, { 0, 1 }, { 1, 1 } };
+
+    static int maxGold(int n, int m, int M[][]) {
+        int gold = 0;
+        int gold2 = 0;
+
+        int[][] dp = new int[n][m];
+        int[][] dp2 = new int[n][m];
+
+        for (int r = 0; r < n; r++) {
+            maxGold_Mem(r, 0, M, dp);
+            maxGold_Tab(r, 0, M, dp2);
+        }
+        for (int r = 0; r < n; r++) {
+            gold = Math.max(gold, dp[r][0]);
+            gold2 = Math.max(gold, dp2[r][0]);
+        }
+
+        display2d(dp);
+        System.out.println(gold2);
+        display2d(dp2);
+        return gold;
+    }
+
+    static int maxGold_Mem(int sr, int sc, int[][] mat, int[][] dp) {
+        if (sc + 1 == mat[0].length)
+            return dp[sr][sc] = mat[sr][sc];
+
+        if (dp[sr][sc] != 0)
+            return dp[sr][sc];
+
+        int maxGold = 0;
+        for (int[] d : dir) {
+            int r = sr + d[0];
+            int c = sc + d[1];
+            if (r >= 0 && r < mat.length && c >= 0 && c < mat[0].length) {
+                maxGold = Math.max(maxGold, maxGold_Mem(r, c, mat, dp));
+            }
+        }
+
+        return dp[sr][sc] = mat[sr][sc] + maxGold;
+    }
+
+    static int maxGold_Tab(int SR, int SC, int[][] mat, int[][] dp) {
+        int n = mat.length, m = mat[0].length;
+        for (int sr = n - 1; sr >= SR; sr--) {
+            for (int sc = m - 1; sc >= SC; sc--) {
+                if (sc + 1 == mat[0].length) {
+                    dp[sr][sc] = mat[sr][sc];
+                    continue;
+                }
+                int maxGold = 0;
+                for (int[] d : dir) {
+                    int r = sr + d[0];
+                    int c = sc + d[1];
+                    if (r >= 0 && r < mat.length && c >= 0 && c < mat[0].length) {
+
+                        maxGold = Math.max(maxGold, dp[r][c]); // Math.max(maxGold, maxGold_Mem(r, c, mat, dp));
+                    }
+                }
+
+                dp[sr][sc] = mat[sr][sc] + maxGold;
+            }
+        }
+        return dp[SR][SC];
+    }
+
     // = Friends Pairing GFG =>
 
     public long countFriendsPairings(int n) {
@@ -358,16 +426,17 @@ public class Questions {
     // www.geeksforgeeks.org/count-number-of-ways-to-partition-a-set-into-k-subsets/
     static long divideInKSubsetsMem(int n, int k, long[][] dp) {
         if (n == 0 || k == 0)
-            return 0;
+            return dp[n][k] = 0;
         // n==k n people n groups => 1 in each group, k==1 all people in 1 group
         if (n == k || k == 1)
             return dp[n][k] = 1;
 
-        if (dp[n][k] != 0)
+        if (dp[n][k] != -1)
             return dp[n][k];
 
         // we made 1 group of self(group-1, peopel-1);
         long selfGroup = divideInKSubsetsMem(n - 1, k - 1, dp);
+
         // we will pair with other groups formed ny rest of memebers, no we can choose
         // any of those k groups formed by n-1 members
         long pairWithOtherFormedGroups = divideInKSubsetsMem(n - 1, k, dp) * k;
@@ -401,12 +470,14 @@ public class Questions {
     }
 
     static long divideInKGroups(int n, int k) {
-        if (n == 0 || k == 0)
-            return 0; // no people or no group
         long[][] dp = new long[n + 1][k + 1];
+        Arrays.stream(dp).forEach(d -> Arrays.fill(d, -1));
         long ans = divideInKSubsetsMem(n, k, dp);
         display2d(dp);
+        System.out.println(ans);
+
         long[][] dp2 = new long[n + 1][k + 1];
+        Arrays.stream(dp2).forEach(d -> Arrays.fill(d, -1));
         long ans2 = divideInKSubsetsTab(n, k, dp2);
         display2d(dp2);
         return ans2;
@@ -421,7 +492,12 @@ public class Questions {
         // System.out.println(Arrays.toString(dp));
         // }
 
-        System.out.println(divideInKGroups(5, 3));
+        // TODO: to ask
+        // System.out.println(divideInKGroups(5, 3));
+        // System.out.println();
+        int n = 3, m = 3;
+        int[][] M = { { 1, 3, 3 }, { 2, 1, 4 }, { 0, 6, 4 } };
+        System.out.println(maxGold(n, m, M));
     }
 
 }
