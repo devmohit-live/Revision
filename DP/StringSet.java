@@ -312,6 +312,76 @@ public class StringSet {
         return dp[n][m] = ans;
     }
 
+    // Min Ditance FollowUP : each operation have individual cost
+    public int minDistFollowMem(String s1, String s2, int[] cost, int n, int m, int[][] dp) {
+
+        if (n == 0 && m == 0)
+            return dp[n][m] = 0; // no operations needed
+        if (n == 0)
+            return dp[n][m] = m * cost[0]; // m insert operations
+        if (m == 0)
+            return dp[n][m] = n * cost[2]; // n delete operations
+
+        if (dp[n][m] != -1)
+            return dp[n][m];
+
+        int replace = minDistFollowMem(s1, s2, cost, n - 1, m - 1, dp) + cost[1];
+        int insert = minDistFollowMem(s1, s2, cost, n, m - 1, dp) + cost[0];
+        int delete = minDistFollowMem(s1, s2, cost, n - 1, m, dp) + cost[2];
+
+        char a = s1.charAt(n - 1);
+        char b = s2.charAt(m - 1);
+        int ans = 0;
+        if (a == b) {
+            // move forward no operation is done-> similar to replace without cost
+            ans = minDistFollowMem(s1, s2, cost, n - 1, m - 1, dp);
+        } else {
+            // we have performed some operation => + cost
+            ans = Math.min(replace, Math.min(insert, delete));
+        }
+
+        return dp[n][m] = ans;
+    }
+
+    public int minDistFollowTab(String s1, String s2, int[] cost, int N, int M, int[][] dp) {
+        for (int n = 0; n <= N; n++) {
+            for (int m = 0; m <= M; m++) {
+                if (n == 0 && m == 0) {
+                    dp[n][m] = 0;
+                    continue;
+                }
+                if (n == 0) {
+                    dp[n][m] = m * cost[0];
+                    continue;
+                } // m insert operations
+                if (m == 0) {
+                    dp[n][m] = n * cost[2];
+                    continue;
+                } // n delete operations
+
+                int replace = dp[n - 1][m - 1] + cost[1];
+                int insert = dp[n][m - 1] + cost[0];
+                int delete = dp[n - 1][m] + cost[2];
+
+                char a = s1.charAt(n - 1);
+                char b = s2.charAt(m - 1);
+                int ans = 0;
+
+                if (a == b) {
+                    // move forward no operation is done-> similar to replace without cost
+                    ans = dp[n - 1][m - 1];
+                } else {
+                    // we have performed some operation => + cost
+                    ans = Math.min(replace, Math.min(insert, delete));
+                }
+
+                dp[n][m] = ans;
+            }
+        }
+
+        return dp[N][M];
+    }
+
     public int minDistanceTab(String s1, String s2, int N, int M, int[][] dp) {
         for (int n = 0; n <= N; n++) {
             for (int m = 0; m <= M; m++) {
@@ -475,4 +545,3 @@ public class StringSet {
         display(dp);
     }
 }
- 
