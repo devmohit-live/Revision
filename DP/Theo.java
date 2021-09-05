@@ -8,62 +8,6 @@ public class Theo {
     // FriendPairing GFG
     int mod = (int) 1e9 + 7;
 
-    public long countFriendsPairings(int n) {
-        if (n == 0)
-            return 0;
-        long[] dp = new long[n + 1];
-        Arrays.fill(dp, -1);
-        return pair_tab(n, dp);
-
-    }
-
-    long pair_Mem(int n, long[] dp) {
-        if (n == 0)
-            return dp[n] = 1;
-
-        if (dp[n] != -1)
-            return dp[n];
-
-        long single = pair_Mem(n - 1, dp);
-        long paired = (n - 2) >= 0 ? pair_Mem(n - 2, dp) * (n - 1) : 0;
-        long ans = (single + paired) % mod;
-        return dp[n] = ans;
-
-    }
-
-    long pair_tab(int N, long[] dp) {
-        for (int n = 0; n <= N; n++) {
-
-            if (n == 0) {
-                dp[n] = 1;
-                continue;
-            }
-
-            long single = dp[n - 1];
-            long paired = (n - 2) >= 0 ? dp[n - 2] * (n - 1) : 0;
-            long ans = (single + paired) % mod;
-            dp[n] = ans;
-        }
-
-        return dp[N];
-    }
-
-    long pair_opti(int N, long[] dp) {
-        int a = 1, b = 1, sum = 0;
-        if (N < 2)
-            return b;
-
-        for (int i = 2; i <= N; i++) {
-            // long single = a;
-            // long pair =((i-1) * b )%mod;
-
-            sum = (a) + ((i - 1) * b) % mod;
-            a = b;
-            b = sum;
-        }
-        return b;
-    }
-
     // Leetcode 516
     public int longestPalindromeSubseq(String s) {
         int n = s.length();
@@ -141,15 +85,23 @@ public class Theo {
 
     // Leetcode 1143
     // lcs from src -> des
-    public static int longestCommonSubsequence(String text1, String text2) {
+    public static void longestCommonSubsequences_src_to_des(String text1, String text2) {
         int n = text1.length(), m = text2.length();
         int[][] dp = new int[n + 1][m + 1];
         for (int[] d : dp)
             Arrays.fill(d, -1);
 
-        int ans = lcs(text1, text2, 0, 0, dp);
+        int ans = lcs_src_des(text1, text2, 0, 0, dp);
+        System.out.println("mem: " + ans);
         display(dp);
-        return ans;
+
+        int[][] dp2 = new int[n + 1][m + 1];
+        for (int[] d : dp)
+            Arrays.fill(d, -1);
+
+        int ans2 = lcs_Tab_src_des(text1, text2, dp2);
+        System.out.println("Tab: " + ans2);
+        display(dp2);
     }
 
     static int lcs_src_des(String s1, String s2, int i, int j, int[][] dp) {
@@ -165,9 +117,9 @@ public class Theo {
         int ans = 0;
 
         if (a == b) {
-            ans = 1 + lcs(s1, s2, i + 1, j + 1, dp);
+            ans = 1 + lcs_src_des(s1, s2, i + 1, j + 1, dp);
         } else {
-            ans = Math.max(lcs(s1, s2, i + 1, j, dp), lcs(s1, s2, i, j + 1, dp));
+            ans = Math.max(lcs_src_des(s1, s2, i + 1, j, dp), lcs_src_des(s1, s2, i, j + 1, dp));
         }
         return dp[i][j] = ans;
     }
@@ -195,57 +147,220 @@ public class Theo {
                 dp[i][j] = ans;
             }
         }
-        display(dp);
         return dp[0][0];
     }
 
     // lcs -> des -> src , n-- => recommended
     static void lcs(String s1, String s2) {
-
+        System.out.println("Src to des: ");
+        longestCommonSubsequences_src_to_des(s1, s2);
+        System.out.println("\n\n Recommended: ");
+        longestCommonSubsequences_recom(s1, s2);
     }
 
-    static int lcs_Mem(String s1, String s2, int n, int m) {
+    public static void longestCommonSubsequences_recom(String text1, String text2) {
+        int n = text1.length(), m = text2.length();
+        int[][] dp = new int[n + 1][m + 1];
+        for (int[] d : dp)
+            Arrays.fill(d, -1);
+
+        int ans = lcs_Mem(text1, text2, n, m, dp);
+        System.out.println("mem: " + ans);
+        display(dp);
+
+        int[][] dp2 = new int[n + 1][m + 1];
+        for (int[] d : dp)
+            Arrays.fill(d, -1);
+
+        int ans2 = lcs_Tab(text1, text2, n, m, dp2);
+        System.out.println("Tab: " + ans2);
+        display(dp2);
+    }
+
+    static int lcs_Mem(String s1, String s2, int n, int m, int[][] dp) {
         if (n == 0 || m == 0)
             return dp[n][m] = 0;
         if (dp[n][m] != -1)
             return dp[n][m];
 
         int ans = 0;
-        if (s1.charAt(n) == s2.charAt(m)) {
-            ans = 1 + lcs_Mem(s1, s2, n - 1, m - 1);
+        if (s1.charAt(n - 1) == s2.charAt(m - 1)) {
+            ans = 1 + lcs_Mem(s1, s2, n - 1, m - 1, dp);
         } else {
-            ans = Math.max(lcs_Mem(s1, s2, n - 1, m), lcs_Mem(s1, s2, n, m - 1));
+            ans = Math.max(lcs_Mem(s1, s2, n - 1, m, dp), lcs_Mem(s1, s2, n, m - 1, dp));
         }
 
         return dp[n][m] = ans;
     }
 
-    static int lcs_Tab(String s1, String s2, int N, int M) {
-        for(){
-            for(){
-                if(n==0 || m==0){
-                   dp[n][m]=0;
-                   continue; 
-                } 
-                int ans=0;
-                if(s1.charAt(n) == s2.charAt(m)){
-                    ans = 1 + lcs_Mem(s1, s2, n-1, m-1);
-                }else{
-                    ans = Math.max(lcs_Mem(s1, s2, n-1, m), lcs_Mem(s1, s2, n, m-1));
+    static int lcs_Tab(String s1, String s2, int N, int M, int[][] dp) {
+        for (int n = 0; n <= N; n++) {
+            for (int m = 0; m <= M; m++) {
+                if (n == 0 || m == 0) {
+                    dp[n][m] = 0;
+                    continue;
+                }
+                int ans = 0;
+                if (s1.charAt(n - 1) == s2.charAt(m - 1)) {
+                    ans = 1 + dp[n - 1][m - 1];// 1 + lcs_Mem(s1, s2, n - 1, m - 1);
+                } else {
+                    // ans = Math.max(lcs_Mem(s1, s2, n - 1, m), lcs_Mem(s1, s2, n, m - 1));
+                    ans = Math.max(dp[n - 1][m], dp[n][m - 1]);
                 }
 
-                dp[n][m]=ans;
+                dp[n][m] = ans;
             }
         }
         return dp[N][M];
     }
 
+    // Leetcode 115
+    static int mindistinctSubsMem(String s1, String s2, int n, int m, int[][] dp) {
+        if (m == 0)
+            return dp[n][m] = 1;
+
+        if (n < m)
+            return dp[n][m] = 0;
+
+        if (dp[n][m] != -1)
+            return dp[n][m];
+
+        char a = s1.charAt(n - 1);
+        char b = s2.charAt(m - 1);
+        int ans = 0;
+        if (a == b) {
+            // 2calls
+            ans = mindistinctSubsMem(s1, s2, n - 1, m - 1, dp) + mindistinctSubsMem(s1, s2, n - 1, m, dp);
+        } else {
+            // 1 call
+
+            ans = mindistinctSubsMem(s1, s2, n - 1, m, dp);
+
+        }
+
+        return dp[n][m] = ans;
+    }
+
+    static int mindistinctSubsTab(String s1, String s2, int N, int M, int[][] dp) {
+        for (int n = 0; n <= N; n++) {
+            for (int m = 0; m <= M; m++) {
+                if (m == 0) {
+                    dp[n][m] = 1;
+                    continue;
+                }
+
+                if (n < m) {
+                    dp[n][m] = 0;
+                    continue;
+                }
+
+                char a = s1.charAt(n - 1);
+                char b = s2.charAt(m - 1);
+                int ans = 0;
+                if (a == b) {
+                    // 2calls
+                    ans = dp[n - 1][m - 1] + dp[n - 1][m];
+                } else {
+                    // 1 call
+
+                    ans = dp[n - 1][m];
+
+                }
+
+                dp[n][m] = ans;
+            }
+        }
+        return dp[N][M];
+    }
+
+    // Leetcode 72 : Edit Distance
+    public static int minDistance(String word1, String word2) {
+        int n = word1.length(), m = word2.length();
+        int[][] dp = new int[n + 1][m + 1];
+        for (int[] d : dp)
+            Arrays.fill(d, -1);
+        return minDistance(word1, word2, n, m, dp);
+    }
+
+    public static int minDistance(String s1, String s2, int n, int m, int[][] dp) {
+
+        if (n == 0 && m == 0)
+            return dp[n][m] = 0; // no operations needed
+        if (n == 0)
+            return dp[n][m] = m; // m insert operations
+        if (m == 0)
+            return dp[n][m] = n; // n delete operations
+
+        if (dp[n][m] != -1)
+            return dp[n][m];
+        char a = s1.charAt(n - 1);
+        char b = s2.charAt(m - 1);
+
+        int replace = minDistance(s1, s2, n - 1, m - 1, dp);
+        int insert = minDistance(s1, s2, n, m - 1, dp);
+        int delete = minDistance(s1, s2, n - 1, m, dp);
+
+        int ans = 0;
+        if (a == b) {
+            // move forward no operation is done-> similar to replace
+            ans = replace;
+        } else {
+            // we have performed some operation => + cost
+            ans = 1 + Math.min(replace, Math.min(insert, delete));
+        }
+
+        return dp[n][m] = ans;
+    }
+
+    public int minDistanceTab(String s1, String s2, int N, int M, int[][] dp) {
+        for (int n = 0; n <= N; n++) {
+            for (int m = 0; m <= M; m++) {
+                if (n == 0 && m == 0) {
+                    dp[n][m] = 0; // no operations needed
+                    continue;
+                }
+
+                if (n == 0) {
+                    dp[n][m] = m; // m insert operations
+                    continue;
+                }
+
+                if (m == 0) {
+                    dp[n][m] = n; // n delete operations
+                    continue;
+                }
+
+                int replace = dp[n - 1][m - 1];
+                int insert = dp[n][m - 1];
+                int delete = dp[n - 1][m];
+
+                char a = s1.charAt(n - 1);
+                char b = s2.charAt(m - 1);
+                int ans = 0;
+                if (a == b) {
+                    // move forward no operation is done-> similar to replace
+                    ans = replace;
+                } else {
+                    // we have performed some operation => + cost
+                    ans = 1 + Math.min(replace, Math.min(insert, delete));
+                }
+
+                dp[n][m] = ans;
+            }
+        }
+
+        return dp[N][M];
+    }
+
     public static void main(String[] args) {
-        System.out.println(longestCommonSubsequence("abcdefgh", "acef") + "\n");
-        String s1 = "abcdefgh", s2 = "acef";
-        int N = s1.length(), M = s2.length();
-        int[][] dp = new int[N + 1][M + 1];
-        Arrays.stream(dp).forEach(d -> Arrays.fill(d, -1));
-        System.out.println(lcs_Tab(s1, s2, dp));
+        // String s1 = "geek", s2 = "acef";
+        String s = "geeksforgeeks", t = "gks";
+        // lcs(s1, s2);
+        int n = s.length(), m = t.length();
+        int[][] dp = new int[n + 1][m + 1];
+        for (int[] d : dp)
+            Arrays.fill(d, -1);
+        System.out.println(mindistinctSubsTab(s, t, n, m, dp));
+        display(dp);
     }
 }

@@ -293,7 +293,7 @@ public class Questions {
     }
 
     // GFG MaxGold:
-    static int[][] dir = { { -1, 1 }, { 0, 1 }, { 1, 1 } };
+    static int[][] dir1 = { { -1, 1 }, { 0, 1 }, { 1, 1 } };
 
     static int maxGold(int n, int m, int M[][]) {
         int gold = 0;
@@ -304,10 +304,8 @@ public class Questions {
 
         for (int r = 0; r < n; r++) {
             maxGold_Mem(r, 0, M, dp);
-            maxGold_Tab(r, 0, M, dp2);
-        }
-        for (int r = 0; r < n; r++) {
             gold = Math.max(gold, dp[r][0]);
+            maxGold_Tab(r, 0, M, dp2);
             gold2 = Math.max(gold, dp2[r][0]);
         }
 
@@ -325,7 +323,7 @@ public class Questions {
             return dp[sr][sc];
 
         int maxGold = 0;
-        for (int[] d : dir) {
+        for (int[] d : dir1) {
             int r = sr + d[0];
             int c = sc + d[1];
             if (r >= 0 && r < mat.length && c >= 0 && c < mat[0].length) {
@@ -345,7 +343,7 @@ public class Questions {
                     continue;
                 }
                 int maxGold = 0;
-                for (int[] d : dir) {
+                for (int[] d : dir1) {
                     int r = sr + d[0];
                     int c = sc + d[1];
                     if (r >= 0 && r < mat.length && c >= 0 && c < mat[0].length) {
@@ -358,6 +356,49 @@ public class Questions {
             }
         }
         return dp[SR][SC];
+    }
+
+    // MIN cost GFG : exactly max gold
+    static int[][] dir = { { 1, 0 }, { 1, -1 }, { 1, 1 } };
+
+    static int maximumPath(int N, int Matrix[][]) {
+
+        int n = Matrix.length, m = Matrix[0].length;
+
+        int[][] dp = new int[n][m];
+        for (int[] d : dp)
+            Arrays.fill(d, -1);
+        // starting from any col in mat
+        int max = 0;
+
+        for (int c = 0; c < m; c++) {
+            maxsum_Mem(0, c, Matrix, dp);
+            max = Math.max(max, dp[0][c]);
+        }
+
+        // Arrays.stream(dp).forEach(d->System.out.println(Arrays.toString(d)));
+
+        return max;
+    }
+
+    static int maxsum_Mem(int sr, int sc, int[][] mat, int[][] dp) {
+        if (sr + 1 == mat.length)
+            return dp[sr][sc] = mat[sr][sc];
+
+        if (dp[sr][sc] != -1)
+            return dp[sr][sc];
+
+        int maxPath = 0;
+        for (int[] d : dir) {
+            int r = sr + d[0];
+            int c = sc + d[1];
+
+            if (r >= 0 && r < mat.length && c >= 0 && c < mat[0].length) {
+                maxPath = Math.max(maxPath, maxsum_Mem(r, c, mat, dp));
+            }
+        }
+
+        return dp[sr][sc] = maxPath + mat[sr][sc];
     }
 
     // = Friends Pairing GFG =>
@@ -443,6 +484,7 @@ public class Questions {
         long ans = selfGroup + pairWithOtherFormedGroups;
         return dp[n][k] = ans;
     }
+
     // TODO: TO ask why tab and mem gives different answers
 
     static long divideInKSubsetsTab(int N, int K, long[][] dp) {
@@ -483,6 +525,8 @@ public class Questions {
         return ans2;
     }
 
+    //
+
     public static void main(String[] args) {
         // String s[] = { "3*", "212311", "*", "1*", "2*", "*3", "**", "*3525**56*" };
         // for (String st : s) {
@@ -493,11 +537,13 @@ public class Questions {
         // }
 
         // TODO: to ask
-        // System.out.println(divideInKGroups(5, 3));
-        // System.out.println();
-        int n = 3, m = 3;
-        int[][] M = { { 1, 3, 3 }, { 2, 1, 4 }, { 0, 6, 4 } };
-        System.out.println(maxGold(n, m, M));
+
+        System.out.println(divideInKGroups(5, 3));
+        System.out.println();
+
+        // int n = 3, m = 3;
+        // int[][] M = { { 1, 3, 3 }, { 2, 1, 4 }, { 0, 6, 4 } };
+        // System.out.println(maxGold(n, m, M));
     }
 
 }
