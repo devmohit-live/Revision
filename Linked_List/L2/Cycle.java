@@ -5,7 +5,8 @@ import java.util.Scanner;
  * position of A,B,C in the LinkedList
  */
 
-// TODO: Hande the case when A = cyclelength then m = m-1 => when slow pointer
+// TODO: Hande the case when A = multiple of cyclelength then m = m-1 => when
+// slow pointer
 // doesn't enter the cycle;
 
 // A = (B+C)*(m-1) + C
@@ -102,7 +103,10 @@ public class Cycle {
 
         M = ((A - C) / (cycleLen)) + 1;
 
-        if (A == cycleLen)
+        // there should be a tail for slow to not enter into cycle A!=0,
+        // also n*A == (B+C) => slow doesn't enters the cycle and and m reduces by 1
+
+        if (A != 0 && A % cycleLen == 0)
             M = M - 1;
 
         System.out.printf("A = %d , B = %d , C = %d , m = %d , Cycle length = %d \n", A, B, C, M, cycleLen);
