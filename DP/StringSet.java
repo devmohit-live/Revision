@@ -1,6 +1,6 @@
 import java.util.Arrays;
 
-public class Theo {
+public class StringSet {
     static void display(int[][] dp) {
         Arrays.stream(dp).forEach(d -> System.out.println(Arrays.toString(d)));
     }
@@ -352,6 +352,117 @@ public class Theo {
         return dp[N][M];
     }
 
+    // Dependecy of : 48, 10
+    String removeDuplicateStars(String s) {
+        if (s.length() == 0)
+            return "";
+        StringBuilder sb = new StringBuilder();
+        sb.append(s.charAt(0));
+
+        int i = 1;
+        while (i < s.length()) {
+            while (i < s.length() && sb.charAt(sb.length() - 1) == '*' && s.charAt(i) == '*')
+                i++;
+            if (i < s.length())
+                sb.append(s.charAt(i));
+            i++;
+        }
+
+        return sb.toString();
+    }
+
+    // Leetocde 44 : WildCard
+
+    public boolean isMatch(String s, String p) {
+        String newp = removeDuplicateStars(p);
+        System.out.println(newp);
+        int n = s.length(), m = newp.length();
+        int[][] dp = new int[n + 1][m + 1];
+        for (int[] d : dp)
+            Arrays.fill(d, -1);
+
+        return isMatch(s, newp, n, m, dp) == 1;
+    }
+
+    int isMatch(String s1, String s2, int n, int m, int[][] dp) {
+        if (n == 0 || m == 0) {
+
+            if (n == 0 && m == 0) // found a +ve case for recursion
+                return dp[n][m] = 1;
+
+            else if (m == 1 && s2.charAt(m - 1) == '*') // n=anython but m has only 1 char => if it is * then it is ok
+                return dp[n][m] = 1;
+            else
+                return dp[n][m] = 0;
+        }
+
+        if (dp[n][m] != -1)
+            return dp[n][m];
+
+        char a = s1.charAt(n - 1);
+        char b = s2.charAt(m - 1);
+        int ans = 0;
+
+        if (a == b || b == '?') {
+            ans = isMatch(s1, s2, n - 1, m - 1, dp);
+        } else if (b == '*') {
+            boolean res = false;
+            // * match with string
+            res = res || isMatch(s1, s2, n, m - 1, dp) == 1 ? true : false;
+            // * match with char 1 and remains alive => elimated the char and going for
+            // further elimination
+            res = res || isMatch(s1, s2, n - 1, m, dp) == 1 ? true : false;
+
+            ans = res ? 1 : 0; // if got answer from anywhere mark as 1
+
+        } else {
+            // a!=b & b!=*
+            ans = 0; // no need to check further
+        }
+
+        return dp[n][m] = ans;
+
+    }
+
+    int isMatchTab(String s1, String s2, int N, int M, int[][] dp) {
+        for (int n = 0; n <= N; n++) {
+            for (int m = 0; m <= M; m++) {
+                if (n == 0 || m == 0) {
+                    if (n == 0 && m == 0) {
+                        dp[n][m] = 1;
+                        continue;
+                    } else if (m == 1 && s2.charAt(m - 1) == '*') {
+                        dp[n][m] = 1;
+                        continue;
+                    } else {
+                        dp[n][m] = 0;
+                        continue;
+                    }
+
+                }
+                char a = s1.charAt(n - 1);
+                char b = s2.charAt(m - 1);
+                int ans = 0;
+
+                if (a == b || b == '?') {
+                    ans = isMatch(s1, s2, n - 1, m - 1, dp);
+                } else if (b == '*') {
+                    boolean res = false;
+                    res = res || isMatch(s1, s2, n, m - 1, dp) == 1 ? true : false;
+                    res = res || isMatch(s1, s2, n - 1, m, dp) == 1 ? true : false;
+                    ans = res ? 1 : 0; // if got answer from anywhere mark as 1
+                } else {
+                    ans = 0; // no need to check further
+                }
+
+                dp[n][m] = ans;
+            }
+        }
+
+        return dp[N][M];
+    }
+
+    // Leetcode 10
     public static void main(String[] args) {
         // String s1 = "geek", s2 = "acef";
         String s = "geeksforgeeks", t = "gks";
@@ -364,3 +475,4 @@ public class Theo {
         display(dp);
     }
 }
+ 
