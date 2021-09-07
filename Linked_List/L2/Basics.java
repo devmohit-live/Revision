@@ -666,7 +666,7 @@ public class Basics {
         while (l2 != null) {
             ListNode multipliedList = multiplyDigit(l1, l2.val);
             addList(prev, multipliedList);
-            prev = prev.next;
+            prev = prev.next; // acts as shifting -> or appeding zeros at last
             l2 = l2.next;
         }
 
@@ -674,7 +674,7 @@ public class Basics {
     }
 
     // copy list with random pointers ->leetcode 138
-    // TODO: copy random pointers optimised space
+    
     public ListNode copyRandomListWithSpace(ListNode head) {
         HashMap<ListNode, ListNode> map = new HashMap<>();
         ListNode curr1 = head;

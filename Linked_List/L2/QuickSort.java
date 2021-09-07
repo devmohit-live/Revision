@@ -91,6 +91,8 @@ public class QuickSort {
 
     // Base ends here
 
+    // QuickSort
+
     public static ListNode[] getSegregateNodes(ListNode head, int pivotIdx) {
         if (head == null || head.next == null)
             return new ListNode[] { null, head, null };
@@ -130,23 +132,29 @@ public class QuickSort {
         return l;
     }
 
-    public static ListNode[] mergeLists(ListNode[] left, ListNode pivotNode, ListNode[] right) {
+    public static ListNode[] mergeLists(ListNode[] left, ListNode mid, ListNode[] right) {
         ListNode fh = null, ft = null;
+        // left head, right head both exists
         if (left[0] != null && right[0] != null) {
-            fh = left[0];
-            left[1].next = pivotNode;
-            pivotNode.next = right[0];
-            ft = right[1];
-        } else if (left[0] == null && right[0] == null) {
-            fh = ft = pivotNode;
+
+            left[1].next = mid; // left tail.next->mid
+            mid.next = right[0];
+            fh = left[0]; // left head
+            ft = right[1]; // right tail
+
         } else if (left[0] == null) {
-            fh = pivotNode;
-            pivotNode.next = right[0];
+            // right head doesn't exixts
+            fh = mid;
+            mid.next = right[0];
             ft = right[1];
-        } else {
+
+        } else if (right[0] == null) {
+            // right[0]==null
             fh = left[0];
-            left[1].next = pivotNode;
-            ft = pivotNode;
+            left[1].next = mid;
+            ft = mid;
+        } else {
+            fh = ft = mid;
         }
 
         return new ListNode[] { fh, ft };
@@ -158,12 +166,16 @@ public class QuickSort {
             return new ListNode[] { head, head };
 
         int len = getLength(head);
-        ListNode[] segregateNodes = getSegregateNodes(head, len / 2);
+        int pivotIdx = len / 2; // we are pivoting on mid node ny default
+        ListNode[] segregateNodes = getSegregateNodes(head, pivotIdx);
+        ListNode left = segregateNodes[0];
+        ListNode pivot = segregateNodes[1];
+        ListNode right = segregateNodes[2];
 
-        ListNode[] left = quickSort(segregateNodes[0]);
-        ListNode[] right = quickSort(segregateNodes[2]);
+        ListNode[] smaller = quickSort(left);
+        ListNode[] larger = quickSort(right);
 
-        return mergeLists(left, segregateNodes[1], right);
+        return mergeLists(smaller, pivot, larger);
     }
 
 }

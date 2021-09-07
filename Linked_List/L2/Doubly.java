@@ -50,7 +50,7 @@ public class Doubly {
         Node curr = this.head;
         sb.append("[");
         while (curr != null) {
-            sb.append(curr.data);
+            sb.append(curr.val);
             if (curr.next != null)
                 sb.append(", ");
             curr = curr.next;
@@ -68,9 +68,9 @@ public class Doubly {
         Node curr = this.head;
         while (curr != null) {
             if (curr.next != null) {
-                System.out.print(curr.data + ", ");
+                System.out.print(curr.val + ", ");
             } else
-                System.out.print(curr.data);
+                System.out.print(curr.val);
 
             curr = curr.next;
         }
@@ -85,9 +85,9 @@ public class Doubly {
         Node curr = this.tail;
         while (curr != null) {
             if (curr.prev != null) {
-                System.out.print(curr.data + ", ");
+                System.out.print(curr.val + ", ");
             } else
-                System.out.print(curr.data);
+                System.out.print(curr.val);
 
             curr = curr.prev;
         }
@@ -102,14 +102,14 @@ public class Doubly {
         if (ListIsEmptyException())
             return -1;
 
-        return this.head.data;
+        return this.head.val;
     }
 
     public int getLast() {
         if (ListIsEmptyException())
             return -1;
 
-        return this.tail.data;
+        return this.tail.val;
     }
 
     private Node getNodeAt(int index) {
@@ -127,7 +127,7 @@ public class Doubly {
             return -1;
 
         Node node = getNodeAt(index);
-        return node.data;
+        return node.val;
     }
 
     // Add functions:
@@ -164,14 +164,14 @@ public class Doubly {
         addLastNode(node);
     }
 
-    public void addAt(int index, int data) {
+    public void addAt(int index, int val) {
         // here this .size bcz we can add to the sizeth index => add last
 
         if (indexIsInvalidException(index, 0, this.size))
             System.out.println(-1);
 
         else {
-            Node node = new Node(data);
+            Node node = new Node(val);
             addNodeAt(index, node);
         }
 
@@ -203,8 +203,8 @@ public class Doubly {
         }
     }
 
-    public void addBefore(Node refNode, int data) {
-        Node n = new Node(data);
+    public void addBefore(Node refNode, int val) {
+        Node n = new Node(val);
         if (refNode.prev == null)
             addFirstNode(n);
         else {
@@ -221,13 +221,13 @@ public class Doubly {
         }
     }
 
-    public void addBefore(int idx, int data) {
+    public void addBefore(int idx, int val) {
         Node node = getNodeAt(idx);
-        addBefore(node, data);
+        addBefore(node, val);
     }
 
-    private void addAfter(Node refNode, int data) {
-        Node x = new Node(data);
+    private void addAfter(Node refNode, int val) {
+        Node x = new Node(val);
         // last node
         if (refNode.next == null)
             addLastNode(x);
@@ -246,9 +246,9 @@ public class Doubly {
         }
     }
 
-    public void addAfter(int idx, int data) {
+    public void addAfter(int idx, int val) {
         Node node = getNodeAt(idx);
-        addAfter(node, data);
+        addAfter(node, val);
     }
 
     // Remove Functions:
@@ -272,7 +272,7 @@ public class Doubly {
         if (ListIsEmptyException())
             return -1;
         Node node = removeFirstNode();
-        return node.data;
+        return node.val;
     }
 
     private Node removeLastNode() {
@@ -295,7 +295,7 @@ public class Doubly {
         if (ListIsEmptyException())
             return -1;
         Node node = removeLastNode();
-        return node.data;
+        return node.val;
     }
 
     public int removeAt(int index) {
@@ -304,7 +304,7 @@ public class Doubly {
         else if (indexIsInvalidException(index, 0, this.size - 1))
             return -1;
         else {
-            return removeNodeAt(index).data;
+            return removeNodeAt(index).val;
         }
     }
 
@@ -353,7 +353,7 @@ public class Doubly {
             return -1;
         }
 
-        return removeBeforeNode(refNode).data;
+        return removeBeforeNode(refNode).val;
     }
 
     public int removeBefore(int idx) {
@@ -385,7 +385,7 @@ public class Doubly {
             System.out.println("LocationIsInvalid: ");
             return -1;
         }
-        return removeNodeAfter(refNode).data;
+        return removeNodeAfter(refNode).val;
 
     }
 
@@ -406,9 +406,9 @@ public class Doubly {
         }
 
         if (prev == null)
-            return removeFirstNode().data;
+            return removeFirstNode().val;
         else if (forw == null)
-            return removeLastNode().data;
+            return removeLastNode().val;
         else {
             prev.next = forw;
             forw.prev = prev;
@@ -417,7 +417,7 @@ public class Doubly {
 
             this.size--;
 
-            return refNode.data;
+            return refNode.val;
         }
     }
 
