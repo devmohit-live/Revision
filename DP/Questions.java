@@ -525,7 +525,29 @@ public class Questions {
         return ans2;
     }
 
-    //
+    // Leetcode 538 : Based on lcs
+    public int minDistance(String word1, String word2) {
+        int n = word1.length(), m = word2.length();
+        // A + B - 2* (A intersection B) => no of words making s1,s2 uncommon
+        int res = n + m - (2 * lcs_Mem(word1, word2, n, m, new int[n + 1][m + 1]));
+        return res;
+    }
+
+    static int lcs_Mem(String s1, String s2, int n, int m, int[][] dp) {
+        if (n == 0 || m == 0)
+            return dp[n][m] = 0;
+        if (dp[n][m] != -1)
+            return dp[n][m];
+
+        int ans = 0;
+        if (s1.charAt(n - 1) == s2.charAt(m - 1)) {
+            ans = 1 + lcs_Mem(s1, s2, n - 1, m - 1, dp);
+        } else {
+            ans = Math.max(lcs_Mem(s1, s2, n - 1, m, dp), lcs_Mem(s1, s2, n, m - 1, dp));
+        }
+
+        return dp[n][m] = ans;
+    }
 
     public static void main(String[] args) {
         // String s[] = { "3*", "212311", "*", "1*", "2*", "*3", "**", "*3525**56*" };

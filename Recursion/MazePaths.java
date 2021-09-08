@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class BacktrackingRev {
+public class MazePaths {
 
     static int[][] dir2 = { { 1, 0 }, { 0, 1 } };
     static String[] dirs2 = { "d", "r" };
