@@ -52,7 +52,7 @@ public class StringSet {
         int n = s.length();
         for (int gap = 0; gap < n; gap++) {
             // move in a diagonal
-            for (int i = -0, j = gap; i < n && j < n; i++, j++) {
+            for (int i = I, j = gap; i < n && j <= J; i++, j++) {
                 if (i > j) {
                     dp[i][j] = 0;
                     continue;
@@ -698,7 +698,7 @@ public class StringSet {
         return maxPalString;
     }
 
-    static void longestPalindrome(String s1, String s2, boolean[][] dp) {
+    static void longestPalindromeSubstring(String s1, String s2, boolean[][] dp) {
         int n = s1.length();
         for (int gap = 0; gap < n; gap++) {
             for (int i = 0, j = i + gap; i < n && j < n; i++, j++) {
@@ -718,6 +718,64 @@ public class StringSet {
 
             }
         }
+    }
+
+    int longestCommonSubstring(String s1, String s2, int n, int m) {
+        int[][] dp = new int[n + 1][m + 1]; // ""string is also included => length 0
+        return longestCommonSubstring(s1, s2, n, m, dp);
+    }
+
+    // exactly similar to lcs just when a!=b length of max common substrign is 0
+    int longestCommonSubstring(String s1, String s2, int N, int M, int[][] dp) {
+        int maxlen = 0, ei = 0;
+        for (int n = 0; n <= N; n++) {
+            for (int m = 0; m <= M; m++) {
+                if (n == 0 || m == 0) {
+                    dp[n][m] = 0;
+                    continue;
+                }
+                int ans = 0;
+                if (s1.charAt(n - 1) == s2.charAt(m - 1)) {
+                    ans = 1 + dp[n - 1][m - 1];// 1 + lcs_Mem(s1, s2, n - 1, m - 1);
+                } else {
+                    // ans = Math.max(lcs_Mem(s1, s2, n - 1, m), lcs_Mem(s1, s2, n, m - 1));
+                    ans = 0;
+                }
+
+                dp[n][m] = ans;
+                if (dp[n][m] > maxlen) {
+                    maxlen = dp[n][m];
+                    ei = n - 1;
+                }
+            }
+        }
+
+        String maxString = s1.substring(0, ei + 1);
+        System.out.println(maxString);
+        return maxlen;
+    }
+
+    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+    // *********************** Printing / BackEng: ****************************
+    String printlps(String s, int i, int j, int[][] dp) {
+        // si>=ei
+        if (i >= j) {
+            return i == j ? "" + s.charAt(i) : "";
+        }
+
+        char a = s.charAt(i);
+        char b = s.charAt(j);
+
+        if (a == b) {
+            return a + printlps(s, i + 1, j - 1, dp) + b;
+
+        } else if (dp[i + 1][j] > dp[i][j - 1]) {
+
+            return printlps(s, i + 1, j, dp);
+
+        } else
+            return printlps(s, i, j - 1, dp);
 
     }
 
