@@ -293,29 +293,58 @@ public class Questions {
     }
 
     // GFG MaxGold:
-    static int[][] dir1 = { { -1, 1 }, { 0, 1 }, { 1, 1 } };
 
     static int maxGold(int n, int m, int M[][]) {
-        int gold = 0;
-        int gold2 = 0;
-
-        int[][] dp = new int[n][m];
+        // int gold = 0;
+        int gold2 = 0, ridx = -1;
+        int[][] dir = { { -1, 1 }, { 0, 1 }, { 1, 1 } };
+        // int[][] dp = new int[n][m];
         int[][] dp2 = new int[n][m];
 
         for (int r = 0; r < n; r++) {
-            maxGold_Mem(r, 0, M, dp);
-            gold = Math.max(gold, dp[r][0]);
-            maxGold_Tab(r, 0, M, dp2);
-            gold2 = Math.max(gold, dp2[r][0]);
+            // maxGold_Mem(r, 0, M, dp);
+            // gold = Math.max(gold, dp[r][0]);
+            maxGold_Tab(r, 0, M, dp2, dir);
+            if (gold2 < dp2[r][0]) {
+                gold2 = dp2[r][0];
+                ridx = r;
+            }
+
         }
 
-        display2d(dp);
-        System.out.println(gold2);
+        // display2d(dp);
+        // System.out.println(gold2);
         display2d(dp2);
-        return gold;
+        printMaxGoldPath(dp2, ridx, 0, "(" + ridx + "," + 0 + ") ", dir);
+
+        return gold2;
     }
 
-    static int maxGold_Mem(int sr, int sc, int[][] mat, int[][] dp) {
+    static void printMaxGoldPath(int[][] dp, int sr, int sc, String asf, int[][] dir) {
+        if (sc + 1 == dp[0].length) {
+            System.out.println(asf);
+            return;
+        }
+
+        int maxGold = 0, didx = -1;
+        for (int d = 0; d < dir.length; d++) {
+            int r = sr + dir[d][0];
+            int c = sc + dir[d][1];
+            if (r >= 0 && c >= 0 && r < dp.length && c < dp[0].length) {
+                int gold = dp[r][c];
+                if (gold > maxGold) {
+                    maxGold = gold;
+                    didx = d;
+                }
+            }
+        }
+        int r = sr + dir[didx][0];
+        int c = sc + dir[didx][1];
+        printMaxGoldPath(dp, r, c, asf + "(" + r + "," + c + ") ", dir);
+
+    }
+
+    static int maxGold_Mem(int sr, int sc, int[][] mat, int[][] dp, int[][] dir) {
         if (sc + 1 == mat[0].length)
             return dp[sr][sc] = mat[sr][sc];
 
@@ -323,18 +352,18 @@ public class Questions {
             return dp[sr][sc];
 
         int maxGold = 0;
-        for (int[] d : dir1) {
+        for (int[] d : dir) {
             int r = sr + d[0];
             int c = sc + d[1];
             if (r >= 0 && r < mat.length && c >= 0 && c < mat[0].length) {
-                maxGold = Math.max(maxGold, maxGold_Mem(r, c, mat, dp));
+                maxGold = Math.max(maxGold, maxGold_Mem(r, c, mat, dp, dir));
             }
         }
 
         return dp[sr][sc] = mat[sr][sc] + maxGold;
     }
 
-    static int maxGold_Tab(int SR, int SC, int[][] mat, int[][] dp) {
+    static int maxGold_Tab(int SR, int SC, int[][] mat, int[][] dp, int[][] dir) {
         int n = mat.length, m = mat[0].length;
         for (int sr = n - 1; sr >= SR; sr--) {
             for (int sc = m - 1; sc >= SC; sc--) {
@@ -343,7 +372,7 @@ public class Questions {
                     continue;
                 }
                 int maxGold = 0;
-                for (int[] d : dir1) {
+                for (int[] d : dir) {
                     int r = sr + d[0];
                     int c = sc + d[1];
                     if (r >= 0 && r < mat.length && c >= 0 && c < mat[0].length) {
@@ -525,7 +554,79 @@ public class Questions {
         return ans2;
     }
 
-    // Leetcode 538 : Based on lcs
+    // Leetcode 1035: (exactly lcs):
+    public int maxUncrossedLines(int[] nums1, int[] nums2) {
+        int n = nums1.length, m = nums2.length;
+        int[][] dp = new int[n + 1][m + 1];
+        for (int[] d : dp)
+            Arrays.fill(d, -1);
+        return maxUncrossedLines_Mem(nums1, nums2, n, m, dp);
+
+    }
+
+    int maxUncrossedLines_Mem(int[] nums1, int[] nums2, int n, int m, int[][] dp) {
+        if (n == 0 || m == 0)
+            return 0;
+
+        if (dp[n][m] != -1)
+            return dp[n][m];
+
+        int ans = 0;
+        if (nums1[n - 1] == nums2[m - 1]) {
+            ans = 1 + maxUncrossedLines_Mem(nums1, nums2, n - 1, m - 1, dp);
+        } else {
+            ans = Math.max(maxUncrossedLines_Mem(nums1, nums2, n - 1, m, dp),
+                    maxUncrossedLines_Mem(nums1, nums2, n, m - 1, dp));
+        }
+        return dp[n][m] = ans;
+    }
+
+    // Leetcode 1458: max dot product
+    public int maxDotProduct(int[] nums1, int[] nums2) {
+        int n = nums1.length, m = nums2.length;
+
+        long[][] dp = new long[n + 1][m + 1];
+
+        for (long[] d : dp)
+            Arrays.fill(d, -(long) 1e18); // value to determine that we havn't computed any true/false case
+
+        int ans = (int) maxDotProduct(nums1, nums2, n, m, dp);
+        return ans;
+
+    }
+
+    long maxDotProduct(int[] nums1, int[] nums2, int n, int m, long[][] dp) {
+        if (n == 0 || m == 0)
+            return dp[n][m] = -(int) 1e17; // default false case vaLUE(part of ans)
+
+        if (dp[n][m] != -(long) 1e18)
+            return dp[n][m];
+
+        long a = nums1[n - 1], b = nums2[m - 1];
+        long first2only = a * b; // only first value are taken
+
+        // this case is hidden in firstTaken,secondTaken
+        // long bothfutherNext = maxDotProduct(nums1, nums2, n - 1, m - 1, dp);
+
+        long bothValuesAreTaken = first2only + maxDotProduct(nums1, nums2, n - 1, m - 1, dp);
+        long firstTaken = maxDotProduct(nums1, nums2, n - 1, m, dp);
+        long secondTaken = maxDotProduct(nums1, nums2, n, m - 1, dp);
+
+        long ans = maximum(firstTaken, secondTaken, first2only, bothValuesAreTaken);
+
+        return dp[n][m] = ans;
+
+    }
+
+    long maximum(long... ar) {
+        long max = -(int) 1e18;
+        for (long el : ar)
+            max = Math.max(max, el);
+
+        return max;
+    }
+
+    // Leetcode 538 : Based on lcs(subsequence)
     public int minDistance(String word1, String word2) {
         int n = word1.length(), m = word2.length();
         // A + B - 2* (A intersection B) => no of words making s1,s2 uncommon
@@ -558,14 +659,12 @@ public class Questions {
         // System.out.println(Arrays.toString(dp));
         // }
 
-        // TODO: to ask
+        // System.out.println(divideInKGroups(5, 3));
+        // System.out.println();
 
-        System.out.println(divideInKGroups(5, 3));
-        System.out.println();
-
-        // int n = 3, m = 3;
-        // int[][] M = { { 1, 3, 3 }, { 2, 1, 4 }, { 0, 6, 4 } };
-        // System.out.println(maxGold(n, m, M));
+        int n = 3, m = 3;
+        int[][] M = { { 1, 3, 3 }, { 2, 1, 4 }, { 0, 6, 4 } };
+        System.out.println(maxGold(n, m, M));
     }
 
 }
