@@ -192,17 +192,18 @@ public class lis {
     }
 
     // reverse bitonic seq
-    reverse_bitonic(int[]arr){
-         int[] lis = Lis(nums);
-        int[] lds = Lis_RL(nums); // mujhse shuru hone wala lds
-        int n = nums.length;
+    static int reverse_bitonic(int[] arr) {
+        // int[] lis = Lis(nums);
+        // int[] lds = Lis_RL(nums); // mujhse shuru hone wala lds
+        // int n = nums.length;
 
-        int max = -1;
-        for (int i = 0; i < n; i++) {
-            max = Math.max(lis[i] + lds[i] - 1, max);
-        }
+        // int max = -1;
+        // for (int i = 0; i < n; i++) {
+        // max = Math.max(lis[i] + lds[i] - 1, max);
+        // }
 
-        return max;
+        // return max;
+        return -1;
     }
 
     // Maximum sum increasing subsequence : We just have to check/compare with sum
@@ -273,10 +274,31 @@ public class lis {
         return dp;
     }
 
+    // Min deletion required to make an array sorted = Basically Length - lis;
+    // Here we have to remember that duplicates are alos counted as sorted ex : 2 2
+    // 2 1 => req only 1 del not 4
+
+    private static int minDeletion(int[] arr) {
+        int n = arr.length, max = 0;
+        int[] dp = new int[n];
+        for (int i = 0; i < n; i++) {
+            dp[i] = 1;
+            for (int j = i - 1; j >= 0; j--) {
+                if (arr[j] <= arr[i]) { // equal for duplicates
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+                }
+            }
+            max = Math.max(max, dp[i]);
+        }
+        return n - max;
+    }
+
     public static void main(String[] args) {
 
         // System.out.println(longestIncreasingSubsequence());
         // System.out.println("Dec " + longestDecreasingSubsequence());
-
+        System.out.println(minDeletion(arr));
+        System.out.println(minDeletion(new int[] { 2, 2, 2, 1 }));
+        System.out.println(minDeletion(new int[] { 1, 2, 2, 2, 1, 4, 4, 4, 6, 5 }));
     }
 }
