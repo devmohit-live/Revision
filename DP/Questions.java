@@ -295,15 +295,15 @@ public class Questions {
     // GFG MaxGold:
 
     static int maxGold(int n, int m, int M[][]) {
-        // int gold = 0;
+        int gold = 0;
         int gold2 = 0, ridx = -1;
         int[][] dir = { { -1, 1 }, { 0, 1 }, { 1, 1 } };
-        // int[][] dp = new int[n][m];
+        int[][] dp = new int[n][m];
         int[][] dp2 = new int[n][m];
 
         for (int r = 0; r < n; r++) {
-            // maxGold_Mem(r, 0, M, dp);
-            // gold = Math.max(gold, dp[r][0]);
+            maxGold_Mem(r, 0, M, dp,dir);
+            gold = Math.max(gold, dp[r][0]);
             maxGold_Tab(r, 0, M, dp2, dir);
             if (gold2 < dp2[r][0]) {
                 gold2 = dp2[r][0];
@@ -312,8 +312,8 @@ public class Questions {
 
         }
 
-        // display2d(dp);
-        // System.out.println(gold2);
+        display2d(dp);
+        System.out.println(gold2);
         display2d(dp2);
         printMaxGoldPath(dp2, ridx, 0, "(" + ridx + "," + 0 + ") ", dir);
 
