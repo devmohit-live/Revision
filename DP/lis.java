@@ -132,7 +132,6 @@ public class lis {
         int n = arr.length;
         int[] dp = new int[n];
         int[] dp2 = new int[n];
-        int[] dp3 = new int[n];
         int max = -1, max2 = -1;
         for (int i = 0; i < n; i++) {
             max = Math.max(max, longestDecreasingSubsequenceMem(arr, i, dp));
@@ -291,6 +290,76 @@ public class lis {
             max = Math.max(max, dp[i]);
         }
         return n - max;
+    }
+
+    // Leetcode 673 : Number of Longest Increasing Sequnces
+    // just also maintain a count array with dp array & update the count array along
+    // with dp array
+    static int findNumberOfLIS(int[] arr) {
+        int max = 0, maxcount = 0, n = arr.length;
+        int[] dp = new int[n];
+        int[] count = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            dp[i] = 1;
+            count[i] = 1;
+
+            for (int j = i - 1; j >= 0; j--) {
+                if (arr[j] < arr[i]) {
+                    if (dp[i] < dp[j] + 1) {
+                        dp[i] = dp[j] + 1;
+                        count[i] = count[j];
+                    } else if (dp[i] == dp[j] + 1) {
+                        count[i] += count[j];
+                    }
+                }
+            }
+
+            if (dp[i] > max) {
+                max = dp[i];
+                maxcount = count[i];
+            } else if (dp[i] == max) {
+                maxcount += count[i];
+            }
+
+        }
+        return maxcount;
+    }
+
+    // Building Bridges : max numner of non overlapping bridges
+    // https://www.geeksforgeeks.org/dynamic-programming-building-bridges/
+    // Sort on the basis of si or ei (so that either starting points or ending point
+    // must not overlap)
+    static int maxNonOverlappingBridges(int[] si, int[] ei) {
+        int max = 0, n = si.length;
+        int[][] arr = new int[n][2];
+        int[] dp = new int[n];
+        for (int i = 0; i < n; i++) {
+            arr[i][0] = si[i];
+            arr[i][1] = ei[i];
+        }
+
+        // sorted them on the basis of ending point : so that we are now sure that
+        // ending points don't overlap=> there maybe the case of duplicates
+        Arrays.sort(arr, (a, b) -> {
+            return a[1] - b[1];
+        });
+
+        // Run Lis on non sorted array => arr[0] => getting lis makes sure we get
+        // strictly increasing(non overlapping) si's
+
+        for (int i = 0; i < n; i++) {
+            dp[i] = 1;
+            for (int j = i - 1; j >= 0; j--) {
+                // arr[j][1] <arr[i][1] using this we are handling the duplicates in sorted
+                // ending point array,
+                if (arr[j][0] < arr[i][0] && arr[j][1] < arr[i][1]) {
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+                }
+            }
+            max = Math.max(dp[i], max);
+        }
+        return max;
     }
 
     public static void main(String[] args) {
