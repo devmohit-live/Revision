@@ -190,19 +190,20 @@ public class lis {
         return dp;
     }
 
-    // reverse bitonic seq
+    // Reverse bitonic seq
     static int reverse_bitonic(int[] arr) {
-        // int[] lis = Lis(nums);
-        // int[] lds = Lis_RL(nums); // mujhse shuru hone wala lds
-        // int n = nums.length;
+        int n = nums.length;
+        int[] lds = new int[n];
+        ldsTab_LR(nums, lds);
+        int[] lds_RL = new int[n];
+        ldsTab_RL(nums, ldsTab_LR); // mujhse shuru hone wala lis
 
-        // int max = -1;
-        // for (int i = 0; i < n; i++) {
-        // max = Math.max(lis[i] + lds[i] - 1, max);
-        // }
+        int max = -1;
+        for (int i = 0; i < n; i++) {
+            max = Math.max(lds[i] + ldsTab_LR[i] - 1, max);
+        }
 
-        // return max;
-        return -1;
+        return max;
     }
 
     // Maximum sum increasing subsequence : We just have to check/compare with sum
