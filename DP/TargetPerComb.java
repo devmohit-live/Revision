@@ -38,8 +38,8 @@ public class TargetPerComb {
         return dp[Tar];
     }
 
-    static int combinationMem(int[] arr, int n, int idx, int tar, int[][] dp) {
-        if (idx == n || tar == 0) {
+    static int combinationMem(int[] arr, int n, int tar, int[][] dp) {
+        if (n == 0 || tar == 0) {
             if (tar == 0)
                 return dp[idx][tar] = 1;
             else
@@ -50,13 +50,19 @@ public class TargetPerComb {
             return dp[idx][tar];
 
         int count = 0;
-        for (int i = idx; i < n; i++) {
+        for (int i = n; i > 0; i--) {
             if (tar - arr[i] >= 0)
-                count += combinationMem(arr, n, i + 1, tar - arr[i], dp);
+                count += combinationMem(arr, i, tar - arr[i], dp);
         }
         return dp[idx][tar] = count;
 
     }
+
+    static int combinationTab2d(int[] arr, int n, int[][] dp) {
+        return -1;
+    }
+
+    // -------------------- KnapSack -------------------------
 
     static int combinationTab1d(int[] arr, int Tar, int[] dp) {
         // bascially in 2d tab we were dependent of previous coin's data for our ans
@@ -74,7 +80,6 @@ public class TargetPerComb {
         }
         return dp[Tar];
     }
-
 
     static int knapSack(int W, int wt[], int val[], int n) {
         int[][] dp = new int[n + 1][W + 1];
@@ -145,4 +150,156 @@ public class TargetPerComb {
         System.out.println(Arrays.toString(dpcomb));
 
     }
+
+    // ========================== Questions =================================
+
+    // Leetcode 377 : Combination Sum IV
+
+    public int combinationSum4(int[] nums, int target) {
+        int[] dp = new int[target + 1];
+        // Arrays.fill(dp,-1); //only for mem identity, not for tab as we have to do
+        // dp[i]+=something
+        // return infiPerm(nums,target,dp);
+        return infiPermTab(nums, target, dp);
+
+    }
+
+    private int infiPermMem(int[] arr, int tar, int[] dp) {
+
+        if (tar == 0)
+            return dp[tar] = 1;
+
+        if (dp[tar] != -1)
+            return dp[tar];
+
+        int count = 0;
+        for (int el : arr) {
+            if (tar - el >= 0)
+                count += infiPermMem(arr, tar - el, dp);
+        }
+        return dp[tar] = count;
+
+    }
+
+    // Leetcode 322: Coin Change (Mi no. of coins req )
+    // can be done with combination or permutation
+    public int coinChange(int[] coins, int amount) {
+        int ans = MinCoins(coins, amount, new int[amount + 1]);
+        return ans == (int) 1e9 ? -1 : ans;
+    }
+
+    // it is basically infiPermTab code with minor changes
+    private int MinCoins(int[] arr, int Tar, int[] dp) {
+        dp[0] = 0; // identification mark : 0 coins are used to make tar 0
+        for (int tar = 1; tar <= Tar; tar++) {
+            int coins = (int) 1e9;
+            for (int el : arr) {
+                if (tar - el >= 0)
+                    coins = Math.min(coins, 1 + dp[tar - el]);
+            }
+
+            dp[tar] = coins;
+        }
+
+        return dp[Tar];
+    }
+
+    // Subset SUM (GFG):
+    // https://practice.geeksforgeeks.org/problems/subset-sum-problem-1611555638/1/?category[]=Dynamic%20Programming&category[]=Dynamic%20Programming&page=4&query=category[]Dynamic%20Programmingpage4category[]Dynamic%20Programming#
+    static Boolean isSubsetSum(int N, int arr[], int tar) {
+        int[][] dp = new int[N + 1][tar + 1];
+        for (int[] d : dp)
+            Arrays.fill(d, -1);
+
+        // int ans = comb(arr,N,0,tar,dp);
+        // if(ans ==-1 || ans == 0) return false;
+        // return true;
+        return targetSum(arr, N, tar, dp) == 1;
+    }
+
+    // first way : -1: unexplored, 0: false, 1:true
+    static int comb(int[] arr, int n, int idx, int tar, int[][] dp) {
+        if (idx == n || tar == 0) {
+            if (tar == 0)
+                return dp[idx][tar] = 1;
+            else
+                return dp[idx][tar] = 0;
+        }
+
+        if (dp[idx][tar] != -1)
+            return dp[idx][tar];
+        boolean res = false;
+        for (int i = idx; i < n; i++) {
+            if (tar - arr[i] >= 0)
+                res = res || comb(arr, n, i + 1, tar - arr[i], dp) == 1;
+        }
+        return dp[idx][tar] = res ? 1 : 0;
+
+    }
+    // second way : same as above just check wheter ans > 0(we are storing count as
+    // we normally do)
+
+    // third waY: using sunbseq method with boolean res
+    public static int targetSum(int[] arr, int n, int tar, int[][] dp) {
+        if (n == 0 || tar == 0) {
+            return dp[n][tar] = (tar == 0 ? 1 : 0);
+        }
+
+        if (dp[n][tar] != -1)
+            return dp[n][tar];
+
+        boolean res = false;
+        if (tar - arr[n - 1] >= 0)
+            res = res || targetSum(arr, n - 1, tar - arr[n - 1], dp) == 1;
+        res = res || targetSum(arr, n - 1, tar, dp) == 1;
+
+        return dp[n][tar] = res ? 1 : 0;
+    }
+
+    // https://practice.geeksforgeeks.org/problems/minimum-cost-to-fill-given-weight-in-a-bag1956/1#
+
+    public int minimumCost(int cost[], int N, int W) {
+        // unbounded knapsack with min cost
+        int[][] dp2 = new int[N + 1][W + 1];
+        for (int[] d : dp2)
+            Arrays.fill(d, -1);
+        int ans = KnapSack(cost, W, dp2, N);
+        if (W == 0)
+            return 0;
+        return (ans >= (int) 1e8 || ans == 0) ? -1 : ans;
+
+        // target sum coin
+        // int[] dp = new int[W + 1];
+        // Arrays.fill(dp,-1);
+        // targetSum(cost,N,W);
+
+        // Arrays.fill(dp,(int)1e9);
+        // return minCost(cost,N,W,dp);
+
+    }
+
+    // First way
+    // 1 indexed based also ith index means i kg wt
+    int KnapSack(int[] cost, int W, int[][] dp, int n) {
+
+        if (n == 0 || W == 0) {
+            if (W == 0)
+                return dp[n][W] = 0; // already 0
+            else
+                return dp[n][W] = (int) 1e9; // not possible
+
+        }
+
+        if (dp[n][W] != -1)
+            return dp[n][W];
+
+        int inc = (int) 1e8, exc = (int) 1e8;
+
+        if (cost[n - 1] > -1 && W - n >= 0)
+            inc = cost[n - 1] + KnapSack(cost, W - n, dp, n);
+        exc = KnapSack(cost, W, dp, n - 1);
+
+        return dp[n][W] = Math.min(inc, exc);
+    }
+
 }
