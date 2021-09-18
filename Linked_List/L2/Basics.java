@@ -445,6 +445,7 @@ public class Basics {
         return head;
     }
 
+    //leetcode 88
     public static ListNode removeAllDuplicates(ListNode head) {
         if (head == null || head.next == null)
             return head;
