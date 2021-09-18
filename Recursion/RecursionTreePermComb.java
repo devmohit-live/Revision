@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class RecursionTree {
+public class RecursionTreePermComb {
     // ***************** */ NCR solutions
 
     // INFINTE SUPPLY

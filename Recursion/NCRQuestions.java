@@ -2,7 +2,7 @@ package Recursion;
 
 import java.util.*;
 
-public class NCRBasedQ {
+public class NCRQuestions {
 
     // leetcode 216
     public List<List<Integer>> combinationSum3(int k, int n) {
