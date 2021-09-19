@@ -2,6 +2,11 @@ import java.util.Arrays;
 
 public class TargetPerComb {
 
+    static void display2d(int[][] dp) {
+        for (int[] d : dp)
+            System.out.println(Arrays.toString(d));
+    }
+
     // Infinite Supply
 
     public static int infipermutationMem(int[] arr, int tar, int[] dp) {
@@ -39,30 +44,38 @@ public class TargetPerComb {
     }
 
     static int combinationMem(int[] arr, int n, int tar, int[][] dp) {
-        if (n == 0 || tar == 0) {
-            if (tar == 0)
-                return dp[idx][tar] = 1;
-            else
-                return dp[idx][tar] = 0;
-        }
-
-        if (dp[idx][tar] != -1)
-            return dp[idx][tar];
-
+        if (tar == 0)
+            return dp[n][tar] = 1;
+        if (dp[n][tar] != -1)
+            return dp[n][tar];
         int count = 0;
         for (int i = n; i > 0; i--) {
-            if (tar - arr[i] >= 0)
-                count += combinationMem(arr, i, tar - arr[i], dp);
+            if (tar - arr[i - 1] >= 0)
+                count += combinationMem(arr, i, tar - arr[i - 1], dp);
         }
-        return dp[idx][tar] = count;
 
+        return dp[n][tar] = count;
     }
 
-    static int combinationTab2d(int[] arr, int n, int[][] dp) {
-        return -1;
-    }
+    // TODO: not working
+    public static int combinationTab2d(int[] arr, int Tar, int LI, int[][] dp) {
 
-    // -------------------- KnapSack -------------------------
+        for (int li = 0; li <= LI; li++) {
+            for (int tar = 0; tar <= Tar; tar++) {
+                if (tar == 0) {
+                    dp[li][tar] = 1;
+                    continue;
+                }
+
+                for (int i = li; i >= 0; i--)
+                    if (tar - arr[i] >= 0) {
+                        dp[li][tar] += dp[i][tar - arr[i]];
+                    }
+            }
+        }
+
+        return dp[LI][Tar];
+    }
 
     static int combinationTab1d(int[] arr, int Tar, int[] dp) {
         // bascially in 2d tab we were dependent of previous coin's data for our ans
@@ -71,7 +84,6 @@ public class TargetPerComb {
 
         for (int el : arr) {
             dp[0] = 1; // identificatin mark
-            int count = 0;
             for (int tar = 1; tar <= Tar; tar++) {
                 if (tar - el >= 0) {
                     dp[tar] += dp[tar - el];
@@ -80,6 +92,45 @@ public class TargetPerComb {
         }
         return dp[Tar];
     }
+
+    public static void main(String[] args) {
+        int[] arr = { 2, 3, 5, 7 };
+        int n = arr.length;
+        int tar = 10;
+
+        int[][] dp = new int[n + 1][tar + 1];
+        for (int[] d : dp)
+            Arrays.fill(d, -1);
+        int[][] dp2 = new int[n + 1][tar + 1];
+
+        int[] dp3 = new int[tar + 1];
+        // Arrays.fill(dp3, -1); //don't fill with -1 is performing direct addition
+
+        int ans = combinationMem(arr, n, tar, dp); // 5
+        System.out.println("Combination Mem:  " + ans);
+        display2d(dp);
+        int ans2 = combinationTab2d(arr, tar, n - 1, dp2);
+        System.out.println("Combination 2d :  " + ans2);
+        display2d(dp2);
+        int ans3 = combinationTab1d(arr, tar, dp3);
+        System.out.println("Combination 1d :  " + ans3);
+        System.out.println(Arrays.toString(dp3));
+
+        // int[] dpper = new int[tar + 1];
+        // Arrays.fill(dpper, -1);
+        // int per = infipermutationMem(arr, 10, dpper);
+        // System.out.println("Permutatiton : " + per);
+        // System.out.println(Arrays.toString(dpper));
+
+        // System.out.println("Combination 1 D");
+        // int[] dpcomb = new int[tar + 1];
+        // int comb = combinationTab1d(arr, tar, dpcomb);
+        // System.out.println(comb);
+        // System.out.println(Arrays.toString(dpcomb));
+
+    }
+
+    // -------------------- KnapSack -------------------------
 
     static int knapSack(int W, int wt[], int val[], int n) {
         int[][] dp = new int[n + 1][W + 1];
@@ -125,33 +176,40 @@ public class TargetPerComb {
         return dp[n][W] = Math.max(a, b);
     }
 
-    public static void main(String[] args) {
-        int[] arr = { 2, 3, 5, 7 };
-        int n = arr.length;
-        int tar = 10;
+    // void knapsackPath()
 
-        int[][] dp = new int[n + 1][tar + 1];
-        for (int[] d : dp)
-            Arrays.fill(d, -1);
-        int ans = combinationMem(arr, n - 1, 0, 10, dp); // 5
-        System.out.println("Combination:  " + ans);
-        System.out.println(Arrays.toString(dp));
+    // Target Sum : All possible coins (Path): Using knapsack
 
-        int[] dpper = new int[tar + 1];
-        Arrays.fill(dpper, -1);
-        int per = infipermutationMem(arr, 10, dpper);
-        System.out.println("Permutatiton : " + per);
-        System.out.println(Arrays.toString(dpper));
+    static boolean targetSumDP(int[] arr, int N, int Tar, boolean[][] dp) {
+        for (int n = 0; n <= N; n++) {
+            for (int tar = 0; tar <= Tar; tar++) {
+                if (n == 0 || tar == 0) {
+                    dp[n][tar] = tar == 0;
+                    continue;
+                }
 
-        System.out.println("Combination  1 D");
-        int[] dpcomb = new int[tar + 1];
-        int comb = combinationTab1d(arr, tar, dpcomb);
-        System.out.println(comb);
-        System.out.println(Arrays.toString(dpcomb));
+                boolean res = false;
 
+                if (tar - arr[n - 1] >= 0)
+                    res = res || dp[n - 1][tar - arr[n - 1]];
+
+                res = res || dp[n - 1][tar];
+
+                dp[n][Tar] = res;
+
+            }
+        }
+        return dp[N][Tar];
     }
 
+    // backEngTarget(int[] arr, boolean[][]dp, int N , int Tar,String psf){
+
+    // }
+
     // ========================== Questions =================================
+
+    // https://www.geeksforgeeks.org/find-number-of-solutions-of-a-linear-equation-of-n-variables/
+    // : exactly no of combinations
 
     // Leetcode 377 : Combination Sum IV
 
