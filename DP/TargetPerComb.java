@@ -360,4 +360,113 @@ public class TargetPerComb {
         return dp[n][W] = Math.min(inc, exc);
     }
 
+    // Leetcode : 494 (involves origin shifting, and manipulating the target)
+    public int findTargetSumWays(int[] nums, int target) {
+        if (nums.length == 0)
+            return 0;
+
+        int sum = 0, n = nums.length;
+        for (int el : nums)
+            sum += el;
+
+        // is target acheivable or not
+
+        if (target < -sum || target > sum)
+            return 0;
+
+        // do origin shifting for negative target
+        // since target is within the range of sum of max -ve it can be is : -sum
+
+        int[][] dp = new int[n + 1][2 * sum + 1];
+        for (int[] d : dp)
+            Arrays.fill(d, -1);
+
+        // sending the sum,and shifted target
+        return findTargetSumWays(nums, n, sum, target + sum, dp);
+
+    }
+
+    // way1 : new target -> sum (actually tar-->0)
+    // TODO: write commnt
+    private int findTargetSumWays1(int[] arr, int n, int sum, int tar, int[][] dp) {
+        if (n == 0) {
+            return dp[n][tar] = (tar == sum) ? 1 : 0;
+        }
+
+        if (dp[n][tar] != -1)
+            return dp[n][tar];
+
+        int count = 0;
+        // Apply for checks as we can't ensure the boundaries why tar goes far from sum
+        // range
+        // as base case cheks for only n==0 first then only tar ==sum
+        if (tar - arr[n - 1] >= -sum)
+            count += findTargetSumWays1(arr, n - 1, sum, tar - arr[n - 1], dp);
+
+        if (tar - (-arr[n - 1]) <= 2 * sum)
+            count += findTargetSumWays1(arr, n - 1, sum, tar - (-arr[n - 1]), dp);
+
+        return dp[n][tar] = count;
+    }
+
+    // way2 : Reaching to Target from 0(which is now being shifted to sum)
+    // orig : 0->tar (after shifting)==> sum->tar+sum // new targ =
+    // tar+sum(shifting) as using this we can ensure the boundaries of sum
+
+    // dp[n][sum] as sum is changing not target
+    private int findTargetSumWays(int[] arr, int n, int sum, int tar, int[][] dp) {
+        if (n == 0) {
+            return dp[n][sum] = (tar == sum) ? 1 : 0;
+        }
+
+        if (dp[n][sum] != -1)
+            return dp[n][sum];
+
+        int count = 0;
+        // add once
+        count += findTargetSumWays(arr, n - 1, sum + arr[n - 1], tar, dp);
+        // subtract one
+        count += findTargetSumWays(arr, n - 1, sum - arr[n - 1], tar, dp);
+
+        return dp[n][sum] = count;
+    }
+
+    // Leetcode 698 : Partition to K Equal Sum Subsets
+    public boolean canPartitionKSubsets(int[] nums, int k) {
+        int n = nums.length, max = 0;
+        long sum = 0;
+        for (int el : nums)
+            sum += el;
+
+        int tar = (int) (sum / k);
+
+        if (sum % k != 0)
+            return false;
+
+        return canPartitionKSubsets(nums, k, 0, 0, tar, n, new boolean[n]);
+
+    }
+
+    private boolean canPartitionKSubsets(int[] arr, int k, int idx, int sumSF, int tar, int n, boolean[] vis) {
+        if (k == 0)
+            return true;
+        if (sumSF > tar)
+            return false;
+        if (sumSF == tar || n == 0) {
+            return sumSF == tar ? canPartitionKSubsets(arr, k - 1, 0, 0, tar, n, vis) : false;
+        }
+
+        boolean res = false;
+        for (int i = idx; i < arr.length; i++) {
+            if (vis[i])
+                continue;
+            vis[i] = true;
+            res = res || canPartitionKSubsets(arr, k, i + 1, sumSF + arr[i], tar, n, vis);
+            vis[i] = false;
+        }
+
+        return res;
+
+    }
+
 }
