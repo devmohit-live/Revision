@@ -432,6 +432,8 @@ public class TargetPerComb {
     }
 
     // Leetcode 698 : Partition to K Equal Sum Subsets
+
+    // Doesn't involves dp
     public boolean canPartitionKSubsets(int[] nums, int k) {
         int n = nums.length, max = 0;
         long sum = 0;
@@ -466,6 +468,43 @@ public class TargetPerComb {
         }
 
         return res;
+
+    }
+
+    // Leetcode 688 : Knight Probability in Chessboard
+    // 3d dp
+    public double knightProbability(int n, int k, int row, int column) {
+        // all moves done and we are inside the valid r,c => in the board
+        if (k == 0)
+            return 1.0;
+
+        // 2 things are changing r,c,k
+        double dp[][][] = new double[k + 1][n + 1][n + 1];
+        int dx[] = { 2, 1, -1, -2, -2, -1, 1, 2 };
+        int dy[] = { 1, 2, 2, 1, -1, -2, -2, -1 };
+
+        return knightProbability(n, k, row, column, dp, dx, dy);
+
+    }
+
+    double knightProbability(int n, int k, int sr, int sc, double[][][] dp, int[] dx, int[] dy) {
+        if (k == 0)
+            return dp[k][sr][sc] = 1.0;
+
+        if (dp[k][sr][sc] != 0)
+            return dp[k][sr][sc];
+
+        double count = 0;
+        for (int d = 0; d < dx.length; d++) {
+            int r = sr + dx[d];
+            int c = sc + dy[d];
+
+            if (r >= 0 && c >= 0 && r < n && c < n)
+                count += knightProbability(n, k - 1, r, c, dp, dx, dy);
+
+        }
+
+        return dp[k][sr][sc] = count / 8.0; // all 8 directions probability
 
     }
 
