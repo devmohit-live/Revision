@@ -57,7 +57,6 @@ public class TargetPerComb {
         return dp[n][tar] = count;
     }
 
-    // TODO: not working
     public static int combinationTab2d(int[] arr, int Tar, int LI, int[][] dp) {
 
         for (int li = 0; li <= LI; li++) {
@@ -127,6 +126,9 @@ public class TargetPerComb {
         // int comb = combinationTab1d(arr, tar, dpcomb);
         // System.out.println(comb);
         // System.out.println(Arrays.toString(dpcomb));
+
+        linearEquationOfNVar(new int[] { 1, 2 }, 5); // 3
+        linearEquationOfNVar(new int[] { 2, 2, 3 }, 4); // 3
 
     }
 
@@ -209,7 +211,12 @@ public class TargetPerComb {
     // ========================== Questions =================================
 
     // https://www.geeksforgeeks.org/find-number-of-solutions-of-a-linear-equation-of-n-variables/
-    // : exactly no of combinations
+    // : exactly no of infi combination
+    static void linearEquationOfNVar(int[] coff, int rhs) {
+        int[] dp = new int[rhs + 1];
+        int ans = combinationTab1d(coff, rhs, dp);
+        System.out.println(ans);
+    }
 
     // Leetcode 377 : Combination Sum IV
 
