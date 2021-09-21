@@ -100,14 +100,20 @@ public class TargetPerComb {
         int[][] dp = new int[n + 1][W + 1];
         for (int[] d : dp)
             Arrays.fill(d, -1);
-        return knapsack01(wt, val, W, n, dp);
+
+        int ans = knapsack01(wt, val, W, n, dp);
+
+        int tab = knapsackTab(wt, val, W, wt.length);
+        System.out.println("Mem : " + ans + " Tab: " + tab);
+        return ans;
     }
 
     // Subseq
     static int knapsack01(int[] wt, int[] val, int W, int n, int[][] dp) {
 
-        if (n == 0 || W == 0)
+        if (n == 0 || W == 0) {
             return dp[n][W] = 0;
+        }
 
         if (dp[n][W] != -1)
             return dp[n][W];
@@ -120,6 +126,41 @@ public class TargetPerComb {
         return dp[n][W] = Math.max(included, excluded);
 
     }
+
+    static int knapsackTab(int[] wt, int[] val, int W, int N) {
+        int[][] dp = new int[N + 1][W + 1];
+        for (int n = 0; n <= N; n++) {
+            for (int w = 0; w <= W; w++) {
+                if (n == 0 || w == 0) {
+                    dp[n][w] = 0;
+                    continue;
+                }
+
+                int inc = 0, excl = 0;
+                if (w - wt[n - 1] >= 0) {
+                    // look at previos index
+                    inc = val[n - 1] + dp[n - 1][w - wt[n - 1]];
+                }
+
+                excl = dp[n - 1][w];
+                dp[n][w] = Math.max(inc, excl);
+            }
+        }
+        display2d(dp);
+
+        return dp[N][W];
+    }
+
+    // static int printPath(int[][] dp , int[] wt, int[] val, int W,int N){
+
+    // int count = 0;
+    // if( W - wt[N-1] >= 0){
+    // count+=
+    // }
+
+    // return count;
+
+    // }
 
     // Unbounded Knapsack :Subseq
     static int knapSackRepAllowed(int[] wt, int[] val, int[][] dp, int W, int n) {
@@ -143,7 +184,7 @@ public class TargetPerComb {
 
     // either use perm or comb result will be same
 
-    // using subseq : TODO: Wriong ans
+    // using subseq :
     static int knapSackRepAllowedTab(int[] wt, int[] val, int W, int N) {
         int size = wt.length;
         int[][] dp = new int[size + 1][W + 1];
@@ -206,9 +247,83 @@ public class TargetPerComb {
         return dp[W];
     }
 
-    // void knapsackPath()
+    // ============== Print Path in KnapSack and Target
+    // Sum===========================
+    // same as mem just extra rule: Only make call to the profitable area(condition
+    // before a call)
 
-    // Target Sum : All possible coins (Path): Using knapsack
+    // Target Sum : All possible coins (Path): Using suseq
+    // rep allowed
+    static int targetSumMem(int[] arr, int tar, int n, int[][] dp) {
+
+        if (n == 0 || tar == 0) {
+            if (tar == 0) {
+                return dp[n][tar] = 1;
+            }
+            return dp[n][tar] = 0;
+        }
+
+        int count = 0;
+        if (tar - arr[n - 1] >= 0)
+            count += targetSumMem(arr, tar - arr[n - 1], n, dp);
+        count += targetSumMem(arr, tar, n - 1, dp);
+        return dp[n][tar] = count;
+    }
+
+    static int targetSumTab(int[] arr, int Tar, int N) {
+        int size = arr.length;
+        int[][] dp = new int[size + 1][Tar + 1];
+
+        for (int n = 0; n <= N; n++) {
+            for (int tar = 0; tar <= Tar; tar++) {
+                if (n == 0 || tar == 0) {
+                    if (tar == 0)
+                        dp[n][tar] = 1;
+                    else
+                        dp[n][tar] = 0;
+                    continue;
+                }
+
+                int count = 0;
+
+                if (tar - arr[n - 1] >= 0)
+                    count += dp[n][tar - arr[n - 1]];
+
+                count += dp[n - 1][tar];
+
+                dp[n][tar] = count;
+
+            }
+        }
+
+        display2d(dp);
+        pathTargetSum(dp, arr, N, Tar, "");
+        return dp[N][Tar];
+    }
+
+    // TODO: only single path is printing
+
+    static int pathTargetSum(int[][] dp, int[] arr, int n, int tar, String psf) {
+        if (n == 0 || tar == 0) {
+            if (tar == 0) {
+                System.out.println(psf);
+                return 1;
+            }
+            return 0;
+        }
+
+        // make a call only if it's proftable (check for the location's profitablitiy
+        // before going there)
+        int count = 0;
+        if (tar - arr[n - 1] >= 0 && dp[n][tar - arr[n - 1]] > 0) {
+            count += pathTargetSum(dp, arr, n, tar - arr[n - 1], psf + arr[n - 1] + " ");
+        }
+        if (dp[n - 1][tar] > 0)
+            count += pathTargetSum(dp, arr, n - 1, tar, psf);
+
+        return count;
+
+    }
 
     static boolean targetSumDP(int[] arr, int N, int Tar, boolean[][] dp) {
         for (int n = 0; n <= N; n++) {
@@ -544,13 +659,15 @@ public class TargetPerComb {
     }
 
     public static void main(String[] args) {
-        // int[] arr = { 2, 3, 5, 7 };
-        // int n = arr.length;
-        // int tar = 10;
+        int[] arr = { 2, 3, 5, 7 };
+        int n = arr.length;
+        int tar = 10;
 
-        // int[][] dp = new int[n + 1][tar + 1];
-        // for (int[] d : dp)
-        // Arrays.fill(d, -1);
+        int[][] dp = new int[n + 1][tar + 1];
+        for (int[] d : dp)
+            Arrays.fill(d, -1);
+        int ans = targetSumTab(arr, tar, n);
+        System.out.println("Ans: " + ans);
         // int[][] dp2 = new int[n + 1][tar + 1];
 
         // int[] dp3 = new int[tar + 1];
@@ -581,22 +698,25 @@ public class TargetPerComb {
         // linearEquationOfNVar(new int[] { 1, 2 }, 5); // 3
         // linearEquationOfNVar(new int[] { 2, 2, 3 }, 4); // 3
 
-        int W = 8;
-        int val[] = { 10, 40, 50, 70 }; // op:110
-        int wt[] = { 1, 3, 4, 5 };
-        int n = val.length;
+        // int W = 8;
+        // int val[] = { 10, 40, 50, 70 }; // op:110
+        // int wt[] = { 1, 3, 4, 5 };
+        // int n = val.length;
 
-        int dp[][] = new int[n + 1][W + 1];
-        for (int[] d : dp)
-            Arrays.fill(d, -1);
-        int mem = knapSackRepAllowed(wt, val, dp, W, n);
-        int dp2[][] = new int[n + 1][W + 1];
-        int tab = knapSackRepAllowedTab(wt, val, W, n);
+        // knapSack(W, wt, val, n);
 
-        int ncrtab1Perm = unboundedKnapSackTab2_1(W, wt, val);
-        int ncrtab2Comb = unboundedKnapSackTab2_1(W, wt, val);
-        System.out.println("Mem :" + mem + " " + tab);
-        System.out.println("NCR  :" + "Perm " + ncrtab1Perm + " Comb :" + ncrtab2Comb);
+        // int dp[][] = new int[n + 1][W + 1];
+        // for (int[] d : dp)
+        // Arrays.fill(d, -1);
+        // int mem = knapSackRepAllowed(wt, val, dp, W, n);
+        // int dp2[][] = new int[n + 1][W + 1];
+        // int tab = knapSackRepAllowedTab(wt, val, W, n);
+
+        // int ncrtab1Perm = unboundedKnapSackTab2_1(W, wt, val);
+        // int ncrtab2Comb = unboundedKnapSackTab2_1(W, wt, val);
+        // System.out.println("Mem :" + mem + " " + tab);
+        // System.out.println("NCR :" + "Perm " + ncrtab1Perm + " Comb :" +
+        // ncrtab2Comb);
     }
 
 }
