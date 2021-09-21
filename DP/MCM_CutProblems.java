@@ -117,6 +117,12 @@ public class MCM_CutProblems {
         return sdp[SI][EI];
     }
 
+
+
+
+
+    
+
     public static void main(String[] args) {
         int N = 5;
         int[] arr = { 40, 20, 30, 10, 30 };

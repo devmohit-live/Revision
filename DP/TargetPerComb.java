@@ -92,47 +92,9 @@ public class TargetPerComb {
         return dp[Tar];
     }
 
-    public static void main(String[] args) {
-        int[] arr = { 2, 3, 5, 7 };
-        int n = arr.length;
-        int tar = 10;
-
-        int[][] dp = new int[n + 1][tar + 1];
-        for (int[] d : dp)
-            Arrays.fill(d, -1);
-        int[][] dp2 = new int[n + 1][tar + 1];
-
-        int[] dp3 = new int[tar + 1];
-        // Arrays.fill(dp3, -1); //don't fill with -1 is performing direct addition
-
-        int ans = combinationMem(arr, n, tar, dp); // 5
-        System.out.println("Combination Mem:  " + ans);
-        display2d(dp);
-        int ans2 = combinationTab2d(arr, tar, n - 1, dp2);
-        System.out.println("Combination 2d :  " + ans2);
-        display2d(dp2);
-        int ans3 = combinationTab1d(arr, tar, dp3);
-        System.out.println("Combination 1d :  " + ans3);
-        System.out.println(Arrays.toString(dp3));
-
-        // int[] dpper = new int[tar + 1];
-        // Arrays.fill(dpper, -1);
-        // int per = infipermutationMem(arr, 10, dpper);
-        // System.out.println("Permutatiton : " + per);
-        // System.out.println(Arrays.toString(dpper));
-
-        // System.out.println("Combination 1 D");
-        // int[] dpcomb = new int[tar + 1];
-        // int comb = combinationTab1d(arr, tar, dpcomb);
-        // System.out.println(comb);
-        // System.out.println(Arrays.toString(dpcomb));
-
-        linearEquationOfNVar(new int[] { 1, 2 }, 5); // 3
-        linearEquationOfNVar(new int[] { 2, 2, 3 }, 4); // 3
-
-    }
-
     // -------------------- KnapSack -------------------------
+    // Target sum : dp[li][tar] += dp[i][tar - arr[i]];
+    // Knapsack : instead of + we just take max
 
     static int knapSack(int W, int wt[], int val[], int n) {
         int[][] dp = new int[n + 1][W + 1];
@@ -141,6 +103,7 @@ public class TargetPerComb {
         return knapsack01(wt, val, W, n, dp);
     }
 
+    // Subseq
     static int knapsack01(int[] wt, int[] val, int W, int n, int[][] dp) {
 
         if (n == 0 || W == 0)
@@ -158,7 +121,7 @@ public class TargetPerComb {
 
     }
 
-    // Unbounded Knapsack
+    // Unbounded Knapsack :Subseq
     static int knapSackRepAllowed(int[] wt, int[] val, int[][] dp, int W, int n) {
         if (n == 0 || W == 0) {
             // either no elements left or no space left
@@ -176,6 +139,71 @@ public class TargetPerComb {
         b = knapSackRepAllowed(wt, val, dp, W, n - 1);
 
         return dp[n][W] = Math.max(a, b);
+    }
+
+    // either use perm or comb result will be same
+
+    // using subseq : TODO: Wriong ans
+    static int knapSackRepAllowedTab(int[] wt, int[] val, int W, int N) {
+        int size = wt.length;
+        int[][] dp = new int[size + 1][W + 1];
+
+        for (int cap = 0; cap <= W; cap++) {
+            for (int item = 0; item <= N; item++) {
+                if (cap == 0 || item == 0) {
+                    dp[item][cap] = 0;
+                    continue;
+                }
+
+                int inc = 0, excl = 0;
+                if (cap - wt[item - 1] >= 0) {
+                    inc = val[item - 1] + dp[item][cap - wt[item - 1]];
+                }
+                excl = dp[item - 1][cap];
+                dp[item][cap] = Math.max(inc, excl);
+            }
+        }
+        display2d(dp);
+        return dp[N][W];
+    }
+
+    // Using target sum concepts > ncr mrthod
+    // prem , comb doesn't matter, putting
+
+    // PERM code here
+    static int unboundedKnapSackTab2_1(int W, int[] wt, int[] val) {
+        int n = val.length;
+        int[] dp = new int[W + 1]; // w=tar
+
+        // for every target we have choice for every coin
+        // tar
+        for (int w = 0; w <= W; w++) {
+            // all coins are available
+            for (int i = 0; i < n; i++) {
+                if (w - wt[i] >= 0) {
+                    dp[w] = Math.max(dp[w], dp[w - wt[i]] + val[i]);
+                }
+            }
+        }
+        return dp[W];
+    }
+
+    // COMB code here
+    static int unboundedKnapSackTab2_2(int W, int[] wt, int[] val) {
+        int n = val.length;
+        int[] dp = new int[W + 1]; // w=tar
+        // using single coin at a time try to acheive target
+
+        // effect of each coin: wt //
+        for (int i = 0; i < n; i++) {
+            // acheinving each target using a single coin
+            for (int w = 0; w <= W; w++) {
+                if (w - wt[i] >= 0) {
+                    dp[w] = Math.max(dp[w], dp[w - wt[i]] + val[i]);
+                }
+            }
+        }
+        return dp[W];
     }
 
     // void knapsackPath()
@@ -513,6 +541,62 @@ public class TargetPerComb {
 
         return dp[k][sr][sc] = count / 8.0; // all 8 directions probability
 
+    }
+
+    public static void main(String[] args) {
+        // int[] arr = { 2, 3, 5, 7 };
+        // int n = arr.length;
+        // int tar = 10;
+
+        // int[][] dp = new int[n + 1][tar + 1];
+        // for (int[] d : dp)
+        // Arrays.fill(d, -1);
+        // int[][] dp2 = new int[n + 1][tar + 1];
+
+        // int[] dp3 = new int[tar + 1];
+        // Arrays.fill(dp3, -1); //don't fill with -1 is performing direct addition
+
+        // int ans = combinationMem(arr, n, tar, dp); // 5
+        // System.out.println("Combination Mem: " + ans);
+        // display2d(dp);
+        // int ans2 = combinationTab2d(arr, tar, n - 1, dp2);
+        // System.out.println("Combination 2d : " + ans2);
+        // display2d(dp2);
+        // int ans3 = combinationTab1d(arr, tar, dp3);
+        // System.out.println("Combination 1d : " + ans3);
+        // System.out.println(Arrays.toString(dp3));
+
+        // int[] dpper = new int[tar + 1];
+        // Arrays.fill(dpper, -1);
+        // int per = infipermutationMem(arr, 10, dpper);
+        // System.out.println("Permutatiton : " + per);
+        // System.out.println(Arrays.toString(dpper));
+
+        // System.out.println("Combination 1 D");
+        // int[] dpcomb = new int[tar + 1];
+        // int comb = combinationTab1d(arr, tar, dpcomb);
+        // System.out.println(comb);
+        // System.out.println(Arrays.toString(dpcomb));
+
+        // linearEquationOfNVar(new int[] { 1, 2 }, 5); // 3
+        // linearEquationOfNVar(new int[] { 2, 2, 3 }, 4); // 3
+
+        int W = 8;
+        int val[] = { 10, 40, 50, 70 }; // op:110
+        int wt[] = { 1, 3, 4, 5 };
+        int n = val.length;
+
+        int dp[][] = new int[n + 1][W + 1];
+        for (int[] d : dp)
+            Arrays.fill(d, -1);
+        int mem = knapSackRepAllowed(wt, val, dp, W, n);
+        int dp2[][] = new int[n + 1][W + 1];
+        int tab = knapSackRepAllowedTab(wt, val, W, n);
+
+        int ncrtab1Perm = unboundedKnapSackTab2_1(W, wt, val);
+        int ncrtab2Comb = unboundedKnapSackTab2_1(W, wt, val);
+        System.out.println("Mem :" + mem + " " + tab);
+        System.out.println("NCR  :" + "Perm " + ncrtab1Perm + " Comb :" + ncrtab2Comb);
     }
 
 }
