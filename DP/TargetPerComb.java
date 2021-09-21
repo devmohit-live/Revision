@@ -103,7 +103,7 @@ public class TargetPerComb {
 
         int ans = knapsack01(wt, val, W, n, dp);
 
-        int tab = knapsackTab(wt, val, W, wt.length);
+        int tab = knapsack01Tab(wt, val, W, wt.length);
         System.out.println("Mem : " + ans + " Tab: " + tab);
         return ans;
     }
@@ -127,7 +127,7 @@ public class TargetPerComb {
 
     }
 
-    static int knapsackTab(int[] wt, int[] val, int W, int N) {
+    static int knapsack01Tab(int[] wt, int[] val, int W, int N) {
         int[][] dp = new int[N + 1][W + 1];
         for (int n = 0; n <= N; n++) {
             for (int w = 0; w <= W; w++) {
@@ -147,20 +147,12 @@ public class TargetPerComb {
             }
         }
         display2d(dp);
+        backEngKnapsack(wt, val, dp, N, W, "");
+        String ans = backEngKnapsack(wt, val, dp, N, W);
+        System.out.println(ans);
 
         return dp[N][W];
     }
-
-    // static int printPath(int[][] dp , int[] wt, int[] val, int W,int N){
-
-    // int count = 0;
-    // if( W - wt[N-1] >= 0){
-    // count+=
-    // }
-
-    // return count;
-
-    // }
 
     // Unbounded Knapsack :Subseq
     static int knapSackRepAllowed(int[] wt, int[] val, int[][] dp, int W, int n) {
@@ -247,8 +239,8 @@ public class TargetPerComb {
         return dp[W];
     }
 
-    // ============== Print Path in KnapSack and Target
-    // Sum===========================
+    // ========= Print Path in KnapSack and Target Sum==========
+
     // same as mem just extra rule: Only make call to the profitable area(condition
     // before a call)
 
@@ -301,8 +293,6 @@ public class TargetPerComb {
         return dp[N][Tar];
     }
 
-    // TODO: only single path is printing
-
     static int pathTargetSum(int[][] dp, int[] arr, int n, int tar, String psf) {
         if (n == 0 || tar == 0) {
             if (tar == 0) {
@@ -347,9 +337,36 @@ public class TargetPerComb {
         return dp[N][Tar];
     }
 
-    // backEngTarget(int[] arr, boolean[][]dp, int N , int Tar,String psf){
+    // TODO: KnapSack Printing
 
-    // }
+    static void backEngKnapsack(int[] wt, int[] val, int[][] dp, int n, int W, String psf) {
+        if (n == 0 || W == 0) {
+            if (W == 0) {
+                System.out.println(psf);
+            }
+            return;
+        }
+
+        // inc = > dp[n][W-wt[n-1]], excl => dp[n-1][W] , ans => max of these two
+        if (dp[n][W - wt[n - 1]] > dp[n - 1][W])
+            backEngKnapsack(wt, val, dp, n, W - wt[n - 1], psf + "( " + wt[n - 1] + ", " + val[n - 1] + ")");
+        else
+            backEngKnapsack(wt, val, dp, n - 1, W, psf);
+
+    }
+
+    static String backEngKnapsack(int[] wt, int[] val, int[][] dp, int n, int W) {
+        if (n == 0 || W == 0) {
+            return "";
+        }
+
+        // inc = > dp[n][W-wt[n-1]], excl => dp[n-1][W] , ans => max of these two
+        if (dp[n][W - wt[n - 1]] > dp[n][W])
+            return "( " + wt[n - 1] + ", " + val[n - 1] + ")" + backEngKnapsack(wt, val, dp, n - 1, W - wt[n - 1]);
+        else
+            return "" + backEngKnapsack(wt, val, dp, n - 1, W);
+
+    }
 
     // ========================== Questions =================================
 
@@ -537,7 +554,31 @@ public class TargetPerComb {
     }
 
     // way1 : new target -> sum (actually tar-->0)
-    // TODO: write commnt
+    // dp => target tending to 0(sum in shited space)
+    private int findTargetSumWays0(int[] arr, int target, int sum, int n, int[][] dp) {
+
+        if (n == 0) {
+            // unshifted => tar == 0
+            return dp[n][target] = ((target == sum) ? 1 : 0);
+        }
+
+        if (dp[n][target] != -1)
+            return dp[n][target];
+
+        int count = 0;
+        // unshifted => tar - arr[n-1] >= -sum
+        if (target - arr[n - 1] >= 0)
+            count += findTargetSumWays(arr, target - arr[n - 1], sum, n - 1, dp);
+
+        // unshifted => tar + arr[n-1] <= sum
+        if (target + arr[n - 1] <= 2 * sum)
+            count += findTargetSumWays(arr, target - (-arr[n - 1]), sum, n - 1, dp);
+
+        return dp[n][target] = count;
+
+    }
+
+    // dp => sum -> target+sum => 0-> target in shifted space
     private int findTargetSumWays1(int[] arr, int n, int sum, int tar, int[][] dp) {
         if (n == 0) {
             return dp[n][tar] = (tar == sum) ? 1 : 0;
@@ -562,7 +603,6 @@ public class TargetPerComb {
     // way2 : Reaching to Target from 0(which is now being shifted to sum)
     // orig : 0->tar (after shifting)==> sum->tar+sum // new targ =
     // tar+sum(shifting) as using this we can ensure the boundaries of sum
-
     // dp[n][sum] as sum is changing not target
     private int findTargetSumWays(int[] arr, int n, int sum, int tar, int[][] dp) {
         if (n == 0) {
@@ -659,15 +699,15 @@ public class TargetPerComb {
     }
 
     public static void main(String[] args) {
-        int[] arr = { 2, 3, 5, 7 };
-        int n = arr.length;
-        int tar = 10;
+        // int[] arr = { 2, 3, 5, 7 };
+        // int n = arr.length;
+        // int tar = 10;
 
-        int[][] dp = new int[n + 1][tar + 1];
-        for (int[] d : dp)
-            Arrays.fill(d, -1);
-        int ans = targetSumTab(arr, tar, n);
-        System.out.println("Ans: " + ans);
+        // int[][] dp = new int[n + 1][tar + 1];
+        // for (int[] d : dp)
+        // Arrays.fill(d, -1);
+        // int ans = targetSumTab(arr, tar, n);
+        // System.out.println("Ans: " + ans);
         // int[][] dp2 = new int[n + 1][tar + 1];
 
         // int[] dp3 = new int[tar + 1];
@@ -698,10 +738,11 @@ public class TargetPerComb {
         // linearEquationOfNVar(new int[] { 1, 2 }, 5); // 3
         // linearEquationOfNVar(new int[] { 2, 2, 3 }, 4); // 3
 
-        // int W = 8;
-        // int val[] = { 10, 40, 50, 70 }; // op:110
-        // int wt[] = { 1, 3, 4, 5 };
-        // int n = val.length;
+        int W = 8;
+        int val[] = { 10, 40, 50, 70 }; // op:110
+        int wt[] = { 1, 3, 4, 5 };
+        int n = val.length;
+        System.out.println("Ans is : " + knapsack01Tab(wt, val, W, n));
 
         // knapSack(W, wt, val, n);
 
