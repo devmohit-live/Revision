@@ -181,8 +181,8 @@ public class MCM_CutProblems {
 
     }
 
-    // Follow UP : If operator - is also included
-    // TODO: to ask -1,-2 etc will take 2 places
+    // Follow UP : If operator - is also included(- is acted as operator numbers are
+    // still +ve)
 
     // cases for min max check for all possibilities if operator is *
     // min(leftmin * rightmin , leftmin * rightmax)
@@ -247,43 +247,70 @@ public class MCM_CutProblems {
     }
 
     // Follow Up 3: if numner is more than 1 digit
-    // TODO: ask for base case
-    static Pair minmax3(String exp, int si, int ei, Pair[][] dp) {
-        // only sinlge character is left +ve base case
+
+    // same as maxmin here we have to somehow get the complete number using a single
+    // index
+
+    // functions to get the expression in list for so that get(i) return complete
+    // numer and operator not a part of number
+
+    static List<String> getData(String s) {
+        List<String> exp = new ArrayList<String>();
+        int start = 0, n = s.length();
+        for (int i = 0; i < n; i++) {
+            char ch = s.charAt(i);
+            if (ch == '*' || ch == '-' || ch == '+') {
+                String operator = ch + "";
+                String number = s.substring(start, i);
+                exp.add(number);
+                exp.add(operator);
+                start = i + 1;
+            }
+        }
+        // for the last left number
+        exp.add(s.substring(start));
+
+        // System.out.println(exp);
+        return exp;
+
+    }
+
+    static minmax3(String s){
+	    List<String> exp = getData(s);
+	    int n = exp.size();
+	    Pair[][] dp = new Pair[n][n];
+    	Pair res = minmax3(exp,0,n-1,dp); 
+    	System.out.println("Min val is : " + res.min);
+    	System.out.println("Max val is : " + res.max);
+    }
+
+    static Pair minmax3(List<String> exp, int si, int ei, Pair[][] dp) {
+
         if (si == ei) {
-            int val = exp.charAt(si) - '0';
+            int val = Integer.parseInt(exp.get(si));
             return dp[si][ei] = new Pair(val);
         }
-        // lookup
+
         if (dp[si][ei] != null)
             return dp[si][ei];
 
         Pair res = new Pair();
-        int cut = si + 1;
 
-        while (exp.charAt(cut) - '0' >= 0 && exp.charAt(cut) - '0' <= 9)
-            cut++;
+        for (int cut = si + 1; cut < ei; cut += 2) {
+            char operaotr = exp.get(cut).charAt(0);
+            Pair leftSideEvaluation = minmax(exp, si, cut - 1, dp);
+            Pair rightSideEvaluation = minmax(exp, cut + 1, ei, dp);
 
-        while (cut < ei) {
-
-            char operaotr = exp.charAt(cut);
-
-            Pair leftSideEvaluation = minmax3(exp, si, cut - 1, dp);
-            Pair rightSideEvaluation = minmax3(exp, cut + 1, ei, dp);
-
-            // rec ans
             Pair eval = evaluate(leftSideEvaluation, rightSideEvaluation, operaotr);
 
             res.min = Math.min(res.min, eval.min);
             res.max = Math.max(res.max, eval.max);
-            cut++;
-            while (exp.charAt(cut) - '0' >= 0 && exp.charAt(idx) - '0' <= 9)
-                cut++;
         }
 
         return dp[si][ei] = res;
 
     }
+
 
     public static void min_max(Strings exp) {
 
