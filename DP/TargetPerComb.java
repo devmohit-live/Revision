@@ -352,7 +352,6 @@ public class TargetPerComb {
             backEngKnapsack(wt, val, dp, n, W - wt[n - 1], psf + "( " + wt[n - 1] + ", " + val[n - 1] + ")");
         else
             backEngKnapsack(wt, val, dp, n - 1, W, psf);
-
     }
 
     static String backEngKnapsack(int[] wt, int[] val, int[][] dp, int n, int W) {
