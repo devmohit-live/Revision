@@ -292,9 +292,6 @@ public class Questions {
         return dp[idx] = count;
     }
 
-    
-    
-    
     // GFG MaxGold:
 
     static int maxGold(int n, int m, int M[][]) {
@@ -305,7 +302,7 @@ public class Questions {
         int[][] dp2 = new int[n][m];
 
         for (int r = 0; r < n; r++) {
-            maxGold_Mem(r, 0, M, dp,dir);
+            maxGold_Mem(r, 0, M, dp, dir);
             gold = Math.max(gold, dp[r][0]);
             maxGold_Tab(r, 0, M, dp2, dir);
             if (gold2 < dp2[r][0]) {
@@ -491,8 +488,8 @@ public class Questions {
         return b;
     }
 
- // Leetcode 139 : WordBreak
-    
+    // Leetcode 139 : WordBreak
+
     public boolean wordBreak(String s, List<String> wordDict) {
         HashSet<String> set = new HashSet<>();
         int maxwordlen = 0, n = s.length();
@@ -531,9 +528,6 @@ public class Questions {
 
         return dp[n];
     }
-
-
-
 
     // We have done this as we just need no of ways , so we used the concept that n
     // similar calls will give same result so net = n*x
@@ -697,10 +691,45 @@ public class Questions {
         return dp[n][m] = ans;
     }
 
+    // Leetcode 576 : Out of the boundary Path
 
+    public int findPaths(int m, int n, int maxMove, int startRow, int startColumn) {
+        long[][][] dp = new long[m + 1][n + 1][maxMove + 1];
 
+        for (long[][] grid : dp)
+            for (long[] row : grid)
+                Arrays.fill(row, -1);
 
-    
+        long res = findPaths(m, n, maxMove, startRow, startColumn, dp);
+        return (int) (res);
+    }
+
+    private long findPaths(int m, int n, int move, int sr, int sc, long[][][] dp) {
+
+        // just have to change the base case
+        if (sr < 0 || sc < 0 || sr >= m || sc >= n)
+            return 1;
+
+        if (move == 0) {
+            return dp[sr][sc][move] = 0;
+        }
+
+        if (dp[sr][sc][move] != -1)
+            return dp[sr][sc][move];
+
+        long count = 0;
+
+        for (int[] d : dir) {
+            int r = sr + d[0];
+            int c = sc + d[1];
+            // make the call reactivly
+            count = (count + findPaths(m, n, move - 1, r, c, dp)) % mod;
+        }
+
+        return dp[sr][sc][move] = count;
+
+    }
+
     public static void main(String[] args) {
         // String s[] = { "3*", "212311", "*", "1*", "2*", "*3", "**", "*3525**56*" };
         // for (String st : s) {
