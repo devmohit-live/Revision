@@ -182,6 +182,108 @@ public class MCM_CutProblems {
     }
 
     // Follow UP : If operator - is also included
+    // TODO: to ask -1,-2 etc will take 2 places
+
+    // cases for min max check for all possibilities if operator is *
+    // min(leftmin * rightmin , leftmin * rightmax)
+
+    static int minimum(int... arr) {
+        int ans = (int) 1e9;
+        for (int el : arr)
+            ans = Math.min(ans, el);
+        return ans;
+    }
+
+    static int maximum(int... arr) {
+        int ans = -(int) 1e9;
+        for (int el : arr)
+            ans = Math.max(ans, el);
+        return ans;
+    }
+
+    static Pair evaluate2(Pair left, Pair right, char op) {
+        Pair ans = new Pair();
+        if (op == '+') {
+            ans.min = left.min + right.min;
+            ans.max = left.max + right.max;
+        } else if (op == '*') {
+            ans.min = minimum(left.min * right.min, left.max * right.max, left.min * right.max, left.max * right.min);
+            ans.max = maximum(left.min * right.min, left.max * right.max, left.min * right.max, left.max * right.min);
+        } else if (op == '-') {
+            ans.min = minimum(left.min - right.min, left.max - right.max, left.min - right.max, left.max - right.min);
+            ans.max = maximum(left.min - right.min, left.max - right.max, left.min - right.max, left.max - right.min);
+        }
+
+        return ans;
+    }
+
+    static Pair minmax2(String exp, int si, int ei, Pair[][] dp) {
+        // only sinlge character is left +ve base case
+        if (si == ei) {
+            int val = exp.charAt(si) - '0';
+            return dp[si][ei] = new Pair(val);
+        }
+        // lookup
+        if (dp[si][ei] != null)
+            return dp[si][ei];
+
+        Pair res = new Pair();
+        // make valid cuts : opeartior is at odd pos
+        for (int cut = si + 1; cut < ei; cut += 2) {
+            char operaotr = exp.charAt(cut);
+            // left and right evalutaed string on current operaotr str[cut]
+            Pair leftSideEvaluation = minmax2(exp, si, cut - 1, dp);
+            Pair rightSideEvaluation = minmax2(exp, cut + 1, ei, dp);
+
+            // rec ans
+            Pair eval = evaluate2(leftSideEvaluation, rightSideEvaluation, operaotr);
+
+            res.min = Math.min(res.min, eval.min);
+            res.max = Math.max(res.max, eval.max);
+        }
+
+        return dp[si][ei] = res;
+
+    }
+
+    // Follow Up 3: if numner is more than 1 digit
+    // TODO: ask for base case
+    static Pair minmax3(String exp, int si, int ei, Pair[][] dp) {
+        // only sinlge character is left +ve base case
+        if (si == ei) {
+            int val = exp.charAt(si) - '0';
+            return dp[si][ei] = new Pair(val);
+        }
+        // lookup
+        if (dp[si][ei] != null)
+            return dp[si][ei];
+
+        Pair res = new Pair();
+        int cut = si + 1;
+
+        while (exp.charAt(cut) - '0' >= 0 && exp.charAt(cut) - '0' <= 9)
+            cut++;
+
+        while (cut < ei) {
+
+            char operaotr = exp.charAt(cut);
+
+            Pair leftSideEvaluation = minmax3(exp, si, cut - 1, dp);
+            Pair rightSideEvaluation = minmax3(exp, cut + 1, ei, dp);
+
+            // rec ans
+            Pair eval = evaluate(leftSideEvaluation, rightSideEvaluation, operaotr);
+
+            res.min = Math.min(res.min, eval.min);
+            res.max = Math.max(res.max, eval.max);
+            cut++;
+            while (exp.charAt(cut) - '0' >= 0 && exp.charAt(idx) - '0' <= 9)
+                cut++;
+        }
+
+        return dp[si][ei] = res;
+
+    }
 
     public static void min_max(Strings exp) {
 
