@@ -117,10 +117,86 @@ public class MCM_CutProblems {
         return sdp[SI][EI];
     }
 
+    // ============================== Min Max =================================
+
+    // https://www.geeksforgeeks.org/minimum-maximum-values-expression/
+    static class Pair {
+        int min = (int) 1e9;
+        int max = -(int) 1e9;
+
+        Pair(int val) {
+            this.min = this.max = val;
+
+        }
+
+        Pair() {
+
+        }
+
+    }
+
+    static Pair evaluate(Pair left, Pair right, char op) {
+        Pair ans = new Pair();
+
+        // all values are +ve
+        if (op == '*') {
+            ans.min = left.min * right.min;
+            ans.max = left.max * right.max;
+
+        } else if (op == '+') {
+            ans.min = left.min + right.min;
+            ans.max = left.max + right.max;
+        }
+
+        return ans;
+    }
+
+    // make a cut at every operator
+    static Pair minmax(String exp, int si, int ei, Pair[][] dp) {
+        // only sinlge character is left +ve base case
+        if (si == ei) {
+            int val = exp.charAt(si) - '0';
+            return dp[si][ei] = new Pair(val);
+        }
+        // lookup
+        if (dp[si][ei] != null)
+            return dp[si][ei];
+
+        Pair res = new Pair();
+        // make valid cuts : opeartior is at odd pos
+        for (int cut = si + 1; cut < ei; cut += 2) {
+            char operaotr = exp.charAt(cut);
+            // left and right evalutaed string on current operaotr str[cut]
+            Pair leftSideEvaluation = minmax(exp, si, cut - 1, dp);
+            Pair rightSideEvaluation = minmax(exp, cut + 1, ei, dp);
+
+            // rec ans
+            Pair eval = evaluate(leftSideEvaluation, rightSideEvaluation, operaotr);
+
+            res.min = Math.min(res.min, eval.min);
+            res.max = Math.max(res.max, eval.max);
+        }
+
+        return dp[si][ei] = res;
+
+    }
+
+    // Follow UP : If operator - is also included
+
+    public static void min_max(Strings exp) {
+
+        int n = exp.length();
+        Pair[][] dp = new Pair[n][n];
+        Pair res = minmax(exp, 0, n - 1, dp);
+        System.out.println("Min val is : " + res.min);
+        System.out.println("Max val is : " + res.max);
+    }
+
     public static void main(String[] args) {
-        int N = 5;
-        int[] arr = { 40, 20, 30, 10, 30 };
-        // Output: 26000
-        matrixMultiplication(N, arr);
+        // int N = 5;
+        // int[] arr = { 40, 20, 30, 10, 30 };
+        // // Output: 26000
+        // matrixMultiplication(N, arr);
+        min_max("1+2*3+4*5");
     }
 }
