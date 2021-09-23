@@ -301,7 +301,8 @@ public class MCM_CutProblems {
             Pair leftSideEvaluation = minmax(exp, si, cut - 1, dp);
             Pair rightSideEvaluation = minmax(exp, cut + 1, ei, dp);
 
-            Pair eval = evaluate(leftSideEvaluation, rightSideEvaluation, operaotr);
+            // Pair eval = evaluate(leftSideEvaluation, rightSideEvaluation, operaotr);
+            Pair eval = evaluate2(leftSideEvaluation, rightSideEvaluation, operaotr);
 
             res.min = Math.min(res.min, eval.min);
             res.max = Math.max(res.max, eval.max);
@@ -311,7 +312,6 @@ public class MCM_CutProblems {
 
     }
 
-
     public static void min_max(Strings exp) {
 
         int n = exp.length();
@@ -319,6 +319,75 @@ public class MCM_CutProblems {
         Pair res = minmax(exp, 0, n - 1, dp);
         System.out.println("Min val is : " + res.min);
         System.out.println("Max val is : " + res.max);
+    }
+
+    // Boolean Paranthisation:
+    // https://practice.geeksforgeeks.org/problems/boolean-parenthesization5610/1#
+
+    static class TFPair {
+        int T, F;
+
+        TFPair() {
+            this.T = 0;
+            this.F = 0;
+        }
+
+        TFPair(int t, int f) {
+            this.T = t;
+            this.F = f;
+        }
+
+    }
+
+    // We have to calculte false too bcz nof of false can also be made true with
+    // different combination with different operators with true;
+
+    static int countWays(int N, String S) {
+        TFPair[][] dp = new TFPair[N][N];
+        return countWays(S, 0, N - 1, dp).T;
+    }
+
+    static void evaluateTF(TFPair left, TFPair right, char op, TFPair res) {
+        int totalTF = ((left.T + left.F) * (right.T + right.F)) % mod;
+        int totalT = 0, totalF = 0;
+
+        if (op == '|') {
+            totalF = (left.F * right.F) % mod;
+            totalT = ((totalTF - totalF) + mod) % mod;
+        } else if (op == '&') {
+            totalT = (left.T * right.T) % mod;
+            totalF = ((totalTF - totalT) + mod) % mod;
+        } else if (op == '^') {
+            totalT = (left.F * right.T) % mod + (left.T * right.F) % mod;
+            totalF = (totalTF - totalT + mod) % mod;
+        }
+
+        res.T = (res.T + totalT) % mod;
+        res.F = (res.F + totalF) % mod;
+
+    }
+
+    static TFPair countWays(String S, int si, int ei, TFPair[][] dp) {
+        if (si == ei) {
+            char ch = S.charAt(si);
+            int t = ch == 'T' ? 1 : 0;
+            int f = ch == 'F' ? 1 : 0;
+            return dp[si][ei] = new TFPair(t, f);
+        }
+        // lookup
+        if (dp[si][ei] != null)
+            return dp[si][ei];
+
+        TFPair res = new TFPair();
+        // make valid cuts : opeartior is at odd pos
+        for (int cut = si + 1; cut < ei; cut += 2) {
+            char operaotr = S.charAt(cut);
+            TFPair leftSideEvaluation = countWays(S, si, cut - 1, dp);
+            TFPair rightSideEvaluation = countWays(S, cut + 1, ei, dp);
+            evaluateTF(leftSideEvaluation, rightSideEvaluation, operaotr, res);
+        }
+
+        return dp[si][ei] = res;
     }
 
     public static void main(String[] args) {
