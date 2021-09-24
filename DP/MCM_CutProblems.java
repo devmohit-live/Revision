@@ -390,6 +390,36 @@ public class MCM_CutProblems {
         return dp[si][ei] = res;
     }
 
+
+    // Leetcode 312: Burst Baloons
+    // burst the ballin at last
+    public int maxCoins(int[] nums) {
+        int n = nums.length;
+        int[][] dp = new int[n][n];
+        for (int[] d : dp)
+            Arrays.fill(d, -1);
+
+        return burst(nums, dp, 0, n - 1, n);
+    }
+
+    int burst(int[] arr, int[][] dp, int si, int ei, int n) {
+
+        if (dp[si][ei] != -1)
+            return dp[si][ei];
+        // These checks also handles the base cases
+        int prize = 0, leftel = 0, rightel = 0;
+        leftel = si == 0 ? 1 : arr[si - 1]; // left to current si
+        rightel = ei == n - 1 ? 1 : arr[ei + 1]; // right to current ei
+
+        for (int cut = si; cut <= ei; cut++) {
+            int leftcost = cut == si ? 0 : burst(arr, dp, si, cut - 1, n);
+            int rightcost = cut == ei ? 0 : burst(arr, dp, cut + 1, ei, n);
+            int self = leftel * arr[cut] * rightel;
+            prize = Math.max(prize, leftcost + rightcost + self);
+        }
+
+        return dp[si][ei] = prize;
+    }
     public static void main(String[] args) {
         // int N = 5;
         // int[] arr = { 40, 20, 30, 10, 30 };
