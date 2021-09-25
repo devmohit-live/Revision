@@ -390,7 +390,6 @@ public class MCM_CutProblems {
         return dp[si][ei] = res;
     }
 
-
     // Leetcode 312: Burst Baloons
     // burst the ballin at last
     public int maxCoins(int[] nums) {
@@ -420,6 +419,47 @@ public class MCM_CutProblems {
 
         return dp[si][ei] = prize;
     }
+
+    // Leetcode 1039: Minimum Score Triangulation of Polygon
+    public int minScoreTriangulation(int[] values) {
+        int n = values.length;
+        int[][] dp = new int[n][n];
+        for (int[] d : dp)
+            Arrays.fill(d, -1);
+
+        // fix 2 points(base) and made a cut for every point(point3) to make a traingle
+        // recursive calls will atuomaticly changes the base as range changes
+        // ei = first point, ei = last point
+        return minScoreTriangulation(values, dp, 0, n - 1);
+
+    }
+
+    // we are always making a traingle in every call if there are 3 points
+    private int minScoreTriangulation(int[] values, int[][] dp, int si, int ei) {
+        if (si + 1 == ei) { // 2points only traingle not possible
+            return dp[si][ei] = 0;
+        }
+
+        // three point trinalge possible :
+        int point1 = values[si];
+        int point2 = values[ei];
+
+        if (dp[si][ei] != -1)
+            return dp[si][ei];
+
+        int score = (int) 1e9;
+        for (int cut = si + 1; cut < ei; cut++) {
+            int leftScore = minScoreTriangulation(values, dp, si, cut);
+            int rightScore = minScoreTriangulation(values, dp, cut, ei);
+            int point3 = values[cut]; // the choosen point
+            int selfTraingleScore = point1 * point2 * point3;
+            int ans = leftScore + rightScore + selfTraingleScore;
+            score = Math.min(score, ans);
+        }
+        return dp[si][ei] = score;
+
+    }
+
     public static void main(String[] args) {
         // int N = 5;
         // int[] arr = { 40, 20, 30, 10, 30 };
