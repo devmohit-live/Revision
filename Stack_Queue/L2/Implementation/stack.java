@@ -1,10 +1,11 @@
 public class stack {
-
+    // ------------------ Data Memebers ------------------
     private int[] arr;
     private int tos;
     private int size;
     private int maxCapacity;
 
+    // -------------- Construcotr and Intializing functions ------------------
     stack() {
         /**
          * Default size is 10;
@@ -23,50 +24,73 @@ public class stack {
         this.maxCapacity = size;
     }
 
+    // ---------- Exceptions ------------------
+
     protected void stackIsFull() throws Exception {
-        if (this.size() == this.maxCapacity)
+        if (this.getSize() == this.maxCapacity)
             throw new Exception("Stack is Full");
 
     }
 
     protected void stackIsEmpty() throws Exception {
-        if (this.size() == 0)
+        if (this.getSize() == 0)
             throw new Exception("Stack is Empty");
 
     }
 
-    protected int size() {
+    // ------------------------ Basic DS Functions ------------------------
+
+    protected int getSize() {
         return this.size;
     }
 
     protected void push(int element) throws Exception {
         stackIsFull();
-        pushToStack(el);
+        push_(element);
     }
 
-    private pushToStack(int el){
+    private void push_(int element) {
         this.tos++;
-        this.arr[this.tos] = el;
+        this.arr[this.tos] = element;
+        this.size++;
     }
 
     protected int peek() throws Exception {
         stackIsEmpty();
-        return peekFromStack();
-    }
-
-    private int peekFromStack() {
         return this.arr[this.tos];
     }
 
     protected int pop() throws Exception {
         stackIsEmpty();
-        return removeFromStack();
+        return pop_();
     }
 
-    private int removeFromStack() {
+    private int pop_() {
         int value = this.arr[this.tos];
         this.tos--;
+        this.size--;
         return value;
+    }
+
+    protected int getMaxSize() {
+        return this.maxCapacity;
+    }
+
+    // ------------- Common Class Functions -------------------
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append('[');
+
+        for (int i = this.getSize() - 1; i > 0; i--) {
+            sb.append(this.arr[i] + ", ");
+        }
+        sb.append(this.arr[0]);
+
+        sb.append(']');
+
+        return sb.toString();
     }
 
 }
