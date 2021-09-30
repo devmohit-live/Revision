@@ -5,7 +5,7 @@ public class stack {
     private int size;
     private int maxCapacity;
 
-    // -------------- Construcotr and Intializing functions ------------------
+    // -------------- Constructor and Intializing functions ------------------
     stack() {
         /**
          * Default size is 10;
@@ -40,11 +40,11 @@ public class stack {
 
     // ------------------------ Basic DS Functions ------------------------
 
-    protected int getSize() {
+    public int getSize() {
         return this.size;
     }
 
-    protected void push(int element) throws Exception {
+    public void push(int element) throws Exception {
         stackIsFull();
         push_(element);
     }
@@ -55,12 +55,12 @@ public class stack {
         this.size++;
     }
 
-    protected int peek() throws Exception {
+    public int peek() throws Exception {
         stackIsEmpty();
         return this.arr[this.tos];
     }
 
-    protected int pop() throws Exception {
+    public int pop() throws Exception {
         stackIsEmpty();
         return pop_();
     }
@@ -72,7 +72,7 @@ public class stack {
         return value;
     }
 
-    protected int getMaxSize() {
+    public int getMaxSize() {
         return this.maxCapacity;
     }
 
