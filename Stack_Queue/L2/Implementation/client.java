@@ -38,5 +38,18 @@ public class client {
         System.out.println(ds);
         System.out.printf("size is %d and max size is %d \n", ds.getSize(), ds.getMaxSize());
 
+        System.out.println("\nThis is Dynamic Stack using Node : ");
+        DynamicStack2 dss = new DynamicStack2();
+        dss.push(1);
+        dss.push(2);
+        dss.push(3);
+        dss.push(4);
+        dss.push(5);
+        System.out.println(dss);
+        System.out.printf("size is %d \n", dss.getSize());
+        dss.push(100);
+        System.out.println(dss);
+        System.out.printf("size is %d\n", dss.getSize());
+
     }
 }
