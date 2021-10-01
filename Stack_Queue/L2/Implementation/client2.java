@@ -25,13 +25,13 @@ public class client2 {
         System.out.println(q);
         System.out.println(q.getSize());
         q.add(100);
+        q.add(101);
         System.out.println(q);
         System.out.printf("Size of Q is : %d , Capacity is : %d \n", q.getSize(), q.getMaxCapacity());
-        // System.out.println(q.remove());
-        // System.out.println(q.remove());
-        // System.out.println(q);
-        // System.out.printf("Size of Q is : %d , Capacity is : %d \n", q.getSize(),
-        // q.getMaxCapacity());
+        System.out.println(q.remove());
+        System.out.println(q.remove());
+        System.out.println(q);
+        System.out.printf("Size of Q is : %d , Capacity is : %d \n", q.getSize(), q.getMaxCapacity());
 
     }
 }
