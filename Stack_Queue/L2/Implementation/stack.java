@@ -82,11 +82,11 @@ public class stack {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append('[');
-
-        for (int i = this.getSize() - 1; i > 0; i--) {
+        int tmpSize = this.getSize();
+        for (int i = 0; i < tmpSize - 1; i++) {
             sb.append(this.arr[i] + ", ");
         }
-        sb.append(this.arr[0]);
+        sb.append(this.arr[tmpSize - 1]);
 
         sb.append(']');
 

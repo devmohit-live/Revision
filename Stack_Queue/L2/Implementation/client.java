@@ -18,6 +18,13 @@ public class client {
         // System.out.println(ob.pop());
         // System.out.println(ob.pop());
         // // System.out.println(ob.pop());
+        // Stack<Integer> st = new Stack<>();
+        // st.push(1);
+        // st.push(2);
+        // st.push(3);
+        // st.push(4);
+        // st.push(5);
+        // System.out.println("original stack of java " + st);
 
         dynamicStack ds = new dynamicStack(5);
         ds.push(1);
