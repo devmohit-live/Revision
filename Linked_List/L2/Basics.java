@@ -328,6 +328,8 @@ public class Basics {
         return size;
     }
 
+    // have to make it global for addFirstNode fucntion(just as we do while
+    // implemeting ll)
     private static ListNode th = null, tt = null;
 
     private static void addFirstNode(ListNode node) {
@@ -385,7 +387,7 @@ public class Basics {
                 curr = forw;
                 i++;
             }
-
+            //
             if (i > m) {
                 prev.next = th;
                 tt.next = curr;
@@ -445,7 +447,7 @@ public class Basics {
         return head;
     }
 
-    //leetcode 88
+    // leetcode 88
     public static ListNode removeAllDuplicates(ListNode head) {
         if (head == null || head.next == null)
             return head;
@@ -675,7 +677,7 @@ public class Basics {
     }
 
     // copy list with random pointers ->leetcode 138
-    
+
     public ListNode copyRandomListWithSpace(ListNode head) {
         HashMap<ListNode, ListNode> map = new HashMap<>();
         ListNode curr1 = head;

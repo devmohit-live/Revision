@@ -697,40 +697,74 @@ public class TargetPerComb {
 
     }
 
-    //Leetcode 213. House Robber II
-      public int rob(int[] nums) {
+    // Leetcode 198 : House Robber
+    public int rob1(int[] nums) {
         int n = nums.length;
-        if(n==0 || n==1){
-          return n==1?nums[0]:0;
+        if (n == 0 || n == 1) {
+            return n == 1 ? nums[0] : 0;
         }
-      
+
+        int[] dp1 = new int[n];
+        // int[] dp2 = new int[n];
+        Arrays.fill(dp1, -1);
+        // Arrays.fill(dp2,-1);
+        int startfrom0 = rob1(nums, dp1, 0);
+        int startfrom1 = rob1(nums, dp1, 1);
+        return Math.max(startfrom0, startfrom1);
+    }
+
+    private int rob1(int[] arr, int[] dp, int si) {
+        int n = arr.length;
+
+        if (si >= n) {
+            return 0;
+        }
+
+        if (dp[si] != -1)
+            return dp[si];
+
+        int robbingCurrentHouse = arr[si] + rob1(arr, dp, si + 2);
+        int notRobbingCurrentHouse = rob1(arr, dp, si + 1);
+
+        return dp[si] = Math.max(robbingCurrentHouse, notRobbingCurrentHouse);
+
+    }
+
+    // Leetcode 213: House Robber II
+    public int rob(int[] nums) {
+        int n = nums.length;
+        if (n == 0 || n == 1) {
+            return n == 1 ? nums[0] : 0;
+        }
+
         int[] dp1 = new int[n];
         int[] dp2 = new int[n];
-        Arrays.fill(dp1,-1);
-        Arrays.fill(dp2,-1);
-        int startfrom0 = rob(nums,dp1,0,n-2);
-        int startfrom1 = rob(nums,dp2,1,n-1);
-        return Math.max(startfrom0,startfrom1);
-      
-      
+        Arrays.fill(dp1, -1);
+        Arrays.fill(dp2, -1);
+        int startfrom0 = rob(nums, dp1, 0, n - 2);
+        int startfrom1 = rob(nums, dp2, 1, n - 1);
+        return Math.max(startfrom0, startfrom1);
+
     }
-  
-   private int rob(int[] arr,int[] dp , int si,int ei) {
-     
-     // si==ei => can't make a statement here as to return arr[i] in this case we have to be sure that si-1th house isn't robbed
-     if(si>ei){ //si+2 case can lead to > and we are also not checking at si==ei => si++;
-       return 0;
-     }
-     
-      if(dp[si]!=-1) return dp[si];
-     
-      int robbingCurrentHouse = arr[si] + rob(arr,dp,si+2,ei);
-      int notRobbingCurrentHouse = rob(arr,dp,si+1,ei);
-     
-     return dp[si] = Math.max(robbingCurrentHouse,notRobbingCurrentHouse);
-     
+
+    private int rob(int[] arr, int[] dp, int si, int ei) {
+
+        // si==ei => can't make a statement here as to return arr[i] in this case we
+        // have to be sure that si-1th house isn't robbed
+        if (si > ei) { // si+2 case can lead to > and we are also not checking at si==ei => si++;
+            return 0;
+        }
+
+        if (dp[si] != -1)
+            return dp[si];
+
+        int robbingCurrentHouse = arr[si] + rob(arr, dp, si + 2, ei);
+        int notRobbingCurrentHouse = rob(arr, dp, si + 1, ei);
+
+        return dp[si] = Math.max(robbingCurrentHouse, notRobbingCurrentHouse);
+
     }
-    
+
     public static void main(String[] args) {
         // int[] arr = { 2, 3, 5, 7 };
         // int n = arr.length;
