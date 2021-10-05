@@ -100,4 +100,24 @@ public class Questions {
         return j == popped.length;// or st.size() == 0;
     }
 
+    // Leetcode 856 : Score of Parentheses
+    public int scoreOfParentheses(String s) {
+        // ek pichla state b solve kro
+
+        int ans = 0;
+        Stack<Integer> st = new Stack<>();
+        st.push(0); // extra 0 for intial mark and aading b=0
+        for (char c : s.toCharArray()) {
+            if (c == '(') {
+                st.push(0);
+            } else {
+                int a = st.pop();
+                int b = st.pop();
+                ans = b + Math.max(2 * a, 1);
+                st.push(ans);
+            }
+        }
+        return st.pop();
+    }
+
 }
