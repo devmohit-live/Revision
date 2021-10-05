@@ -14,7 +14,8 @@ public class ZeroSum {
             if (sum == 0) {
                 len = i + 1; // index
             } else if (map.containsKey(sum)) {
-                len = i - map.get(sum); // not +1 bcz in prefix sum we have count from l+1 and we subtract the l
+                len = i - map.get(sum); // not +1 bcz here we are subtracting (start-1) insteadin of starting index of
+                                        // subarray
             } else if (!map.containsKey(sum)) {
                 map.put(sum, i);
             }
