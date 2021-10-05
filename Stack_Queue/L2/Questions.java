@@ -76,4 +76,28 @@ public class Questions {
         return ans;
     }
 
+    // Leetcode 946 : Validate Stack Sequences
+    public boolean validateStackSequences(int[] pushed, int[] popped) {
+
+        if (pushed.length == 0 && popped.length == 0)
+            return true;
+        // should be of same length
+        else if (pushed.length != popped.length)
+            return false;
+
+        int j = 0; // counts the no of pop operations actually done
+        Stack<Integer> st = new Stack<>();
+        for (int i : pushed) {
+            st.push(i); // push to check for popping sequnce
+
+            // while valid and top of st is actually equal to stack seq
+            while (st.size() > 0 && st.peek() == popped[j]) {
+                st.pop();
+                j++;
+            }
+
+        }
+        return j == popped.length;// or st.size() == 0;
+    }
+
 }
