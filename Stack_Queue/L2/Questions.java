@@ -124,11 +124,11 @@ public class Questions {
 
     // Leetcode 856 : Score of Parentheses
     public int scoreOfParentheses(String s) {
-        // ek pichla state b solve kro
+        // Intuttion : ek pichla state b solve kro
 
         int ans = 0;
         Stack<Integer> st = new Stack<>();
-        st.push(0); // extra 0 for intial mark and aading b=0
+        st.push(0); // extra 0 for intial mark and adding b=0 in eq
         for (char c : s.toCharArray()) {
             if (c == '(') {
                 st.push(0);

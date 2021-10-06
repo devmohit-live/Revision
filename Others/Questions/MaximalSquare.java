@@ -49,4 +49,43 @@ public class MaximalSquare {
 
     }
 
+
+    // Leetcode 1277: Count Square Submatrices with All Ones
+
+      
+  int[][] dir = { {0,1}, {1,0}, {1,1} };
+  
+    public int countSquares(int[][] arr) {
+      int c = 0,n=arr.length, m = arr[0].length;
+      int[][] dp = new int[n][m];
+      
+      for(int i=0;i<n;i++)
+        for(int j=0;j<m;j++){
+          int small = 0;
+          if(arr[i][j] == 1)
+            c +=  rec(arr,i,j,dp);
+        }
+      
+      return c;
+    }
+  
+  private int rec(int[][] arr, int sr,int sc,int[][] dp){
+    if(sr>=arr.length || sc>=arr[0].length || sr<0 || sc<0 || arr[sr][sc]==0 ) return 0;
+    
+    if(dp[sr][sc]!=0) return dp[sr][sc];
+    
+    int ans = (int)1e9;
+    
+    for(int[] d: dir){
+      int r = sr + d[0];
+      int c = sc+ d[1];
+      int small = rec(arr,r,c,dp);
+       ans = Math.min(small,ans);
+    }
+       
+    return dp[sr][sc] = ans +1 ;
+    
+  }
+  
+
 }
