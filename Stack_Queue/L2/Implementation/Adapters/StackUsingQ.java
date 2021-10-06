@@ -46,4 +46,42 @@ public class StackUsingQ {
             return this.queue.size() == 0;
         }
     }
-}
+
+    // Follow Up : Implement Stack USing Single Q:
+
+    // Approach: for each push =>add the new given element the remove item from q
+    // till size of q > 1 and add again them into q
+
+    class FU {
+        private Queue<Integer> queue;
+
+        public MyStack() {
+            this.queue =new ArrayDeque();
+        
+        }
+
+        public void push(int x) {
+            queue.add(x);
+            int size = queue.size();
+            while (size-- > 1) {
+                queue.add(queue.remove());
+            }
+        }
+
+        public int pop() {
+            return queue.remove();
+        }
+
+        public int top() {
+            return queue.peek();
+        }
+
+        public boolean empty() {
+            return this.queue.size() == 0;
+        }
+    }
+
+     
+
+    
+
