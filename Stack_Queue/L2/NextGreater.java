@@ -68,13 +68,13 @@ public class NextGreater {
     static int[] nsol(int[] arr) {
         int n = arr.length;
         int[] ans = new int[n];
-        Arrays.fill(ans, -1); // arr.length represent imaginary number to left is nsol => infinity
+        Arrays.fill(ans, -1);
 
         Stack<Integer> st = new Stack<>();
-        st.push(-1); // represents no element is there
+        st.push(-1);
 
-        for (int i = 0; i < n; i++) {
-            while (st.peek() != -1 && arr[st.peek()] < arr[i]) {
+        for (int i = n - 1; i >= 0; i--) { // left so backwards loop
+            while (st.peek() != -1 && arr[st.peek()] > arr[i]) { // smaller so >
                 ans[st.pop()] = i;
             }
 
