@@ -170,4 +170,6 @@ public class linkedlist {
         this.size++;
     }
 
+    
+
 }
