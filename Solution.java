@@ -2,19 +2,23 @@ import java.util.*;
 
 class Solution {
     public static void main(String args[]) {
-        Scanner sc = new Scanner(System.in);
-        int caseNum = sc.nextInt();
-        for (int ks = 1; ks <= caseNum; ks++) {
-            int[][] arr = new int[3][3];
-            for (int i = 0; i < 3; i++) {
-                arr[i][0] = sc.nextInt();
+        // Scanner sc = new Scanner(System.in);
+        // int caseNum = sc.nextInt();
+        // for (int ks = 1; ks <= caseNum; ks++) {
+        // int[][] arr = new int[3][3];
+        // for (int i = 0; i < 3; i++) {
+        // arr[i][0] = sc.nextInt();
 
-                if (i != 1)
-                    arr[i][1] = sc.nextInt();
-                arr[i][2] = sc.nextInt();
-            }
-            System.out.println(String.format("Case #%d: %s", ks, solve(arr)));
-        }
+        // if (i != 1)
+        // arr[i][1] = sc.nextInt();
+        // arr[i][2] = sc.nextInt();
+        // }
+        // System.out.println(String.format("Case #%d: %s", ks, solve(arr)));
+        // }
+        int[] arr = { 1, 5, 0, 2 };
+        int n = arr.length;
+        sort(arr, n - 1);
+        System.out.println(Arrays.toString(arr));
     }
 
     static int solve(int[][] arr) {
@@ -62,6 +66,31 @@ class Solution {
             count += max;
         }
         return count;
+    }
+
+    // sort array suing recursion
+
+    static void sort(int[] arr, int n) {
+        if (n == 0)
+            return;
+        sort(arr, n - 1); // gives arr sorted till n-1th idx
+
+        int myself = arr[n];
+        int i = n-1; // before that arr is sorted
+        int[] tmp = new int[arr.length];
+        //
+       if(myself > arr[n-1]) arr[n] = myself;
+
+       if(arr[0]>myself){
+           int idx = n-1;
+           while(idx>=0)
+            arr[idx + 1] = arr[idx];
+
+            arr[0] = myself;
+       }
+           
+       while()
+
     }
 
 }
