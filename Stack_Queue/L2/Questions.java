@@ -427,7 +427,11 @@ public class Questions {
         return count;
     }
 
-    // Appraoch2: 921
+    // Appraoch2: 921 => just count opening, and closing brackets
+    // if ( =>op++ , ifch=) and op!=0 that is we already have some opening brackets
+    // to nullify op--;
+    // else we don't have any opening bracket to nullify actual leftover closing++;
+
     public int minAddToMakeValid2(String s) {
         int n = s.length();
         int op = 0, closing = 0;
@@ -441,8 +445,10 @@ public class Questions {
             } else
                 closing++;
         }
+          String.valueOf(obj)
 
         return op + closing;
     }
+  
 
 }
