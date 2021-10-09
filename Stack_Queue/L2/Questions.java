@@ -317,6 +317,52 @@ public class Questions {
 
     }
 
-    
+    // similarly Arraylist can be used to create stack as we have created with
+    // StringBuilder in the below code
+
+    // Leetcode 316: Remove Duplicate Letters
+    // similar to remove digits
+    public String removeDuplicateLetters(String s) {
+        int[] freq = new int[26];
+        boolean[] vis = new boolean[26];
+        int n = s.length();
+        StringBuilder sb = new StringBuilder(); // will use it as a stack
+
+        // calculate the freq to avoid deleting critical characters
+        for (int i = 0; i < n; i++)
+            freq[s.charAt(i) - 'a']++;
+
+        for (int i = 0; i < n; i++) {
+            char ch = s.charAt(i); // curr
+
+            freq[ch - 'a']--; // occured hence freq reduced by one
+
+            if (vis[ch - 'a'])
+                continue; // ignore the already visited characters
+
+            // remove is not a critical character
+
+            while (sb.length() != 0 && sb.charAt(sb.length() - 1) > ch && freq[sb.charAt(sb.length() - 1) - 'a'] > 0) {
+                char top = sb.charAt(sb.length() - 1); // getLast:peek
+                sb.deleteCharAt(sb.length() - 1); // pop
+                vis[top - 'a'] = false; // now not in stack
+            }
+
+            sb.append(ch); // push
+            vis[ch - 'a'] = true; // in a stack so mark true
+        }
+
+        // since we are using StringBuilder as stack we don not nned to pop => store and
+        // reverse the string bcz of pop operation we can directly get the data from
+        // 0->sb.length which was not possible in stack
+        return sb.toString();
+
+    }
+    // Leetcode 1081 : Smallest Subsequence of Distinct Characters:
+    // Exactly same = too copy of 316, just they change the wordings of the
+    // questions, by adding substring
+    // since while using stack any character can remove any smaller char to it's
+    // previous: exactly same as substring
+    // Just paste the exact code.
 
 }
