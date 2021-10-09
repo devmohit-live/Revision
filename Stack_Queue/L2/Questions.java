@@ -276,4 +276,47 @@ public class Questions {
 
         return ans;
     }
+
+    // Leetcode 402: Remove K Digits
+
+    public String removeKdigits(String nums, int k) {
+        int n = nums.length();
+        Stack<Character> st = new Stack<>();
+
+        if (k > n)
+            return "";
+
+        for (int i = 0; i < n; i++) {
+            char ch = nums.charAt(i);
+
+            while (st.size() != 0 && st.peek() > ch && k > 0) {
+                st.pop();
+                k--;
+            }
+            st.push(ch);
+
+        }
+        while (k-- > 0) {
+            st.pop();
+        }
+
+        StringBuilder sb = new StringBuilder();
+        while (st.size() != 0)
+            sb.append(st.pop());
+
+        sb = sb.reverse(); // as the number is popped from stack => reverse order
+
+        // remove the starting zeros
+        while (sb.length() > 0 && sb.charAt(0) == '0')
+            sb.deleteCharAt(0);
+
+        if (sb.length() == 0)
+            return "0"; // all the numbers were 0 so number will be 0
+        else
+            return sb.toString();
+
+    }
+
+    
+
 }
