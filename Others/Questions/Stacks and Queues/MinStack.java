@@ -131,7 +131,60 @@ public class MinStack {
         }
     }
 
-    // Approach 4 : Using arithmatics => storing modified values and checking min acc to condition
-    
+    // Approach 4 : Using arithmatics => storing modified values and checking min
+    // acc to condition
+    // Time: O(1) all opeartations , Space: O(1)
+    class MinStack4 {
+        Stack<Long> st;
+        Long mini;
+        // long bcz we have to do some arithmatic operations which can cause
+        // over/underflow also the range of numebr so
+        // INTMIN to INTMaX included
+
+        public MinStack() {
+        st = new Stack<>();
+        mini = Long.MAX_VALUE; 
+    }
+
+        public void push(int value) {
+            Long val = Long.valueOf(value);
+            if (st.isEmpty()) {
+                mini = val;
+                st.push(val);
+            } else {
+                if (val < mini) {
+                    // min needs to be updated , and modified valued needs to be pushed
+                    st.push(2 * val - mini);
+                    mini = val;
+                } else {
+                    st.push(val);
+                }
+            }
+        }
+
+        public void pop() {
+            if (st.isEmpty())
+                return;
+
+            Long val = st.pop();
+            if (val < mini) {
+                // modiefied value was there so the actual value at that time was the min,
+                // update the min to it's prev min
+                mini = 2 * mini - val;
+            }
+        }
+
+        public int top() {
+            if (st.peek() < mini) {
+                // min was the actual value, we have modified value in stack
+                return mini.intValue();
+            }
+            return st.peek().intValue();
+        }
+
+        public int getMin() {
+            return mini.intValue();
+        }
+    }
 
 }
