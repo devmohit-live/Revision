@@ -427,4 +427,22 @@ public class Questions {
         return count;
     }
 
+    // Appraoch2: 921
+    public int minAddToMakeValid2(String s) {
+        int n = s.length();
+        int op = 0, closing = 0;
+
+        for (int i = 0; i < n; i++) {
+            char ch = s.charAt(i);
+            if (ch == '(')
+                op++;
+            else if (op != 0) {
+                op--;
+            } else
+                closing++;
+        }
+
+        return op + closing;
+    }
+
 }
