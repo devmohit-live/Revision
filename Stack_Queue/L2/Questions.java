@@ -365,4 +365,66 @@ public class Questions {
     // previous: exactly same as substring
     // Just paste the exact code.
 
+    // Leetcode 1249:Minimum Remove to Make Valid Parentheses
+    public String minRemoveToMakeValid(String s) {
+        int n = s.length();
+        Stack<Integer> st = new Stack<>();
+        char[] arr = s.toCharArray(); // as string is immutable
+
+        for (int i = 0; i < n; i++) {
+            char ch = arr[i];
+            if (ch != '(' && ch != ')') // ignore alphabets
+                continue;
+            else if (ch == '(')
+                st.push(i);
+            else if (st.size() != 0 && ch == ')') // pop the valid openings
+                st.pop();
+            else
+                arr[i] = '#'; // mark invalid
+        }
+
+        // if stack contains some indexes => all will be invalid
+        while (st.size() > 0)
+            arr[st.pop()] = '#';
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < n; i++)
+            if (arr[i] != '#')
+                sb.append(arr[i]);
+
+        return sb.toString();
+
+    }
+
+    // Leetcode 921: Minimum Add to Make Parentheses Valid
+    // exactly same as above(1249)
+    public int minAddToMakeValid(String s) {
+        int n = s.length();
+        Stack<Integer> st = new Stack<>();
+        char[] arr = s.toCharArray();
+        int count = 0;
+
+        for (int i = 0; i < n; i++) {
+            char ch = arr[i];
+            if (ch != '(' && ch != ')')
+                continue;
+            else if (ch == '(')
+                st.push(i);
+            else if (st.size() != 0 && ch == ')')
+                st.pop();
+            else
+                arr[i] = '#'; // mark invalid
+        }
+
+        // if stack contains some indexes => all will be invalid
+        while (st.size() > 0)
+            arr[st.pop()] = '#';
+
+        for (int i = 0; i < n; i++)
+            if (arr[i] == '#')
+                count++;
+        // System.out.println(Arrays.toString(arr));
+        return count;
+    }
+
 }
