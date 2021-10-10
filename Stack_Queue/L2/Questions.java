@@ -94,34 +94,41 @@ public class Questions {
 
     // Leetcode 735: Asteroid Collision
     // opposite sides will collide
-    public int[] asteroidCollision(int[] asteroids) {
+    public int[] asteroidCollision(int[] arr) {
         Stack<Integer> st = new Stack<>();
-        for (int el : asteroids) {
-            // push all the positive numbers
+        int n = arr.length;
 
-            if (el > 0)
-                st.push(el);
+        // collison : first + , second -ve, ei peeek is +ve(so by default we will push
+        // +ve)
 
-            while (st.size() != 0 && st.peek() > 0 && st.peek() < -el)
+        for (int i = 0; i < n; i++) {
+
+            if (arr[i] > 0) {
+                st.push(arr[i]);
+                // continue;
+            }
+            // condition for collision 1+ve , 2-ve ans magnitude of 2nd > 1
+            while (st.size() != 0 && st.peek() > 0 && arr[i] < 0 && st.peek() < -arr[i])
                 st.pop();
 
-            if (st.size() != 0 && st.peek() == -el) {
-                st.pop(); // ans dosn't push el as it is also destroyed
-            } else if (st.size() == 0 || st.peek() < 0)
-                st.push(el);
-            else {
-                // nothing to do in other cases as if we don't push the el it is considered as
-                // destroyed
+            if (st.size() != 0 && st.peek() == -arr[i]) {
+                // ex 9, -9 => both will be destoyed
+                st.pop(); // +9 is destroyed and we don't push -9
+            } else if (st.size() == 0 || st.peek() < 0) {
+                // empty stack or first element is negative : push this elemet too
+                st.push(arr[i]);
+            } else {
+                // magnitude of -ve was smaller , so we don't push the the ar[i];
+                // ie nothing to do
             }
 
         }
 
         int[] ans = new int[st.size()];
-        int idx = ans.length - 1;
+        int i = st.size() - 1;
         while (st.size() != 0) {
-            ans[idx--] = st.pop();
+            ans[i--] = st.pop();
         }
-
         return ans;
     }
 
@@ -445,10 +452,8 @@ public class Questions {
             } else
                 closing++;
         }
-          String.valueOf(obj)
 
         return op + closing;
     }
-  
 
 }
