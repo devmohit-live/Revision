@@ -553,4 +553,54 @@ public class Questions {
 
         }
     }
+
+    // Leetcode 155
+    class MinStack {
+
+        private Stack<Long> st;
+        private long minSf;
+
+        public MinStack() {
+            this.st = new Stack<>();
+            this.minSf = 0;
+        }
+
+        public void push(int val) {
+            long x = val;
+            if (st.size() == 0) {
+                st.push(x);
+                minSf = x;
+                return;
+            }
+
+            if (x < minSf) {
+                st.push(2 * x - minSf);
+                minSf = x;
+            } else {
+                st.push(x);
+            }
+        }
+
+        public void pop() {
+            if (st.peek() < minSf) {
+                minSf = 2 * minSf - st.peek();
+            }
+
+            st.pop();
+        }
+
+        public int top() {
+            if (st.peek() < minSf) {
+                return (int) minSf;
+            }
+
+            return (int) (long) st.peek();
+        }
+
+        public int getMin() {
+            return (int) minSf;
+        }
+
+    }
+
 }
