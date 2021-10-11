@@ -456,4 +456,101 @@ public class Questions {
         return op + closing;
     }
 
+    // Leetcode 895
+    // all opearions in log n
+    class FreqStack {
+
+        private class Pair implements Comparable<Pair> {
+            int val, idx, freq;
+
+            Pair(int val, int idx, int freq) {
+                this.val = val;
+                this.idx = idx;
+                this.freq = freq;
+            }
+
+            @Override
+            public int compareTo(Pair o) {
+                if (this.freq == o.freq) {
+                    return o.idx - this.idx;
+                }
+
+                return o.freq - this.freq;
+            }
+
+        }
+
+        private HashMap<Integer, Integer> map;
+        private PriorityQueue<Pair> pq;
+        private int idx;
+
+        public FreqStack() {
+            map = new HashMap<>();
+            pq = new PriorityQueue<>();
+            idx = 0;
+        }
+
+        public void push(int val) {
+            map.put(val, map.getOrDefault(val, 0) + 1); // freq
+            pq.add(new Pair(val, idx++, map.get(val)));
+        }
+
+        public int pop() {
+            Pair rm = pq.remove();
+            map.put(rm.val, map.get(rm.val) - 1);
+            if (map.get(rm.val) == 0)
+                map.remove(rm);
+
+            return rm.val;
+        }
+    }
+
+    // Approach 2: O(1)
+    class FreqStack {
+        private HashMap<Integer, Stack<Integer>> container;
+        private HashMap<Integer, Integer> freq;
+        private int maxfreq;
+
+        public FreqStack() {
+            this.container = new HashMap<>();
+            this.freq = new HashMap<>();
+            this.maxfreq = 0;
+
+            container.put(0, new Stack<Integer>()); // for 0 freq
+        }
+
+        public void push(int val) {
+            // increase that elements freq
+            freq.put(val, freq.getOrDefault(val, 0) + 1);
+
+            if (freq.get(val) > maxfreq) {
+                // new max freq => new container
+                maxfreq = freq.get(val);
+                container.put(maxfreq, new Stack<Integer>());
+                container.get(maxfreq).push(val);
+            } else
+                container.get(freq.get(val)).push(val); // push it appropriate freq container's stack
+
+        }
+
+        public int pop() {
+            int val = container.get(maxfreq).pop(); //
+
+            // decrese the freq og this val
+            freq.put(val, freq.get(val) - 1);
+            if (freq.get(val) == 0)
+                freq.remove(val);
+
+            // check if container's stack got empty after this pop then remove the stack
+            // from container
+            if (container.get(maxfreq).size() == 0)
+                container.remove(maxfreq--);
+
+            // if not empty then there are some elements with same max freq so we don't need
+            // to decrease the maxfreq yet
+
+            return val;
+
+        }
+    }
 }
