@@ -603,4 +603,43 @@ public class Questions {
 
     }
 
+    // Leetcode 853 :  Car Fleet
+
+      public int carFleet(int target, int[] position, int[] speed) {
+      int n = speed.length;  
+      
+      // 0: pos, 1: time to reach target
+      double[][] cars = new double [n][2];
+      
+      for(int i=0;i<n;i++){
+        int pos = position[i];
+        double time = ((target - pos ) * 1.0) / speed[i];
+        cars[i][0] = pos*1.0;
+        cars[i][1] = time;
+        
+      }
+      //sort on basis of position to arrange them in a number line(racing track)
+      Arrays.sort(cars, (a,b)->{
+        return (a[0] - b[0] >=0) ? 1 : -1;
+        });
+      
+      
+      int fleets = 1; // by default single car is also called a fleet
+      
+      double prevTime = cars[n-1][1];
+      for(int i=n-2;i>=0;i--){
+        if( cars[i][1] > prevTime){
+          fleets++;
+          prevTime = cars[i][1];
+        } else{
+          // do nothing
+        }
+               
+        
+      }
+      
+      return fleets;
+      
+    }
+
 }
