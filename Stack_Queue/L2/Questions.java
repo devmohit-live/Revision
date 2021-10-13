@@ -603,43 +603,80 @@ public class Questions {
 
     }
 
-    // Leetcode 853 :  Car Fleet
+    // Leetcode 853 : Car Fleet
 
-      public int carFleet(int target, int[] position, int[] speed) {
-      int n = speed.length;  
-      
-      // 0: pos, 1: time to reach target
-      double[][] cars = new double [n][2];
-      
-      for(int i=0;i<n;i++){
-        int pos = position[i];
-        double time = ((target - pos ) * 1.0) / speed[i];
-        cars[i][0] = pos*1.0;
-        cars[i][1] = time;
-        
-      }
-      //sort on basis of position to arrange them in a number line(racing track)
-      Arrays.sort(cars, (a,b)->{
-        return (a[0] - b[0] >=0) ? 1 : -1;
-        });
-      
-      
-      int fleets = 1; // by default single car is also called a fleet
-      
-      double prevTime = cars[n-1][1];
-      for(int i=n-2;i>=0;i--){
-        if( cars[i][1] > prevTime){
-          fleets++;
-          prevTime = cars[i][1];
-        } else{
-          // do nothing
+    public int carFleet(int target, int[] position, int[] speed) {
+        int n = speed.length;
+
+        // 0: pos, 1: time to reach target
+        double[][] cars = new double[n][2];
+
+        for (int i = 0; i < n; i++) {
+            int pos = position[i];
+            double time = ((target - pos) * 1.0) / speed[i];
+            cars[i][0] = pos * 1.0;
+            cars[i][1] = time;
+
         }
-               
-        
-      }
-      
-      return fleets;
-      
+        // sort on basis of position to arrange them in a number line(racing track)
+        Arrays.sort(cars, (a, b) -> {
+            return (a[0] - b[0] >= 0) ? 1 : -1;
+        });
+
+        int fleets = 1; // by default single car is also called a fleet
+
+        double prevTime = cars[n - 1][1];
+        for (int i = n - 2; i >= 0; i--) {
+            if (cars[i][1] > prevTime) {
+                fleets++;
+                prevTime = cars[i][1];
+            } else {
+                // do nothing
+            }
+
+        }
+
+        return fleets;
+
+    }
+    // TODO: car fleet 2
+
+    // Leetcode 636 exclusive time of functions
+    public int[] exclusiveTime(int n, List<String> logs) {
+        private class logPair {
+            int id, timeStamp, sleepTime;
+            boolean isStart = false;
+
+            logPair(String str) {
+                String[] ar = str.split(":");
+                this.id = Integer.parseInt(ar[0]);
+                this.timeStamp = Integer.parseInt(ar[2]);
+                this.isStart = ar[1].equals("start");
+                this.sleepTime = 0;
+            }
+        }
+
+        LinkedList<logPair> st = new LinkedList<>();
+        int[] ans = new int[n];
+
+        for (String s : logs) {
+            logPair log = new logPair(s);
+
+            if (log.isStart)
+                st.addFirst(log);
+            else {
+                logPair rp = st.removeFirst();
+                // sleeptime : the in between time interval where some other functions were
+                // executed
+                // k=like in round robin just time window is not fixed here
+                ans[rp.id] += log.timeStamp - rp.timeStamp + 1 - rp.sleepTime;
+
+                if (st.size() != 0)
+                    st.getFirst().sleepTime += log.timeStamp - rp.timeStamp + 1;
+            }
+        }
+
+        return ans;
     }
 
 }
