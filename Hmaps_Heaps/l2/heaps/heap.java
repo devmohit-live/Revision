@@ -1,94 +1,131 @@
-import java.util.ArrayList;
+import java.util.*;
 
-public class heap {
+public class Heap {
+    // Data Members======================================
+
     private ArrayList<Integer> arr;
-    private boolean isMaxHeap;
-    // private int size =0;
+    private int noOfEle = 0;
+    private boolean isMaxHeap = true; // default
 
-    heap() {
-        this(false);
-    }
+    // Constructors=======================================
 
-    // chaining
-    heap(boolean isMaxHeap) {
+    private void intialize(boolean isMaxHeap) {
         this.arr = new ArrayList<>();
+        this.noOfEle = 0;
+        this.isMaxHeap = isMaxHeap;
     }
 
-    // overloading
-    heap(int[] arr) {
-        super();
-        // make the complete arraylist first
-        for (int i : arr) {
-            this.arr.add(i);
-        }
+    public Heap(boolean isMaxHeap) {
+        intialize(isMaxHeap);
+    }
 
-        // downheapify
-        for (int i = this.arr.size() - 1; i >= 0; i--)
+    public Heap() {
+        this(true);
+    }
+
+    // O(n)
+    public Heap(int[] data, boolean isMaxHeap) {
+        this(isMaxHeap);
+
+        for (int ele : data)
+            this.arr.add(ele);
+
+        this.noOfEle = this.arr.size();
+
+        for (int i = this.noOfEle - 1; i >= 0; i--) { // NLogN -> N
             downHeapify(i);
+        }
     }
 
-    private int compareTo(int i, int j, boolean isMaxHeap) {
-        boolean greater = arr.get(i) > arr.get(j);
-        if (isMaxHeap)
-            return 1;
-        else
-            return -1;
+    // exceptions.==============================================
+
+    private void UnderFlowPointerException() throws Exception {
+        if (this.noOfEle == 0)
+            throw new Exception("HeapUnderFlowException");
+    }
+
+    // Basics Functions.=========================================
+
+    public int size() {
+        return this.noOfEle;
+    }
+
+    public boolean isEmpty() {
+        return this.noOfEle == 0;
+    }
+
+    // DS Functions.==============================================
+
+    public int compareTo(int t, int o) {
+        if (isMaxHeap) {
+            // max heap
+            return this.arr.get(t) - this.arr.get(o);
+        } else {
+            // min heap
+            return this.arr.get(o) - this.arr.get(t);
+        }
     }
 
     private void swap(int i, int j) {
-        int tmp = arr.get(i);
-        arr.set(i, arr.get(j));
-        arr.set(j, tmp);
+        int e1 = this.arr.get(i);
+        int e2 = this.arr.get(j);
+
+        this.arr.set(i, e2);
+        this.arr.set(j, e1);
     }
 
-    // log n
+    // O(LogN)
     private void downHeapify(int pi) {
-        int lci = 2 * pi + 1;
-        int rci = 2 * pi + 2;
-        int maxidx = pi;
+        int maxIdx = pi, lci = 2 * pi + 1, rci = 2 * pi + 2;
 
-        if (lci < this.arr.size() && comapreTo(lci, maxidx, true) > 0)
-            maxidx = lci;
-        if (rci < this.arr.size() && comapreTo(rci, maxidx, true) > 0)
-            maxidx = rci;
+        // will swap only when compareTo gives +ve value
+        if (lci < this.noOfEle && compareTo(lci, maxIdx) > 0)
+            maxIdx = lci;
+        if (rci < this.noOfEle && compareTo(rci, maxIdx) > 0)
+            maxIdx = rci;
 
-        if (pi != maxidx) {
-            swap(pi, maxidx);
-            downHeapify(maxidx);
+        if (maxIdx != pi) {
+            swap(pi, maxIdx);
+            downHeapify(maxIdx);
         }
-
     }
 
-    void upheapify(int ci) {
+    // O(LogN)
+    private void upheapify(int ci) {
         int pi = (ci - 1) / 2;
-        if (pi >= 0 && compareTo(ci, pi, true) > 0)
+        if (pi >= 0 && compareTo(ci, pi) > 0) {
             swap(ci, pi);
-        upheapify(pi);
+            upheapify(pi);
+        }
     }
 
-    // 1
-    public int peak() {
+    // O(1)
+    public int peek() throws Exception {
+        UnderFlowPointerException();
         return this.arr.get(0);
     }
 
-    // log n
-    public int add(int el) {
+    // O(LogN)
+    public int remove() throws Exception {
+        UnderFlowPointerException();
 
-        this.arr.add(el);
-        upheapify(thi.arr.size() - 1);
+        int rEle = this.arr.get(0);
+        int idx = this.noOfEle - 1;
+        swap(0, idx);
+        this.arr.remove(idx);
 
-    }
-
-    // log n
-    public int remove() {
-        // exception
-        int rm = this.arr.get(0);
-        swap(this.arr.size() - 1, 0);
-        this.arr.remove(this.arr.size() - 1);
+        this.noOfEle--;
         downHeapify(0);
-        return rm;
+
+        return rEle;
     }
 
-    // int[] arr = {10,20,30,-2,-3,-4,5,6,7,8,9,22,11,13,14};
+    // O(LogN)
+    public void add(int data) {
+        this.arr.add(data);
+        this.noOfEle++;
+        int idx = this.noOfEle - 1;
+        upheapify(idx);
+    }
 
 }
