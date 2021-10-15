@@ -222,7 +222,7 @@ public class Questions {
 
             st.push(i);
         }
-
+        // ver very important;
         // some elemtns left in stack => for them right boundary is arr.length = n;
         while (st.peek() != -1) {
             int ht = heights[st.pop()];
@@ -259,6 +259,7 @@ public class Questions {
     // Leetcode 32: Longest Valid Parentheses
     // based on lasrgest area histogram 2
 
+    // Remenber it is a longestvalid substring not subseq
     public int longestValidParentheses(String s) {
         int ans = 0, n = s.length();
         if (n == 0)
@@ -702,5 +703,41 @@ public class Questions {
         }
         return water;
     }
+
+    // if subseq was asked
+    public int longestValidParenthesesSubseq(String s) {
+        StringBuilder sb = new StringBuilder(s);
+        Stack<Integer> st = new Stack<>();
+        st.push(-1);
+        for (int i = 0; i < s.length(); i++) {
+            char ch = s.charAt(i);
+            if (st.peek() == -1 && ch == ')')
+                sb.setCharAt(i, '#');
+            else if (ch == '(')
+                st.push(i);
+            else if (ch == ')')
+                st.pop();
+
+        }
+
+        // all leftovers in stack are invalid
+        while (st.peek() != -1)
+            sb.setCharAt(st.pop(), '#');
+        System.out.println(sb.toString());
+        int c = 0;
+        for (int i = 0; i < sb.length(); i++)
+            if (sb.charAt(i) != '#')
+                c++;
+
+        return c;
+
+    }
+
+    // here the subseq and substring will fail :
+    /*
+     * Your input "()(()" stdout for subseq ()#()
+     * 
+     * Output for subseq 4 output for substring : 2 (# breaks the continuity )
+     */
 
 }
