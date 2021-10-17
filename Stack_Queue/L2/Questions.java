@@ -343,13 +343,15 @@ public class Questions {
         for (int i = 0; i < n; i++) {
             char ch = s.charAt(i); // curr
 
-            freq[ch - 'a']--; // occured hence freq reduced by one
+            freq[ch - 'a']--; // occured hence freq reduced by one(pushed or ignored will be considered as
+                              // done)
 
             if (vis[ch - 'a'])
                 continue; // ignore the already visited characters
 
             // remove is not a critical character
 
+            // >0 not >1 as we have already decremeted the frq above
             while (sb.length() != 0 && sb.charAt(sb.length() - 1) > ch && freq[sb.charAt(sb.length() - 1) - 'a'] > 0) {
                 char top = sb.charAt(sb.length() - 1); // getLast:peek
                 sb.deleteCharAt(sb.length() - 1); // pop
@@ -391,6 +393,49 @@ public class Questions {
                 arr[i] = '#'; // mark invalid
         }
 
+        // if stack contains some indexes => all will be invalid
+        while (st.size() > 0)
+            arr[st.pop()] = '#';
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < n; i++)
+            if (arr[i] != '#')
+                sb.append(arr[i]);
+
+        return sb.toString();
+
+    }
+
+    // 1249 Follow Up : When multiple brackets are there
+    // https://leetcode.com/playground/io5rpQFd
+
+    public static String minRemoveToMakeValidFollowUp(String s) {
+        int n = s.length();
+        Stack<Integer> st = new Stack<>();
+        char[] arr = s.toCharArray(); // as string is immutable
+
+        for (int i = 0; i < n; i++) {
+            char ch = arr[i];
+            // ignore alphabets
+            if (ch != '(' && ch != ')' && ch != '{' && ch != '}' && ch != '[' && ch != ']')
+                continue;
+
+            else if (ch == '(' || ch == '{' || ch == '[')
+                st.push(i);
+
+            // pop the valid openings
+            else if (st.size() != 0 && ch == ')' && arr[st.peek()] == '(')
+                st.pop();
+            else if (st.size() != 0 && ch == '}' && arr[st.peek()] == '{')
+                st.pop();
+            else if (st.size() != 0 && ch == ']' && arr[st.peek()] == '[')
+                st.pop();
+
+            else
+                arr[i] = '#';
+
+        }
+        // System.out.println(arr);
         // if stack contains some indexes => all will be invalid
         while (st.size() > 0)
             arr[st.pop()] = '#';
