@@ -561,8 +561,6 @@ public class Questions {
             this.container = new HashMap<>();
             this.freq = new HashMap<>();
             this.maxfreq = 0;
-
-            container.put(0, new Stack<Integer>()); // for 0 freq
         }
 
         public void push(int val) {
@@ -573,9 +571,15 @@ public class Questions {
                 // new max freq => new container
                 maxfreq = freq.get(val);
                 container.put(maxfreq, new Stack<Integer>());
-                container.get(maxfreq).push(val);
-            } else
-                container.get(freq.get(val)).push(val); // push it appropriate freq container's stack
+            }
+            container.get(freq.get(val)).push(val); // push it appropriate freq container's stack
+
+            // I always write here : map.get(maxfreq).push(val); instead of if/else
+            // separated push
+            // of map.get(freq.get(val))which is wrong
+            // suppose currfrw = 2 , having el 1,2,3
+            // now we got 4 , freq of 4 now is 1, so it would be pushed into 1's stack not
+            // on 2's
 
         }
 
