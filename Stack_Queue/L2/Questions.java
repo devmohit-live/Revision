@@ -782,6 +782,55 @@ public class Questions {
 
     }
 
+
+    //Leetcode  636 : Exclusive Time Function:
+    // O(n) time and space
+    public int[] exclusiveTime(int n, List<String> logs) {
+        Stack<Integer> st= new Stack<>();
+       int[] ans = new int[n];     
+      int time = 0; // timer/counter
+      
+      for(int i=0;i<logs.size();i++){
+        //extract details
+        String[] log = logs.get(i).split(":");
+        int id = Integer.parseInt(log[0]);
+        boolean isStart = log[1].equals("start");
+        int timestamp = Integer.parseInt(log[2]);
+        int duration =0;
+        
+        
+        if(isStart){
+          //start
+          if(st.size()>0){
+              // new function started and old one is paused for now
+              // old function end = start of new fx block time = timestmap
+            duration =  timestamp - time;
+            ans[st.peek()] +=duration;
+            time = timestamp;
+          }
+
+          st.push(id);
+        }
+        
+        else{
+          //end of the last function
+          duration=( (timestamp - time) + 1);
+          ans[st.pop()] += duration; //consumed the end block completely(so end at 5 => 5'th time block is exhausted => new end = start of 6)
+          time = timestamp+1;
+        }
+        
+         // System.out.println(Arrays.toString(log)+"  "+ st+" duration  "+ duration  +" mytime "+ans[id]  +" time "+time);
+        
+      }
+        return ans;
+      
+    }
+}
+
+
+
+
+
     // here the subseq and substring will fail :
     /*
      * Your input "()(()" stdout for subseq ()#()
