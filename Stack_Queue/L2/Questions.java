@@ -691,44 +691,6 @@ public class Questions {
     }
     // TODO: car fleet 2
 
-    // Leetcode 636 exclusive time of functions
-    public int[] exclusiveTime(int n, List<String> logs) {
-        private class logPair {
-            int id, timeStamp, sleepTime;
-            boolean isStart = false;
-
-            logPair(String str) {
-                String[] ar = str.split(":");
-                this.id = Integer.parseInt(ar[0]);
-                this.timeStamp = Integer.parseInt(ar[2]);
-                this.isStart = ar[1].equals("start");
-                this.sleepTime = 0;
-            }
-        }
-
-        LinkedList<logPair> st = new LinkedList<>();
-        int[] ans = new int[n];
-
-        for (String s : logs) {
-            logPair log = new logPair(s);
-
-            if (log.isStart)
-                st.addFirst(log);
-            else {
-                logPair rp = st.removeFirst();
-                // sleeptime : the in between time interval where some other functions were
-                // executed
-                // k=like in round robin just time window is not fixed here
-                ans[rp.id] += log.timeStamp - rp.timeStamp + 1 - rp.sleepTime;
-
-                if (st.size() != 0)
-                    st.getFirst().sleepTime += log.timeStamp - rp.timeStamp + 1;
-            }
-        }
-
-        return ans;
-    }
-
     // trapping rain water using largest area histogramm concept:
     // https://leetcode.com/problems/trapping-rain-water/discuss/17414/A-stack-based-solution-for-reference-inspired-by-Histogram
     public int trap(int[] height) {
@@ -782,60 +744,100 @@ public class Questions {
 
     }
 
-
-    //Leetcode  636 : Exclusive Time Function:
+    // Leetcode 636 : Exclusive Time Function:
     // O(n) time and space
+    // explanation : https://www.youtube.com/watch?v=3zqVinluGSM
+
     public int[] exclusiveTime(int n, List<String> logs) {
-        Stack<Integer> st= new Stack<>();
-       int[] ans = new int[n];     
-      int time = 0; // timer/counter
-      
-      for(int i=0;i<logs.size();i++){
-        //extract details
-        String[] log = logs.get(i).split(":");
-        int id = Integer.parseInt(log[0]);
-        boolean isStart = log[1].equals("start");
-        int timestamp = Integer.parseInt(log[2]);
-        int duration =0;
-        
-        
-        if(isStart){
-          //start
-          if(st.size()>0){
-              // new function started and old one is paused for now
-              // old function end = start of new fx block time = timestmap
-            duration =  timestamp - time;
-            ans[st.peek()] +=duration;
-            time = timestamp;
-          }
+        Stack<Integer> st = new Stack<>();
+        int[] ans = new int[n];
+        int time = 0; // timer/counter
 
-          st.push(id);
+        for (int i = 0; i < logs.size(); i++) {
+            // extract details
+            String[] log = logs.get(i).split(":");
+            int id = Integer.parseInt(log[0]);
+            boolean isStart = log[1].equals("start");
+            int timestamp = Integer.parseInt(log[2]);
+            int duration = 0;
+
+            if (isStart) {
+                // start
+                if (st.size() > 0) {
+                    // new function started and old one is paused for now
+                    // old function end = start of new fx block time = timestmap
+                    duration = timestamp - time;
+                    ans[st.peek()] += duration;
+                    time = timestamp;
+                }
+
+                st.push(id);
+            }
+
+            else {
+                // end of the last function
+                duration = ((timestamp - time) + 1);
+                ans[st.pop()] += duration; // consumed the end block completely(so end at 5 => 5'th time block is
+                                           // exhausted => new end = start of 6)
+                time = timestamp + 1;
+            }
+
+            // System.out.println(Arrays.toString(log)+" "+ st+" duration "+ duration +"
+            // mytime "+ans[id] +" time "+time);
+
         }
-        
-        else{
-          //end of the last function
-          duration=( (timestamp - time) + 1);
-          ans[st.pop()] += duration; //consumed the end block completely(so end at 5 => 5'th time block is exhausted => new end = start of 6)
-          time = timestamp+1;
-        }
-        
-         // System.out.println(Arrays.toString(log)+"  "+ st+" duration  "+ duration  +" mytime "+ans[id]  +" time "+time);
-        
-      }
         return ans;
-      
+
     }
+
+    // Appraoch 2 : O(n)time, O(n) Space
+    // By maintaining sleep time and having all three properties in a class of
+    // logpair : slower and neede class
+
+    public int[] exclusiveTime(int n, List<String> logs) {
+        // local inner class : can't be private
+
+        class logPair {
+            int id, timeStamp, sleepTime;
+            boolean isStart = false;
+
+            logPair(String str) {
+                String[] ar = str.split(":");
+                this.id = Integer.parseInt(ar[0]);
+                this.timeStamp = Integer.parseInt(ar[2]);
+                this.isStart = ar[1].equals("start");
+                this.sleepTime = 0;
+            }
+        }
+
+        LinkedList<logPair> st = new LinkedList<>();
+        int[] ans = new int[n];
+
+        for (String s : logs) {
+            logPair log = new logPair(s);
+
+            if (log.isStart)
+                st.addFirst(log);
+            else {
+                logPair rp = st.removeFirst();
+                // sleeptime : the in between time interval where some other functions were
+                // executed
+                // k=like in round robin just time window is not fixed here
+                ans[rp.id] += log.timeStamp - rp.timeStamp + 1 - rp.sleepTime;
+
+                if (st.size() != 0)
+                    st.getFirst().sleepTime += log.timeStamp - rp.timeStamp + 1;
+            }
+        }
+
+        return ans;
+    }
+
 }
 
-
-
-
-
-    // here the subseq and substring will fail :
-    /*
-     * Your input "()(()" stdout for subseq ()#()
-     * 
-     * Output for subseq 4 output for substring : 2 (# breaks the continuity )
-     */
-
-}
+// here the subseq and substring will fail :
+/*
+ * Your input "()(()" stdout for subseq ()#()
+ * 
+ * Output for subseq 4 output for substring : 2 (# breaks the continuity )
+ */
