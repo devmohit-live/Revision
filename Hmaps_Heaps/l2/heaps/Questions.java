@@ -177,4 +177,54 @@ public class Questions {
 
         return (List<String>) list;
     }
+
+    // Leetcode 778: Swim in water
+    public int swimInWater(int[][] grid) {
+        int[][] dir = { { 0, -1 }, { 0, 1 }, { -1, 0 }, { 1, 0 } };
+        // max of min : bfs on min of pq : last elemet that leads to end => max
+
+        int n = grid.length, m = grid[0].length, maxtime = 0;
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> {
+            int i1 = a / m, j1 = a % m;
+            int i2 = b / m, j2 = b % m;
+            return grid[i1][j1] - grid[i2][j2];
+        }); // min time
+
+        // maxtime = maxvalue of mins
+
+        boolean[][] vis = new boolean[n][m];
+
+        if (n <= 1)
+            return 0;
+
+        pq.add(0);
+        vis[0][0] = true;
+
+        while (pq.size() != 0) {
+            int rm = pq.remove();
+
+            int i = rm / m;
+            int j = rm % m;
+
+            vis[i][j] = true;
+            int minHeightSoFar = grid[i][j];
+            maxtime = Math.max(maxtime, minHeightSoFar);
+
+            if (i == n - 1 && j == m - 1)
+                break;
+
+            for (int[] d : dir) {
+                int r = i + d[0];
+                int c = j + d[1];
+                if (r >= 0 && c >= 0 && r < n && c < m && !vis[r][c]) {
+                    vis[r][c] = true;
+                    pq.add(r * m + c);
+                }
+            }
+
+        }
+
+        return maxtime;
+
+    }
 }
