@@ -227,4 +227,37 @@ public class Questions {
         return maxtime;
 
     }
+
+    // Leetcode 1642 :Furthest Building You Can Reach
+
+    public int furthestBuilding(int[] heights, int bricks, int ladders) {
+        PriorityQueue<Integer> pq = new PriorityQueue<>(); // of size l gaurantees me that these no of elements can be
+                                                           // acheived by ladder(size of pq == no of ladders)
+
+        // elimination statergy => min nikalte jao or bricks se cover krte jao ,max walo
+        // ko preserve kro or usko ladder se aceive krenege
+
+        int n = heights.length;
+        for (int i = 1; i < n; i++) {
+            int curr = heights[i], prev = heights[i - 1], diff = curr - prev;
+
+            if (diff > 0)
+                pq.add(diff);
+            // we are sure that upto pq.size() elemets we acn definity cover with ladder
+
+            // if we got more then that we will try to cover smallest differences using
+            // bricks(that's why min pq)
+            if (pq.size() > ladders)
+                bricks -= pq.remove();
+
+            if (bricks < 0)
+                return i - 1;
+
+        }
+
+        // reached at end
+
+        return n - 1;
+
+    }
 }
