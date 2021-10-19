@@ -261,36 +261,50 @@ public class Questions {
 
     }
 
-    // Leetcode 128 : Longest Consecutive Subsequnce
-    public int longestConsecutive(int[] nums) {
+    // Leetcode 632 : Smallest Range Covering Elements from K Lists
+    // based on sort k sorted lists concepts
+    public int[] smallestRange(List<List<Integer>> nums) {
+        int n = nums.size();
 
-        // idea is to remove the consecutive elemets from the set as we explre them
-        // once, so that all the consecutive elemets related to an element e is removed
-        // at once
-        if (nums.length == 0 || nums.length == 1)
-            return nums.length;
-        int maxlen = 0, start = -1;
-        Set<Integer> set = new HashSet<>();
-        for (int el : nums)
-            set.add(el);
-        int max = 0;
-        for (int el : nums) {
-            int prev = el - 1, next = el + 1;
+        // min pq to give the starting point(min)
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> {
+            int r1 = a[0], c1 = a[1];
+            int r2 = b[0], c2 = b[1];
+            return nums.get(r1).get(c1) - nums.get(r2).get(c2);
+        });
 
-            // set.remove actually decreases the search complexity/time of element in a set
-            while (set.contains(prev))
-                set.remove(prev--);
-            while (set.contains(next))
-                set.remove(next++);
-            int len = next - prev - 1;
-            if (len > maxlen) {
-                maxlen = len;
-                start = prev + 1;
+        int max = -(int) 1e9, start = -1, end = -1, range = (int) 1e9;
+
+        // add starting points
+        for (int i = 0; i < n; i++) {
+            int el = nums.get(i).get(0);
+            pq.add(new int[] { i, 0 });
+            max = Math.max(max, el);
+        }
+
+        // pq will must contains 1 ele from each list
+        while (pq.size() == n) {
+
+            int[] rm = pq.remove();
+            int r = rm[0], c = rm[1], el = nums.get(r).get(c);
+
+            // check of we got smaller range
+            if (max - el < range) {
+                range = max - el;
+                start = el;
+                end = max;
+            }
+
+            c++;
+            if (c < nums.get(r).size()) {
+                pq.add(new int[] { r, c }); // add the next column ele of that list
+                max = Math.max(max, nums.get(r).get(c));
             }
         }
 
-        // System.out.println(start+" "+(start+maxlen-1));
-        return maxlen;
-
+        int[] ans = new int[] { start, end };
+        return ans;
     }
+
 }
+
