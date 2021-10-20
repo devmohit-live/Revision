@@ -31,4 +31,26 @@ public class Questions {
         return maxlen;
 
     }
+
+//Leetcode 1218 : . Longest Arithmetic Subsequence of Given Difference
+
+     public int longestSubsequence(int[] nums, int diff) {
+        int max = -1,n=nums.length;
+        // since here we aleady know the difference is cinstant ,
+        // we eill be kwwp on checking for the previos element exists in map beforehand
+        
+        // why not recursion of lis bcz here we already know diff, it is not a normal subseq, it is an arthmetic subseq
+        
+        //el, length of lis upto now
+        HashMap<Integer,Integer> map = new HashMap<>();
+        
+        for(int el: nums){
+            map.put(el, map.getOrDefault(el-diff,0)+1);
+        }
+        
+        for(int el: map.keySet())
+            max =Math.max(max,map.get(el));
+        
+        return max;
+    }
 }
