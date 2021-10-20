@@ -90,4 +90,32 @@ public class Questions {
 
         return ans;
     }
+
+    // Leetcode 781 : Min number of Rabbits
+    public int numRabbits(int[] arr) {
+        // mygroup : no of rabbits answering the question in the group (posibilty)
+        HashMap<Integer, Integer> map = new HashMap<>();
+        int ans = 0, n = arr.length;
+        for (int el : arr) {
+            if (!map.containsKey(el)) {
+                // new group explored
+                ans += el + 1; // (other group members I know + myself)
+                map.put(el, 1);
+            } else {
+                // possibility is other memeners of the same group answering the question:
+                // he will tell the same thing that there el memember in the group except me
+                map.put(el, map.get(el) + 1);
+            }
+
+            if (map.get(el) == el + 1) {
+                map.remove(el); // we found all possible memebers of this group(including me)
+                // if someone else be giving same answer then he belongs to the different group
+                // of same size.
+            }
+        }
+
+        return ans;
+    }
+
+    // if max was asked we would be treating every group as an individual group
 }
