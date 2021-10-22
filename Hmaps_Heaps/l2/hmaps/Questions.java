@@ -118,4 +118,52 @@ public class Questions {
     }
 
     // if max was asked we would be treating every group as an individual group
+
+    // 954 : Arrays of double pairs
+    /*
+     * we need to sort so that we can acheive the 2*el search in array Why not just
+     * push elemets nd it's freq , iterate over map.keys and decrease both the freq
+     * of el, 2*el fails at condition where el/2, el*2 both exists in map, and we
+     * will be getting the keys in rando, orders say ; 2,1,4,8 => remove 2,4 first ,
+     * left 1,8 => will return false;
+     * 
+     * // so need to traverse in array only in a particular fashion/pattern, to
+     * avoid check for half in case of negative numbers we can sort the array
+     * according to the abs()
+     * 
+     * // int[] sort can't be done in cutome fashion , so we need to make an arary
+     * of Integer(heap memo)
+     */
+
+    public boolean canReorderDoubled(int[] ar) {
+        int n = ar.length;
+        if ((n & 1) == 1)
+            return false; // odd length
+        Integer[] arr = new Integer[n];
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            arr[i] = ar[i];
+            map.put(ar[i], map.getOrDefault(ar[i], 0) + 1);
+        }
+
+        Arrays.sort(arr, (a, b) -> {
+            return Math.abs(a) - Math.abs(b);
+        });
+
+        for (Integer el : arr) {
+            // if freq of el = 0 either conitue or remove
+            // if removing apply exitanance chek in put too
+            if (map.get(el) == 0)
+                continue;
+
+            if (map.getOrDefault(2 * el, 0) <= 0)
+                return false;
+
+            map.put(el, map.get(el) - 1);
+            map.put(2 * el, map.get(2 * el) - 1);
+
+        }
+        return true;
+    }
+
 }
