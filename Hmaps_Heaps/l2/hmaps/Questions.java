@@ -166,4 +166,47 @@ public class Questions {
         return true;
     }
 
+
+    //Leetcod e295 : Median in a data stream
+    class MedianFinder {
+  // we are making the median left oriented 
+  // basically median is by default supposed  to lie on left side of number line
+  // left -> ... -> (max of left) ->  median -> (min of right) ->  ... ->  right
+
+  //max of left = max pq, min of right => min pq
+  
+  private PriorityQueue<Integer> left;
+  private PriorityQueue<Integer> right;
+  // private int minsofar;
+  
+    public MedianFinder() {
+        left = new PriorityQueue<>((a,b)->{
+          return b - a;
+        });
+        
+        right = new PriorityQueue<>();
+    }
+    
+    public void addNum(int num) {
+        //default left oriented || number is in my range (in min < max in left)
+      if(left.size()==0 || num<=left.peek())
+        left.add(num);
+      else right.add(num);
+      
+      if(left.size() - right.size() == 2) right.add(left.remove());
+      else if(right.size() - left.size() == 1) left.add(right.remove());
+      
+    }
+    
+    public double findMedian() {
+      if(left.size() == right.size())
+        return  (1.0 * left.peek() + right.peek() )/2; 
+      //defult left oriented
+      return 1.0 * left.peek();
+      
+    }
+}
+        
+
+
 }
