@@ -148,6 +148,35 @@ public class Questions {
         return ans;
     }
 
+    // 378 : kth smallest in sorted matrix
+    public int kthSmallest(int[][] matrix, int k) {
+        int n = matrix.length;
+        if (n * n == k)
+            return matrix[0][0];
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> {
+            // max
+            int r1 = a / n, c1 = a % n;
+            int r2 = b / n, c2 = b % n;
+
+            return matrix[r1][c1] - matrix[r2][c2];
+        });
+
+        for (int i = 0; i < n; i++)
+            pq.add(i * n + 0);
+        int r = 0, c = 0;
+
+        while (k-- > 0) {
+            int rm = pq.remove();
+            r = rm / n;
+            c = rm % n;
+            if (c + 1 < n)
+                pq.add(r * n + c + 1);
+
+        }
+        return matrix[r][c];
+
+    }
+
     // Leetcode 692 : Top K Frequent words
     public List<String> topKFrequent(String[] words, int k) {
         HashMap<String, Integer> map = new HashMap<>();
@@ -176,6 +205,31 @@ public class Questions {
         }
 
         return (List<String>) list;
+    }
+
+    // 451 : Sort Characters By Frequency (same as k frequent)
+    public String frequencySort(String s) {
+        HashMap<Character, Integer> map = new HashMap<>();
+        for (char ch : s.toCharArray()) {
+            map.put(ch, map.getOrDefault(ch, 0) + 1);
+        }
+
+        PriorityQueue<Character> pq = new PriorityQueue<>((a, b) -> {
+            return map.get(b) - map.get(a);
+        });
+
+        for (char ch : map.keySet())
+            pq.add(ch);
+        StringBuilder sb = new StringBuilder();
+
+        while (pq.size() != 0) {
+            char ch = pq.remove();
+            int val = map.get(ch);
+            while (val-- > 0)
+                sb.append(ch);
+        }
+
+        return sb.toString();
     }
 
     // Leetcode 778: Swim in water
@@ -307,4 +361,3 @@ public class Questions {
     }
 
 }
-

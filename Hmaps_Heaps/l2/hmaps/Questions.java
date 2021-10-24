@@ -166,47 +166,75 @@ public class Questions {
         return true;
     }
 
-
-    //Leetcod e295 : Median in a data stream
+    // Leetcod 295 : Median in a data stream
     class MedianFinder {
-  // we are making the median left oriented 
-  // basically median is by default supposed  to lie on left side of number line
-  // left -> ... -> (max of left) ->  median -> (min of right) ->  ... ->  right
+        // we are making the median left oriented
+        // basically median is by default supposed to lie on left side of number line
+        // left -> ... -> (max of left) -> median -> (min of right) -> ... -> right
 
-  //max of left = max pq, min of right => min pq
-  
-  private PriorityQueue<Integer> left;
-  private PriorityQueue<Integer> right;
-  // private int minsofar;
-  
-    public MedianFinder() {
-        left = new PriorityQueue<>((a,b)->{
-          return b - a;
-        });
-        
-        right = new PriorityQueue<>();
-    }
-    
-    public void addNum(int num) {
-        //default left oriented || number is in my range (in min < max in left)
-      if(left.size()==0 || num<=left.peek())
-        left.add(num);
-      else right.add(num);
-      
-      if(left.size() - right.size() == 2) right.add(left.remove());
-      else if(right.size() - left.size() == 1) left.add(right.remove());
-      
-    }
-    
-    public double findMedian() {
-      if(left.size() == right.size())
-        return  (1.0 * left.peek() + right.peek() )/2; 
-      //defult left oriented
-      return 1.0 * left.peek();
-      
-    }
-}
-        
+        // max of left = max pq, min of right => min pq
 
+        private PriorityQueue<Integer> left;
+        private PriorityQueue<Integer> right;
+        // private int minsofar;
+
+        public MedianFinder() {
+            left = new PriorityQueue<>((a, b) -> {
+                return b - a;
+            });
+
+            right = new PriorityQueue<>();
+        }
+
+        public void addNum(int num) {
+            // default left oriented || number is in my range (in min < max in left)
+            if (left.size() == 0 || num <= left.peek())
+                left.add(num);
+            else
+                right.add(num);
+
+            if (left.size() - right.size() == 2)
+                right.add(left.remove());
+            else if (right.size() - left.size() == 1)
+                left.add(right.remove());
+
+        }
+
+        public double findMedian() {
+            if (left.size() == right.size())
+                return (1.0 * left.peek() + right.peek()) / 2;
+            // defult left oriented
+            return 1.0 * left.peek();
+
+        }
+
+        // 1027 : Longest Arithmetic Subsequence
+        public int longestArithSeqLength(int[] A) {
+            int n = A.length;
+            // dp => mujhe khtm hone wala lis with n differences like where d = 1,2,3,...
+            // d= common differenece (ranges from A[x] - A[y] , x=0->n, y=1->n)
+            HashMap<Integer, Integer>[] dp = new HashMap[n];
+
+            for (int i = 0; i < n; i++)
+                dp[i] = new HashMap<>();
+
+            int len = 0;
+            for (int i = 0; i < n; i++) {
+                for (int j = i - 1; j >= 0; j--) {
+                    int diff = A[i] - A[j];
+
+                    // present length of lis upto me with some differences
+                    int currLen = dp[i].getOrDefault(diff, 0);
+                    // length of lis befre me with same common diff
+                    int newLen = dp[j].getOrDefault(diff, 1) + 1;
+                    // my updated length for that common difference
+                    dp[i].put(diff, Math.max(currLen, newLen));
+                    len = Math.max(len, dp[i].get(diff));
+                }
+            }
+
+            return len;
+        }
+    }
 
 }
