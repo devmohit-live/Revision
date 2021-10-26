@@ -172,4 +172,30 @@ public class Questions {
         return new int[] { ei, si }; // ceil,floor(si crosses over ei)
     }
 
+    // Leetcode 74: Search in 2d
+    // 2d to 1d binary search
+    public boolean searchMatrix(int[][] matrix, int target) {
+        int n = matrix.length, m = matrix[0].length;
+        if (n == 0 && m == 0)
+            return false;
+        int high = m * n - 1, low = 0; // 2d to 1d approach
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+            int r = mid / m;
+            int c = mid % m;
+            if (matrix[r][c] == target) {
+                System.out.println("Fpund at " + r + " row and " + c + " column");
+                return true;
+            } else if (matrix[r][c] > target) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+
+        }
+        System.out.println("Not Found " + -1);
+        return false;
+    }
+
 }
