@@ -133,13 +133,16 @@ public class Questions {
     }
 
     // or perfect location: ei will be pointing to the potential index
-    int perfectLocationBetter(int[] arr, in tar){
-        int si =0, ei = arr.length; // not -1 as element can be added to last 
+    int perfectLocationBetter(int[] arr, int tar) {
+        int si = 0, ei = arr.length; // not -1 as element can be added to last
         // as here we don't want si to cross ei(potential index)
-        while(si<ei){
-            int mid = si + (ei - si )/2;
-            if(arr[mid]<=tar) si = mid+1; //damn sure about next idx as me or previos are lesser
-            else ei = mid, // not mid-1 as it can be the case that from 0 to mid-1 be the same duplicate element == tar
+        while (si < ei) {
+            int mid = si + (ei - si) / 2;
+            if (arr[mid] <= tar)
+                si = mid + 1; // damn sure about next idx as me or previos are lesser
+            else
+                ei = mid; // not mid-1 as it can be the case that from 0 to mid-1 be the same duplicate
+                          // element == tar
 
         }
 
@@ -198,7 +201,8 @@ public class Questions {
         return false;
     }
 
-    // GFG: https://practice.geeksforgeeks.org/problems/inversion-of-array-1587115620/1#
+    // GFG:
+    // https://practice.geeksforgeeks.org/problems/inversion-of-array-1587115620/1#
 
     public static long totalInversionCount(long[] arr, long[] sortedArray, long si, long mid, long ei) {
         int i = (int) si, j = (int) mid + 1, k = (int) si;
@@ -242,6 +246,39 @@ public class Questions {
 
         long[] sortedArray = new long[(int) N];
         return inversionCount(arr, sortedArray, 0, N - 1);
+    }
+
+    // Leetcode 658. Find K Closest Elements
+
+    public List<Integer> findClosestElements(int[] arr, int k, int x) {
+        int n = arr.length;
+        List<Integer> ans = new ArrayList<>();
+        if (x <= arr[0]) {
+            for (int i = 0; i < k; i++)
+                ans.add(arr[i]);
+            return ans;
+        }
+
+        else if (x >= arr[n - 1]) {
+            for (int i = n - k; i < n; i++)
+                ans.add(arr[i]);
+            return ans;
+        }
+
+        int idx = perfectLocationBetter(arr, x);
+        int si = Math.max(0, idx - k);
+        int ei = Math.min(n - 1, idx + k);
+
+        while ((ei - si + 1) > k) {
+            if ((x - arr[si]) > (arr[ei] - x))
+                si++;
+            else
+                ei--;
+        }
+        for (int i = si; i <= ei; i++)
+            ans.add(arr[i]);
+
+        return ans;
     }
 
 }
