@@ -149,12 +149,13 @@ public class Questions {
     }
 
     // 378 : kth smallest in sorted matrix
+    // Here elimination stratergy doesn't work:
+    // time : Klogn as we will be iterating over k ele in pq
+
     public int kthSmallest(int[][] matrix, int k) {
         int n = matrix.length;
-        if (n * n == k)
-            return matrix[0][0];
         PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> {
-            // max
+            // min
             int r1 = a / n, c1 = a % n;
             int r2 = b / n, c2 = b % n;
 
@@ -233,9 +234,14 @@ public class Questions {
     }
 
     // Leetcode 778: Swim in water
+    // ek point pe kahde hokr hum apne 4 immediate ko dekh ke smallest pe jaenge :
+    // BFS
     public int swimInWater(int[][] grid) {
+        // kind of dijisktra
         int[][] dir = { { 0, -1 }, { 0, 1 }, { -1, 0 }, { 1, 0 } };
-        // max of min : bfs on min of pq : last elemet that leads to end => max
+        // max of min : pq => last elemet that leads to end => max
+        // AT EACH STAGE WE NEED MINIMUM SO WE NEED MIN PQ AND CAN'T USE ELIMINATION
+        // STRATERGY
 
         int n = grid.length, m = grid[0].length, maxtime = 0;
         PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> {
@@ -319,6 +325,8 @@ public class Questions {
     // based on sort k sorted lists concepts
     public int[] smallestRange(List<List<Integer>> nums) {
         int n = nums.size();
+        // why not r*m+c why int[] : bcz it is a list and here the c is different for
+        // each list , so we have to put int[r,c]
 
         // min pq to give the starting point(min)
         PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> {
@@ -337,7 +345,12 @@ public class Questions {
         }
 
         // pq will must contains 1 ele from each list
-        while (pq.size() == n) {
+
+        // pq.size() == n -> for this we don;e need else break as we are first
+        // removing making it of size n-1 then adding, if we dob't add it will be < n
+        // while (pq.size() == n) {
+        // or
+        while (true) {
 
             int[] rm = pq.remove();
             int r = rm[0], c = rm[1], el = nums.get(r).get(c);
@@ -353,6 +366,8 @@ public class Questions {
             if (c < nums.get(r).size()) {
                 pq.add(new int[] { r, c }); // add the next column ele of that list
                 max = Math.max(max, nums.get(r).get(c));
+            } else {
+                break; // pq will must contains 1 ele from each list
             }
         }
 

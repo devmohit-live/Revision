@@ -55,6 +55,43 @@ public class Questions {
         return -1;
     }
 
+    // or
+    private int firstIdx(int[] arr, int x) {
+        int lo = 0, high = arr.length - 1, ans = -1;
+        while (lo <= high) {
+            int mid = lo + (high - lo) / 2;
+            if (arr[mid] == x) {
+                ans = mid;
+                high = mid - 1; // more elements can be on left
+                continue;
+            }
+            if (arr[mid] > x) {
+                high = mid - 1;
+            } else {
+                lo = mid + 1;
+            }
+        }
+        return ans;
+    }
+
+    private int lastIdx(int[] arr, int x) {
+        int lo = 0, high = arr.length - 1, ans = -1;
+        while (lo <= high) {
+            int mid = lo + (high - lo) / 2;
+            if (arr[mid] == x) {
+                ans = mid;
+                lo = mid + 1; // more elements can be on right
+                continue;
+            }
+            if (arr[mid] > x) {
+                high = mid - 1;
+            } else {
+                lo = mid + 1;
+            }
+        }
+        return ans;
+    }
+
     // closest to the target (if present then return target) else return closes to
     // it (left oriented)
     int closestPoint(int[] arr, int tar) {
@@ -224,6 +261,30 @@ public class Questions {
             arr[(int) si] = sortedArray[(int) si++];
 
         return count;
+    }
+
+    // Sqrt Leetcode 69
+    public int mySqrt(int x) {
+        // binary searh
+        // putting high = x/2 fails at the case for x == 1
+        // always take long when you are not sure about the last/first limit range of
+        // container
+        long low = 0, high = x, ans = 0;
+
+        while (low <= high) {
+            long mid = low + (high - low) / 2;
+
+            if (mid * mid <= x) {
+                low = mid + 1;
+                ans = mid;
+            } else {
+                high = mid - 1;
+            }
+
+        }
+
+        return (int) ans;
+
     }
 
     public static long inversionCount(long[] arr, long[] sortedArray, long si, long ei) {
