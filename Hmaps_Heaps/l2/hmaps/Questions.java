@@ -237,4 +237,23 @@ public class Questions {
         }
     }
 
+    // Leetcode contest 5898. Kth Distinct String in an Array
+    public String kthDistinct(String[] arr, int k) {
+        int n = arr.length, count = 0;
+        HashMap<String, Integer> map = new HashMap<>();
+
+        for (String s : arr) {
+            map.put(s, map.getOrDefault(s, 0) + 1);
+        }
+        for (int i = 0; i < n; i++) {
+            if (map.get(arr[i]) == 1)
+                count++;
+            if (count == k)
+                return arr[i];
+
+        }
+
+        return "";
+    }
+
 }
