@@ -25,4 +25,36 @@ public class Questions {
     // question
     // sort it first=> apply 2 pointers
 
+    // 3sum Leetcode 15
+    public List<List<Integer>> threeSum(int[] nums) {
+        int n = nums.length;
+        Set<List<Integer>> res = new HashSet<>();
+
+        Arrays.sort(nums);
+
+        for (int i = 0; i < n - 2; i++) {
+            // 2sum
+            int j = i + 1, k = n - 1;
+            while (j < k) {
+                int curr = nums[i];
+                curr += nums[j] + nums[k];
+
+                if (curr == 0) {
+                    List<Integer> small = new ArrayList<>();
+                    small.add(nums[i]);
+                    small.add(nums[j]);
+                    small.add(nums[k]);
+                    res.add(small);
+                } else if (curr > 0) {
+                    k--;
+                } else
+                    j++;
+
+            }
+
+        }
+
+        return new ArrayList<>(res);
+    }
+
 }
