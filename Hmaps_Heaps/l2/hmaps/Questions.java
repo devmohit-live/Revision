@@ -120,12 +120,17 @@ public class Questions {
     // if max was asked we would be treating every group as an individual group
 
     // 954 : Arrays of double pairs
+
     /*
      * we need to sort so that we can acheive the 2*el search in array Why not just
-     * push elemets nd it's freq , iterate over map.keys and decrease both the freq
-     * of el, 2*el fails at condition where el/2, el*2 both exists in map, and we
-     * will be getting the keys in rando, orders say ; 2,1,4,8 => remove 2,4 first ,
-     * left 1,8 => will return false;
+     * push elemets nd it's freq ,
+     */
+
+    /*
+     * iterating over over map.keys and decrease both the freq of el, 2*el fails at
+     * condition where el/2, el*2 both exists in map, and we will be getting the
+     * keys in rando, orders say ; 2,1,4,8 => remove 2,4 first , left 1,8 => will
+     * return false;
      * 
      * // so need to traverse in array only in a particular fashion/pattern, to
      * avoid check for half in case of negative numbers we can sort the array
@@ -153,8 +158,10 @@ public class Questions {
         for (Integer el : arr) {
             // if freq of el = 0 either conitue or remove
             // if removing apply exitanance chek in put too
+
             if (map.get(el) == 0)
-                continue;
+                continue; // it was nulled by some el who was actually el/2
+            // since we are traversing in an array so we can encounter that elemet again
 
             if (map.getOrDefault(2 * el, 0) <= 0)
                 return false;
@@ -254,6 +261,59 @@ public class Questions {
         }
 
         return "";
+    }
+
+    // /Leetcode 380get random
+    class RandomizedSet {
+
+        private int idx;
+        private HashMap<Integer, Integer> map;
+        private ArrayList<Integer> arr;
+
+        public RandomizedSet() {
+            this.arr = new ArrayList<>();
+            this.idx = 0;
+            this.map = new HashMap<>();
+        }
+
+        public boolean insert(int val) {
+            if (map.containsKey(val))
+                return false;
+            arr.add(val);
+            map.put(val, idx++);
+            return true;
+        }
+
+        public boolean remove(int val) {
+            if (!map.containsKey(val))
+                return false;
+
+            int i = map.get(val), n = arr.size();
+
+            // swap with last elemetns of arr
+            int last = arr.get(n - 1);
+            arr.set(i, last);
+            arr.remove(n - 1);
+
+            // set proper index for last element sa it is changes now
+            map.put(last, i); // new idex
+
+            // erase the cal from map too
+            map.remove(val);
+            // remeber to decrease idx
+            idx--;
+            return true;
+
+        }
+
+        public int getRandom() {
+            Random random = new Random();
+            int n = arr.size();
+            int i = random.nextInt(n);
+
+            return arr.get(i);
+
+        }
     }
 
 }
