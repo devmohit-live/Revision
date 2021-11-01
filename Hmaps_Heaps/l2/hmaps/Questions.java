@@ -316,4 +316,6 @@ public class Questions {
         }
     }
 
+    // Leetcode 447 : No of Boomerangs
+
 }
