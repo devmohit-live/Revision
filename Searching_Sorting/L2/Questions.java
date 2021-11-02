@@ -342,38 +342,82 @@ public class Questions {
         return ans;
     }
 
-    //Leetcode 33
+    // Leetcode 33
     public int search(int[] nums, int target) {
-        int si = 0 , ei= nums.length-1;
-      
-      while(si<=ei){
-        int mid = si + (ei - si )/2;
-        
-        if(nums[mid] == target ) return mid;
-        
-        //check for sorted part 
-        //left part is sorted
-        if(nums[si]< nums[mid] || si == mid){
-          if(nums[si]<= target && target < nums[mid]){
-            ei = mid-1;
-          }else{
-            si = mid +1;
-          }
-          
-          
+        int si = 0, ei = nums.length - 1;
+
+        while (si <= ei) {
+            int mid = si + (ei - si) / 2;
+
+            if (nums[mid] == target)
+                return mid;
+
+            // check for sorted part
+            // left part is sorted
+            if (nums[si] < nums[mid] || si == mid) {
+                if (nums[si] <= target && target < nums[mid]) {
+                    ei = mid - 1;
+                } else {
+                    si = mid + 1;
+                }
+
+            } else {
+                // right part sorted
+                if (nums[mid] < target && target <= nums[ei]) {
+                    si = mid + 1;
+                } else {
+                    ei = mid - 1;
+                }
+            }
         }
-        else{
-          //right part sorted
-          if(nums[mid]< target && target<= nums[ei]){
-            si= mid+1;
-          }else{
-            ei = mid-1;
-          }
-        }
-    }
-      
-      return -1;
+
+        return -1;
     }
 
-//TODO: https://leetcode.com/problems/search-in-rotated-sorted-array-ii/ 81
+    // TODO: https://leetcode.com/problems/search-in-rotated-sorted-array-ii/ 81
+    // TODO: 153,154 => min in sorted rotaated array
+
+    // Leetcode 875 : koko and bananas
+    // Approach : in this question how we think that we should use binary search:
+    // Wherever searching something is required look for binary search(sorted??? =>
+    // indexes are alaways sorted)
+    // When you somehow know the range of your answer (x--->y) which is
+    // increasing/decreasing you can apply binary search
+
+    public int minEatingSpeed(int[] arr, int h) {
+        // set the range for bs
+
+        int si = 1, ei = -1;
+        for (int el : arr)
+            ei = Math.max(ei, el);
+        // mid = > speed
+
+        while (si < ei) {
+            int mid = si + (ei - si) / 2;
+
+            if (!iSpeedPossible(arr, mid, h)) {
+                // look for greater hours : go right
+                si = mid + 1;
+            } else {
+                // found but try to look for minimum possible value
+                ei = mid;
+            }
+        }
+
+        return si;
+
+    }
+
+    private boolean iSpeedPossible(int[] arr, int speed, int hr) {
+        int time = 0;
+        for (int el : arr) {
+            time += el / speed;
+            if (el % speed != 0)
+                time++;
+
+        }
+        return time <= hr;
+
+    }
+
 }
