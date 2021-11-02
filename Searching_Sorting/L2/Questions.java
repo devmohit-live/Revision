@@ -420,4 +420,52 @@ public class Questions {
 
     }
 
+    // similar question but instead of speed here we are asked for the capacity is
+    // so taht work is finihed within that day
+
+    // also here we can use multiple elements of array at a time
+
+    // Leetcode 1011 : Capacity To Ship Packages Within D Day
+    public int shipWithinDays(int[] arr, int days) {
+        int si = (int) 1e9, ei = 0;
+
+        for (int el : arr) {
+            ei += el; // max range of bs here would be sum
+            si = Math.min(si, el);
+        }
+
+        // si<ei ,so ei = mid
+        while (si < ei) {
+            int mid = si + (ei - si) / 2;
+
+            if (!isDayPossible(arr, mid, days)) {
+                // move to higher values;
+                si = mid + 1;
+            } else {
+                ei = mid;
+            }
+        }
+        return si;
+
+    }
+
+    private boolean isDayPossible(int[] arr, int capacity, int lim) {
+        int total_days = 1, curr = 0;
+        for (int i = 0; i < arr.length; i++) {
+            // if single elemet is higher than the cap => not possible
+            if (arr[i] > capacity)
+                return false;
+
+            curr += arr[i];
+            if (curr > capacity) {
+                total_days++;
+                curr = arr[i];
+            }
+
+        }
+
+        return total_days <= lim;
+
+    }
+
 }
