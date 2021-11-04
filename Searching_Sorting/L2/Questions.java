@@ -92,6 +92,26 @@ public class Questions {
         return ans;
     }
 
+    // Important : UpperBound => idx of key or greater than that (whichever
+    // exits)(if both doesb't exitsts returns arr.length)
+
+    private int upperbound(int[][] events, int el) {
+        int si = 0, ei = n - 1;
+
+        while (si < ei) {
+            int mid = si + (ei - si) / 2;
+            if (events[mid][0] >= el)
+                ei = mid;
+            else
+                si = mid + 1;
+        }
+
+        if (events[si][0] >= el)
+            return si;
+        return n;
+
+    }
+
     // closest to the target (if present then return target) else return closes to
     // it (left oriented)
     int closestPoint(int[] arr, int tar) {
@@ -209,7 +229,7 @@ public class Questions {
                 ei = mid - 1;
         }
 
-        return new int[] { ei, si }; // ceil,floor(si crosses over ei)
+        return new int[] { ei, si }; // floor,ceil(si crosses over ei)
     }
 
     // Leetcode 74: Search in 2d
@@ -376,7 +396,7 @@ public class Questions {
 
     // TODO: https://leetcode.com/problems/search-in-rotated-sorted-array-ii/ 81
 
-    //leetcode 153
+    // leetcode 153
     public int findMin(int[] nums) {
         int n = nums.length, si = 0, ei = n - 1;
 
