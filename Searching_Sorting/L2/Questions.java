@@ -92,26 +92,6 @@ public class Questions {
         return ans;
     }
 
-    // Important : UpperBound => idx of key or greater than that (whichever
-    // exits)(if both doesb't exitsts returns arr.length)
-
-    private int upperbound(int[][] events, int el) {
-        int si = 0, ei = n - 1;
-
-        while (si < ei) {
-            int mid = si + (ei - si) / 2;
-            if (events[mid][0] >= el)
-                ei = mid;
-            else
-                si = mid + 1;
-        }
-
-        if (events[si][0] >= el)
-            return si;
-        return n;
-
-    }
-
     // closest to the target (if present then return target) else return closes to
     // it (left oriented)
     int closestPoint(int[] arr, int tar) {
@@ -206,23 +186,47 @@ public class Questions {
         return ei;
     }
 
-    // ceil and floor
-    int[] ceilAndfloor(int[] arr, int tar) {
+    // Important : UpperBound => idx of key or greater than that (whichever
+    // exits)(if both doesb't exitsts returns arr.length)(return s the first idx in
+    // case of duplicates too)
+
+    private int upperbound(int[][] events, int el) {
+        int si = 0, ei = n - 1;
+
+        while (si < ei) {
+            int mid = si + (ei - si) / 2;
+            if (events[mid][0] >= el)
+                ei = mid;
+            else
+                si = mid + 1;
+        }
+
+        if (events[si][0] >= el)
+            return si;
+        return n;
+
+    }
+
+    // floor and ceil (lower and upper bound of al given key)
+    // if key exists that key will be lb as welll as ub,
+    // if lb/ub desn't exixts -1 will be returned
+    // in case of duplicates it it not sure that the first index of the lemenet is
+    // retunred.
+    // in case you want a surety of first idx pass that elemet obtained from lb to
+    // first idx function
+
+    private static int[] floorAndCeil(int[] arr, int data) {
         int si = 0, ei = arr.length - 1;
 
-        // corner
         if (data < arr[si])
-            return si;
+            return new int[] { -1, si };
         else if (data > arr[ei])
-            return ei;
+            return new int[] { ei, -1 };
 
         while (si <= ei) {
             int mid = (si + ei) / 2;
             if (arr[mid] == data)
                 return new int[] { mid, mid };
-            // ..or if truely wanted the floor ceil
-            // return new int[]{(mid-1),{mid+1}};
-            // it can be -1, n
             else if (arr[mid] < data)
                 si = mid + 1;
             else
