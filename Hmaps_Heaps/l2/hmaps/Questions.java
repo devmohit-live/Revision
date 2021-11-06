@@ -368,6 +368,53 @@ public class Questions {
         long dis = x*x + y*y;
         return dis;
     }
-}
+
+
+    //Leetcode 149 :  Max no of Points in a line
+
+    //Using double 
+    public int maxPoints(int[][] points) {
+        final int n = points.length;
+        int ans = 0, max = 0;
+        String slopeHavingMaxPoints = "";
+        HashMap<Double, Integer> map = new HashMap<>();
+
+        // no of points are asked => combinations
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                // String slope = slope(points,i,j);
+                double slope = getSlope(points, i, j);
+                map.put(slope, map.getOrDefault(slope, 0) + 1);
+                if (map.get(slope) > max) {
+                    max = map.get(slope);
+                    slopeHavingMaxPoints = (slope == 1.0 * 1e5) ? "infi" : "" + slope;
+
+                }
+
+            }
+
+            // actual ans , max+1=> bcz we got n-1 points as we have fixed 1(i) point for
+            // calculation slope
+            ans = Math.max(max + 1, ans);
+            map.clear(); // same work for other points being fixed
+        }
+        System.out.println("Slope " + slopeHavingMaxPoints + " having " + ans + " no. of points");
+        return ans;
+    }
+
+    private double getSlope(int[][] points, int i, int j) {
+        int dy = (points[i][1] - points[j][1]);
+        int dx = (points[i][0] - points[j][0]);
+
+        if (dx == 0)
+            return 1.0 * 1e5; // handling infinity
+        double slope = (1.0 * dy) / dx;
+        if (slope == -0.0)
+            slope = 0;
+        // System.out.println(i+" "+j+" "+((1.0*dy)/dx));
+        return slope;
+    }
+
+    // Using String
 
 }
