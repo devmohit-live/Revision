@@ -511,4 +511,26 @@ public class Questions {
 
     }
 
+    // Leetcode 441 : Arrange Coins: BS + AP series
+    // O(log n)(faster)
+    public int arrangeCoinsBS(int n) {
+        // binary search and ap
+        // m*(m+1)/2 = sum => no of coins
+
+        long si = 0, ei = n;
+        while (si <= ei) {
+            long mid = si + (ei - si) / 2;
+            long sum = mid * (mid + 1) / 2;
+
+            if (sum == n)
+                return (int) mid;
+            else if (sum > n) {
+                ei = mid - 1;
+            } else
+                si = mid + 1;
+        }
+
+        return (int) ei;
+    }
+
 }
