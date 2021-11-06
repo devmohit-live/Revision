@@ -317,5 +317,57 @@ public class Questions {
     }
 
     // Leetcode 447 : No of Boomerangs
+    // 1. Basically humko saare arrangemetns chahiye iliye loop ka ya pattern hai
+
+    // 2. mai hr ek point ko fix krke baaki points ki ditance dekh rha hu ex: first
+    // i=0 wala point fix krke baakio ki distance
+
+    // 3. boomerang bnane ke liye atleast map[i] ki value>=2 honi chahiye bcz centre
+    // of boomerang(fixed point here ) has two extreems(points) with same distance,
+    // even thoug agr hum check na b lgae to kaam krega as n*(n-1) n<0 n-1=>0
+
+    // 4.humne ek point fix krke saare possible pairs ke (permutaion) nikal liye as
+    // we are doing n(n-1)=? permutaion for map.value>2
+    // ie. agr hume same distance pe 2 se jada same distance ke points milte hai to
+    // mai unki nC2(n*n(n-1/2)) combinations or n(n-1) permutaions bna skta hu
+    // ex: A,b ko 2 extremes maange fixed point ke liye, pehle A for first extreeme
+    // mana then b ko
+
+    // 5. next time jb dusre point ko fixed krenge to bilkul fresh distance milegi
+    // so for this point we have to start fresh but we just have to add the
+    // results(no of arrangemets in main result), to start fresh we are clearing the
+    // map here
+     public int numberOfBoomerangs(int[][] points) {
+        final int n = points.length;
+         int res = 0;
+        HashMap<Long,Integer> map = new HashMap<>(n-1); //(n cordinates make n-1 lines/pairs)
+        for(int i=0;i<n;i++){
+            // nneded all possible pairs: permutaions: arrangement matters
+            for(int j=0;j<n;j++){
+                if(i==j) continue;
+                long dis  = distance(points,i,j);
+                map.put(dis, map.getOrDefault(dis,0)+1);
+            }
+            
+            for(int val : map.values()){
+                res+= (val*(val-1)); //permutaton
+            }
+            
+            map.clear();
+            
+        }
+        
+       
+        return res;
+    }
+    
+    private long distance(int[][] points, int i,int j){
+        int x1 = points[i][0], y1 = points[i][1];
+        int x2 = points[j][0], y2 = points[j][1];
+        int x = Math.abs(x1-x2), y = Math.abs(y1-y2);
+        long dis = x*x + y*y;
+        return dis;
+    }
+}
 
 }
