@@ -337,42 +337,55 @@ public class Questions {
     // so for this point we have to start fresh but we just have to add the
     // results(no of arrangemets in main result), to start fresh we are clearing the
     // map here
-     public int numberOfBoomerangs(int[][] points) {
+    public int numberOfBoomerangs(int[][] points) {
         final int n = points.length;
-         int res = 0;
-        HashMap<Long,Integer> map = new HashMap<>(n-1); //(n cordinates make n-1 lines/pairs)
-        for(int i=0;i<n;i++){
+        int res = 0;
+        HashMap<Long, Integer> map = new HashMap<>(n - 1); // (n cordinates make n-1 lines/pairs)
+        for (int i = 0; i < n; i++) {
             // nneded all possible pairs: permutaions: arrangement matters
-            for(int j=0;j<n;j++){
-                if(i==j) continue;
-                long dis  = distance(points,i,j);
-                map.put(dis, map.getOrDefault(dis,0)+1);
+            for (int j = 0; j < n; j++) {
+                if (i == j)
+                    continue;
+                long dis = distance(points, i, j);
+                map.put(dis, map.getOrDefault(dis, 0) + 1);
             }
-            
-            for(int val : map.values()){
-                res+= (val*(val-1)); //permutaton
+
+            for (int val : map.values()) {
+                res += (val * (val - 1)); // permutaton
             }
-            
+
             map.clear();
-            
+
         }
-        
-       
+
         return res;
     }
-    
-    private long distance(int[][] points, int i,int j){
+
+    private long distance(int[][] points, int i, int j) {
         int x1 = points[i][0], y1 = points[i][1];
         int x2 = points[j][0], y2 = points[j][1];
-        int x = Math.abs(x1-x2), y = Math.abs(y1-y2);
-        long dis = x*x + y*y;
+        int x = Math.abs(x1 - x2), y = Math.abs(y1 - y2);
+        long dis = x * x + y * y;
         return dis;
     }
 
+    // Leetcode 149 : Max no of Points in a line
 
-    //Leetcode 149 :  Max no of Points in a line
+    // 1. Why String N=and gcd(), if you can use double=> when the slope is infinity
+    // we can get into problem
+    // this can be handeled by explicitly ccehking for infi and passing and
+    // identification mark into map (something above the contraints=> >1e4)
 
-    //Using double 
+    // why gcd=> m1 = 18/14 ans m2 = 9/7 points to same slope but on converting it
+    // to string causes different keys
+
+    // 2. in java there exists -0 and -0 !=0 , for slope -0 map will not be updated
+    // properly
+    // exp slope of points [2,3],[3,3] gives -0 as slope, m = dy/dx
+    // dy = 3-3 =>0, dx = 2-3 => -1, now ideally it should be 0 but it gives -0
+    // to avoid this we can use string and gcd thing
+
+    // Using double
     public int maxPoints(int[][] points) {
         final int n = points.length;
         int ans = 0, max = 0;
@@ -416,5 +429,49 @@ public class Questions {
     }
 
     // Using String
+    public int maxPointsBetter(int[][] points) {
+        final int n = points.length;
+        int ans = 0, max = 0;
+        String slopeHavingMaxPoints = "";
+        HashMap<String, Integer> map = new HashMap<>();
+
+        // no of points are asked => combinations
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                String slope = slope(points, i, j);
+                map.put(slope, map.getOrDefault(slope, 0) + 1);
+
+                if (map.get(slope) > max) {
+                    max = map.get(slope);
+                    slopeHavingMaxPoints = slope;
+
+                }
+
+            }
+
+            // actual ans , max+1=> bcz we got n-1 points as we have fixed 1(i) point for
+            // calculation slope
+            ans = Math.max(max + 1, ans);
+            map.clear(); // same work for other points being fixed
+        }
+        System.out.println("Slope " + slopeHavingMaxPoints + " having " + ans + " no. of points");
+        return ans;
+    }
+
+    private int gcd(int a, int b) {
+        if (b == 0)
+            return a;
+        return gcd(b, a % b);
+    }
+
+    private String slope(int[][] points, int i, int j) {
+        int dy = (points[i][1] - points[j][1]);
+        int dx = (points[i][0] - points[j][0]);
+        int gcd = gcd(dx, dy);
+        dy /= gcd;
+        dx /= gcd;
+        String slope = dy + "@" + dx;
+        return slope;
+    }
 
 }
