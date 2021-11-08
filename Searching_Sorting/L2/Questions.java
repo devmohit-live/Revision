@@ -170,6 +170,12 @@ public class Questions {
     }
 
     // or perfect location: ei will be pointing to the potential index
+
+    // gives last idx in case of repeated elements ex: [1,2,5,5,5,5,7,8,9] tar= 5 =?
+    // gives=>5
+    // if you want idx = 2 in this case that is first idx remove the ''='' condition
+    // from if
+
     int perfectLocationBetter(int[] arr, int tar) {
         int si = 0, ei = arr.length; // not -1 as element can be added to last
         // as here we don't want si to cross ei(potential index)
