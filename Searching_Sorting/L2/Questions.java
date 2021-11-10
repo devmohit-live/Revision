@@ -539,4 +539,19 @@ public class Questions {
         return (int) ei;
     }
 
+    // Leetcode 162:
+    public int findPeakElement(int[] nums) {
+        int lo = 0, high = nums.length - 1;
+        while (lo < high) {
+            int mid = lo + (high - lo) / 2;
+            // extremes are -infi
+            if (nums[mid] > nums[mid + 1]) {
+                // we are assured the left contains 1 peak
+                high = mid;
+            } else {
+                lo = mid + 1;
+            }
+        }
+        return lo;
+    }
 }
