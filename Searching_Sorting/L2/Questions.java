@@ -554,4 +554,50 @@ public class Questions {
         }
         return lo;
     }
+
+    // Leetcode 209
+    public int minSubArrayLen(int target, int[] nums) {
+        // bs on answers
+        int n = nums.length;
+        int si = 1, ei = n + 1; // start point is size of window 1, end point is size of window n
+        // but since si<ei is the condition(ei=mid) to enclude n too we have taken ei =
+        // n+1
+        // can't so si<=ei ,as tle => si == ei == mid(repeated)
+        boolean isPossible = false;
+        while (si < ei) {
+            int mid = si + (ei - si) / 2;
+
+            if (slw(nums, target, mid)) {
+                isPossible = true;
+                // try/search for lower window size
+                ei = mid;
+            } else {
+                si = mid + 1;
+            }
+        }
+        return isPossible ? si : 0;
+
+    }
+
+    private boolean slw(int[] arr, int target, int k) {
+        int n = arr.length, sum = 0;
+        ;
+        for (int i = 0; i < k; i++) {
+            sum += arr[i];
+        }
+        int max = sum;
+        int l = 0, r = k - 1; // window start,end point
+        // end point of window is not at last idx push the slider
+
+        while (r < n - 1) {
+            sum -= arr[l];
+            l++;
+            r++;
+            sum += arr[r];
+
+            max = Math.max(max, sum);
+        }
+
+        return (max >= target);
+    }
 }
