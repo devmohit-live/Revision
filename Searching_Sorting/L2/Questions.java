@@ -600,4 +600,36 @@ public class Questions {
 
         return (max >= target);
     }
+
+    // Leetcode:1413. Minimum Value to Get Positive Step by Step Sum
+    // can also be done by maintainng prefix sum in a var
+    public int minStartValue(int[] nums) {
+        int n = nums.length;
+
+        // ei = no of el * max value of that el possible(contraint)
+        // as all elements can be -ve in nums
+        int si = 1, ei = n * 100 + 1;
+        while (si < ei) {
+            int mid = si + (ei - si) / 2;
+            if (isValidStart(nums, mid)) {
+                // look for lower possible start
+                ei = mid;
+            } else {
+                si = mid + 1;
+            }
+
+        }
+
+        return si;
+    }
+
+    private boolean isValidStart(int[] arr, int start) {
+        for (int el : arr) {
+            start += el;
+            if (start < 1)
+                return false;
+        }
+        return true;
+    }
+
 }
