@@ -632,4 +632,48 @@ public class Questions {
         return true;
     }
 
+    // Leetcode 4. Median of Two Sorted Arrays
+
+    // Approach 1 : Using merge 2 sorted aArrays => TIme = O(m+n), Space = > O(m+n)
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        int n = nums1.length, m = nums2.length;
+        int[] arr = mergerSortedArrays(nums1, nums2, n, m);
+
+        // find mid;
+        int mid = arr.length / 2;
+        if (arr.length % 2 == 0) {
+            return (arr[mid] + arr[mid - 1] * 1.0) / 2;
+        }
+        return arr[mid];
+    }
+
+    private int[] mergerSortedArrays(int[] nums1, int[] nums2, int n, int m) {
+        int[] ans = new int[m + n];
+        int i = 0, j = 0, idx = 0;
+        // make combined sorted array
+        while (i < n && j < m) {
+            if (nums1[i] <= nums2[j]) {
+                ans[idx++] = nums1[i];
+                i++;
+            } else {
+                ans[idx++] = nums2[j];
+                j++;
+            }
+        }
+
+        while (i < n) {
+            ans[idx++] = nums1[i++];
+        }
+        while (j < m) {
+            ans[idx++] = nums2[j++];
+        }
+        return ans;
+
+    }
+
+    // Appraoch Binary Search (Finding the correct position of partiton (as arrays
+    // are sorted))
+    // valid condition of partitioning at position x : max(ax,bx) <= min(ax+1,bx+1)
+    // =>(O(1) as arrays is sorted)
+
 }

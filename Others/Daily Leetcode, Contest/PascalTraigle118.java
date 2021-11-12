@@ -1,6 +1,6 @@
 public class PascalTraingel118 {
     // CREATING PASCAL TRIANGE
-
+    // no of elments in a row = row number
     public List<List<Integer>> generate(int numRows) {
         List<List<Integer>> ans = new ArrayList<>();
         List<Integer> row = null, prev = null;
@@ -25,8 +25,9 @@ public class PascalTraingel118 {
         return ans;
     }
 
-    // Getting nth row of pascal trangle
+    // getting specif r,c data from pascal triangle => r-1Cc-1 //O(n)
+    // ex: 5th row 3rd col => 5-1C3-1 => 4C2 => 6
 
-    // getting specif r,c data from pascal triangle
+    // Getting nth row of pascal trangle // optimizing using above appraoch
 
 }
