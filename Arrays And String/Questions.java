@@ -290,4 +290,26 @@ public class Questions {
         System.out.println("After: " + Arrays.toString(arr));
     }
 
+    private void move012(int[] arr) {
+        System.out.println("Before: " + Arrays.toString(arr));
+        int p = -1, itr = 0, n = arr.length, p2 = n - 1;
+        while (itr <= p2) {
+            if (arr[itr] == 0) {
+                swap(arr, ++p, itr);
+                itr++;
+            }
+
+            else if (arr[itr] == 2) {
+                swap(arr, itr, p2);
+                p2--;
+                // now check wheter the swaped elemetn which is now residing at itr maybe 0,1,2
+                // basically continue;
+                continue;
+            } else // arr[itr] was 1
+                itr++;
+        }
+
+        System.out.println("After: " + Arrays.toString(arr));
+    }
+
 }
