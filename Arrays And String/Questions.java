@@ -204,4 +204,36 @@ public class Questions {
         return ans;
     }
 
+
+    //rotate an array 
+
+    public void rotate(int[] nums, int k) {
+        int n = nums.length;
+        
+        if(k<0) k = n-k; // left to effective right rotate
+        
+        k = k%n;
+        
+        if(n==0 || n==1 || k==0 || n==k) return;
+        
+        k = n-k-1;
+        
+        reverse(nums,0,k);
+        reverse(nums,k+1,n-1);
+        reverse(nums,0,n-1);
+        
+    }
+
+    private void reverse(int[] arr,int si,int ei){
+        while(si<ei){
+            int tmp = arr[si];
+            arr[si] = arr[ei];
+            arr[ei] = tmp;
+            
+            si++; ei--;
+        }
+    }
+
+
+
 }
