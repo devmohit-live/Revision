@@ -1,4 +1,5 @@
 import java.uti.*;
+import java.util.Arrays;
 
 public class Questions {
     // leetcode 1 : Two Sum :
@@ -204,36 +205,89 @@ public class Questions {
         return ans;
     }
 
-
-    //rotate an array 
+    // rotate an array
 
     public void rotate(int[] nums, int k) {
         int n = nums.length;
-        
-        if(k<0) k = n-k; // left to effective right rotate
-        
-        k = k%n;
-        
-        if(n==0 || n==1 || k==0 || n==k) return;
-        
-        k = n-k-1;
-        
-        reverse(nums,0,k);
-        reverse(nums,k+1,n-1);
-        reverse(nums,0,n-1);
-        
+
+        if (k < 0)
+            k = n - k; // left to effective right rotate
+
+        k = k % n;
+
+        // or directly (used to put a number in a range(either given number is negative
+        // or positive))
+        // k = (k%n +n)%n ;
+
+        if (n == 0 || n == 1 || k == 0 || n == k)
+            return;
+
+        k = n - k - 1;
+
+        // why? demorgans's law (complement (complemet(a)) => a )
+        reverse(nums, 0, k); // ~a
+        reverse(nums, k + 1, n - 1); // ~b
+        // now we have ~a + ~b
+        reverse(nums, 0, n - 1); // ~(~a + ~b) => a+b => original array
+
     }
 
-    private void reverse(int[] arr,int si,int ei){
-        while(si<ei){
+    private void reverse(int[] arr, int si, int ei) {
+        while (si < ei) {
             int tmp = arr[si];
             arr[si] = arr[ei];
             arr[ei] = tmp;
-            
-            si++; ei--;
+
+            si++;
+            ei--;
         }
     }
 
+    // move all negative to start : partiton type
+    public void moveNegatives(int[] arr) {
+        int n = arr.length;
+        int p = -1, itr = 0;
 
+        System.out.println("Before: " + Arrays.toString(arr));
+        while (itr < n) {
+            if (arr[itr] < 0)
+                swap(arr, ++p, itr);
+            itr++;
+        }
+
+        System.out.println("After: " + Arrays.toString(arr));
+
+    }
+
+    private void swap(int[] arr, int i, int j) {
+        int tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
+    }
+
+    // O(2n)
+    private void moveZerors01(int[] arr) {
+        System.out.println("Before: " + Arrays.toString(arr));
+        int idx = 0, n = arr.length;
+        for (int i = 0; i < n; i++)
+            if (arr[i] == 0)
+                arr[idx++] = 0;
+        for (int i = idx; i < n; i++)
+            arr[i] = 1;
+        System.out.println("After: " + Arrays.toString(arr));
+
+    }
+
+    // O(n), using same partition technique
+    private void moveZerors(int[] arr) {
+        System.out.println("Before: " + Arrays.toString(arr));
+        int p = -1, itr = 0, n = arr.length;
+        while (itr < n) {
+            if (arr[itr] == 0)
+                swap(arr, ++p, itr);
+            itr++;
+        }
+        System.out.println("After: " + Arrays.toString(arr));
+    }
 
 }
