@@ -16,10 +16,14 @@ public class CombinationIterator_1286 {
 
     class CombinationIterator1 {
 
-        PriorityQueue<String> lexosmaller;// to get lexosmaller elemets always
+        // PriorityQueue<String> lexosmaller;// to get lexosmaller elemets always
+        // Since the imput is Given sorted we can use normal queue here reducing the
+        // time by logn
+        Queue<String> lexosmaller;
 
         public CombinationIterator(String characters, int combinationLength) {
-            lexosmaller = new PriorityQueue<>();
+            // lexosmaller = new PriorityQueue<>();
+            lexosmaller = new ArrayDeque<>();
             generateAllPossibleStrings(characters, combinationLength, 0, new StringBuilder());
         }
 
