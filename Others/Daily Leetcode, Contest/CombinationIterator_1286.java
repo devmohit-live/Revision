@@ -14,6 +14,8 @@ public class CombinationIterator_1286 {
     // worst case k =1,0 making n-combl = n => n^k * log(nCk)
     // Space: O(n) pq
 
+    // Uing Q (since it is sorted) time : n^k
+
     class CombinationIterator1 {
 
         // PriorityQueue<String> lexosmaller;// to get lexosmaller elemets always
