@@ -43,4 +43,48 @@ public class FixedSize {
         q = null;
         return ans;
     }
+
+    // Proper way of writing Sliding windoe : Template
+
+    // Leetocde 567 : Permutaion in String
+    // Basically anagrams of s1 in present in a s2
+    public boolean checkInclusion(String pat, String s) {
+        int pl = pat.length(), n = s.length();
+        int si = 0, ei = 0, k = pl;
+        int[] freq = new int[26];
+        for (int i = 0; i < pl; i++) {
+            freq[pat.charAt(i) - 'a']++;
+        }
+
+        // format of sliding window
+        while (ei < n) { // <n
+            // do the main ei type opearation beforehand
+            freq[s.charAt(ei) - 'a']--;
+
+            // if less than window size increase the ei
+            if (ei - si + 1 < k)
+                ei++;
+            // check for window size is equal to required
+            else {
+                // operations => min/max
+                if (isValid(freq))
+                    return true;
+                // remove the el from window
+                freq[s.charAt(si) - 'a']++;
+                // shift the pointers/window
+                si++;
+                ei++;
+            }
+        }
+
+        return false;
+
+    }
+
+    private boolean isValid(int[] freq) {
+        for (int el : freq)
+            if (el != 0)
+                return false;
+        return true;
+    }
 }
