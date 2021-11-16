@@ -676,4 +676,68 @@ public class Questions {
     // valid condition of partitioning at position x : max(ax,bx) <= min(ax+1,bx+1)
     // =>(O(1) as arrays is sorted)
 
+    // leetocde 668 Kth Smallest Number in Multiplication Table
+    // Using pq gives memory limit exceeded
+    // elimination staratergy
+    // Approach 1: Using pq (K >>> large) (memory limit exceed)
+    private int findKthNumberPQ(int m, int n, int k) {
+
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> {
+            int i1 = a[0], j1 = a[1], i2 = b[0], j2 = b[1];
+            int el1 = (i1 + 1) * (j1 + 1), el2 = (i2 + 1) * (j2 + 1);
+            return el2 - el1; // max pq
+        });
+
+        for (int i = 0; i < m; i++)
+            for (int j = 0; j < n; j++) {
+
+                pq.add(new int[] { i, j });
+
+                if (pq.size() > k)
+                    pq.remove();
+
+                // int el = (i+1)*(j+1);
+                // int x = i*r + j;
+                // v[x] = el;
+            }
+
+        // System.out.println("Array is "+ Arrays.toString(v));
+        int[] rm = pq.remove();
+        int el = (rm[0] + 1) * (rm[1] + 1);
+        return el;
+    }
+
+    // Using BS in answes
+    // Approach bs(on answers): since we know that we have to search something
+    // from min(mat)=1, to max(mat)=m*n => bs
+
+    // we also know that the row in intself will bw sorted (multiplication keeps on
+    // increasing)
+
+    // find the count of numbers smaller than the mid if that count == k (it can be
+    // the possible ans)
+    // mid will act as the kth number having k numbers <= itself
+    public int findKthNumber(int m, int n, int k) {
+        int si = 1, ei = m * n;
+
+        while (si < ei) {
+            int mid = si + (ei - si) / 2;
+            if (countOfLesser(mid, k, m, n) >= k) {
+                ei = mid;
+            } else
+                si = mid + 1;
+        }
+
+        return si;
+
+    }
+
+    private int countOfLesser(int mid, int k, int m, int n) {
+        int count = 0;
+        for (int i = 1; i <= m; i++)
+            count += Math.min(mid / i, n);
+
+        return count;
+    }
+
 }
