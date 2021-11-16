@@ -719,7 +719,8 @@ public class Questions {
     // mid will act as the kth number having k numbers <= itself
     public int findKthNumber(int m, int n, int k) {
         int si = 1, ei = m * n;
-
+        // countOfLesser describes whether mid is large enough to be the k^th value in
+        // the multiplication table.
         while (si < ei) {
             int mid = si + (ei - si) / 2;
             if (countOfLesser(mid, k, m, n) >= k) {
@@ -732,7 +733,19 @@ public class Questions {
 
     }
 
+    /*
+     * counting how many values are less than or equal to mid. For each of m rows,
+     * the ith row looks like[i, 2*i, 3*i, ..., n*i].
+     * 
+     * The largest possible \text{k*i ≤ x} that could appear is \text{k = x // i}k =
+     * x // i. However, if \text{x}x is really big, then perhaps \text{k > n}k > n,
+     * so in total there are \text{min(k, n) = min(x // i, n)}min(k, n) = min(x //
+     * i, n) values in that row that are less than or equal to \text{x}x.
+     */
     private int countOfLesser(int mid, int k, int m, int n) {
+        // basically counting numbers less than mid
+        // mid/i => numer/mid <=0 => number is lesser than or equal to mid
+        // min(mid/i,n) => if all numbers are divisble than n(columns)
         int count = 0;
         for (int i = 1; i <= m; i++)
             count += Math.min(mid / i, n);

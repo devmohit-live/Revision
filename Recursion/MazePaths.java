@@ -85,7 +85,7 @@ public class MazePaths {
 
         int count = 0;
 
-        for (int d = 0; d < dir.length; d++) {// radius cane be Math.max(n,n) if not given
+        for (int d = 0; d < dir.length; d++) {// radius cane be Math.max(n,m) if not given
             for (int rad = 1; rad <= Radius; rad++) {
                 int r = sr + rad * dir[d][0];
                 int c = sc + rad * dir[d][1];
