@@ -87,4 +87,34 @@ public class FixedSize {
                 return false;
         return true;
     }
+
+
+    // max in a sliding window : interviewbit
+    public int[] slidingMaximum(final int[] arr, int k) {
+        int n = arr.length;
+        int[] ans = new int[n - k + 1];
+        int si = 0, ei = 0, idx = 0;
+        LinkedList<Integer> dq = new LinkedList<>();
+
+        while (ei < n) {
+            while (dq.size() > 0 && dq.getLast() < arr[ei])
+                dq.removeLast();
+            dq.addLast(arr[ei]);
+
+            if (ei - si + 1 < k)
+                ei++;
+
+            else if (ei - si + 1 == k) {
+                // ans
+                ans[idx++] = dq.getFirst();
+
+                // calulatiom
+                if (dq.getFirst() == arr[si])
+                    dq.removeFirst();
+                si++;
+                ei++;
+            }
+        }
+        return ans;
+    }
 }
