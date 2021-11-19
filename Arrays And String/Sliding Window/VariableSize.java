@@ -4,26 +4,26 @@ public class VariableSize {
 
     // Pattern
 
-    public int maxLength(int[] arr, int sum){
-        int  n=arr.length, si =0, ei =0,max =-1, ssf =0;
+    public int maxLength(int[] arr, int sum) {
+        int n = arr.length, si = 0, ei = 0, max = -1, ssf = 0;
 
-        while(ei<n){
-            //operation
+        while (ei < n) {
+            // operation
             sum += arr[ei];
             // less than the given condition
-            if(ssf< sum){
+            if (ssf < sum) {
                 // keep on increasing the window
                 ei++;
             }
             // equals
-            else if(ssf == sum){
-                // update the ans 
-                max = Math.max(max, ei -si +1);
+            else if (ssf == sum) {
+                // update the ans
+                max = Math.max(max, ei - si + 1);
             }
             // greater
-            else if(ssf > sum){
-                while(si< n && ssf> sum){
-                    // remove the opeartion 
+            else if (ssf > sum) {
+                while (si < n && ssf > sum) {
+                    // remove the opeartion
                     sum -= arr[si];
                     si++;
                 }
@@ -69,6 +69,12 @@ public class VariableSize {
 
     }
 
+    // we can use map too so that map.size can be use to set the unique chaarcters
+    // in string map.size == k
+    // instead of checking in freq
+    // also we are doing ei++ every time , so we can put after evry condition
+    // instead of wrting it everytime
+
     // constant time => 26
     private int getUniqueCount(int[] freq) {
         int count = 0;
@@ -79,5 +85,12 @@ public class VariableSize {
         return count;
 
     }
+
+    // Leetcode 3: Longest Substring Without Repeating Characters
+    // 3. Without Repeating Characters == all unique characters
+    // all unique characters means that the length of current window (ei-si+1) must
+    // contains characters whose freq == 1
+    // ie it it similar to previos questions here just the K is also
+    // variable(current window size)
 
 }
