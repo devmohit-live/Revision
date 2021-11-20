@@ -93,4 +93,111 @@ public class VariableSize {
     // ie it it similar to previos questions here just the K is also
     // variable(current window size)
 
+    public int lengthOfLongestSubstringUsingFreq(String s) {
+        int n = s.length(), si = 0, ei = 0, max = 0;
+        // count represents no of unique entries in freq == map.size()
+        int[] freq = new int[128];
+        // sapce ans special chars are also included in string
+        // '' represents null having ascii value as 0
+        // so given the constraits better to use HashMap
+
+        while (ei < n) {
+            // op
+            char ch = s.charAt(ei);
+            map.put(ch, map.getOrDefault(ch, 0) + 1);
+            freq[ch - 0]++;
+
+            int count = countPresent(freq);
+
+            // if(map.size() == ei -si +1){
+            if (count == ei - si + 1) {
+                // ans
+                max = Math.max(max, ei - si + 1);
+                ei++;
+            } else {
+
+                // while(si<n && map.size() < ei - si +1){
+                while (si < n && count < ei - si + 1) {
+                    char rm = s.charAt(si);
+                    // map.put(rm,map.get(rm)-1);
+                    freq[rm - 0]--;
+
+                    // if(map.get(rm) == 0) map.remove(rm);
+                    if (freq[rm - 0] == 0)
+                        count--;
+
+                    si++;
+                }
+                ei++;
+            }
+
+        }
+        return max;
+
+    }
+
+    private int countPresent(int[] freq) {
+        int count = 0;
+        // return count of character who are present in array it freq>0
+        for (int el : freq)
+            if (el > 0)
+                count++;
+
+        return count;
+    }
+
+    public int lengthOfLongestSubstring(String s) {
+        int n = s.length(), si = 0, ei = 0, max = 0;
+        HashMap<Character, Integer> map = new HashMap<>();
+        while (ei < n) {
+            // if(ei-si+1 < map.size()) ei++ redundant => won't happen
+
+            // calculations
+            char ch = s.charAt(ei);
+            map.put(ch, map.getOrDefault(ch, 0) + 1);
+            // conditions
+            if (ei - si + 1 == map.size()) {
+                // ans
+                max = Math.max(max, ei - si + 1);
+                ei++;
+            } else {
+                while (si < n && map.size() < ei - si + 1) {
+                    char to_remove = s.charAt(si);
+                    map.put(to_remove, map.get(to_remove) - 1);
+                    if (map.get(to_remove) == 0)
+                        map.remove(to_remove);
+                    si++;
+                }
+                ei++;
+            }
+        }
+
+        return max;
+    }
+
+    private int lengthOfLongestSubstringUsingSet(String s) {
+        HashSet<Character> set = new HashSet<>();
+
+        int si = 0, ei = 0, n = s.length(), max = 0;
+
+        while (ei < n) {
+            char ch = s.charAt(ei);
+            if (!set.contains(ch)) {
+                // we are increasing the unique characters
+                set.add(ch);
+                max = Math.max(max, set.size());
+                ei++;
+            } else {
+                // it was a duplicate characters, we eill decrease the window size
+                // remove from the set
+                char to_remove = s.charAt(si);
+                set.remove(to_remove);
+                si++;
+            }
+
+        }
+
+        return max;
+    }
+
 }
