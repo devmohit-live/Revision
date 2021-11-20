@@ -28,13 +28,39 @@ public class Basics {
 
         return count;
     }
+    // Count Set Bits 3 ways:
 
-    // karinghan algo ->unsets the last set bit
+    // 1 karinghan algo ->unsets the last set bit
     static int karninghan(int n) {
         int count = 0;
-        while (n > 0) {
+        while (n != 0) { // don't put > 0
             count++;
             n = (n & (n - 1));
+        }
+        return count;
+    }
+
+    // 2
+    static int karninghan2(int n) {
+        int count = 0, rmsb = (n & -n);
+        while (n != 0) { // don't put > 0
+            count++;
+            // remove rmsb fromn
+            n -= rmsb;
+            // recompute to rmsb
+            rmsb = (n & -n);
+            n = (n & (n - 1));
+        }
+        return count;
+    }
+
+    // 3
+    public int hammingWeight(int n) {
+        int count = 0;
+        while (n != 0) {
+            if ((n & 1) == 1)
+                count++;
+            n = n >>> 1;
         }
         return count;
     }
@@ -70,6 +96,11 @@ public class Basics {
 
         return x;
     }
+
+    // Power of 2
+    // 5 : false 5&4 != 0
+    // 4 : true; 4&3 == 0
+    // (n&(n-1))==0;
 
     // Leetcode 342 : Power of 4
     public boolean isPowerOfFour(int n) {
