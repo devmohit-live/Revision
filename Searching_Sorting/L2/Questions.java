@@ -753,4 +753,52 @@ public class Questions {
         return count;
     }
 
+
+    //Leetcode 540: 
+    public int singleNonDuplicate(int[] nums) {
+        int n = nums.length, si =0, ei = n-1;
+        
+        while(si<ei){
+            int mid = si + (ei -si)/2;
+            // or
+// if( ((mid&1)==0 && nums[mid]==nums[mid+1]) || ( (mid&1)==1 && nums[mid-1]==nums[mid] ) ) s=mid+1;
+            
+            if(nums[mid] == nums[(mid^1)]){
+                //everything is fine till now check for the following parts
+                si = mid +1;
+            }else{
+                // something have went wrong previously, some element must have appeared
+                // once int the array before check for previos part
+                ei = mid; // this can be a possible ans
+            }
+        }
+        
+        
+        return nums[si];
+        
+    }
+}
+
+ /*
+    
+For odd numbers (e.g., 1, 3, 5, 7, 9), mid^1 equals mid - 1
+For example: 3 ^ 1 = 0011 ^ 0001 = 0010 = 2
+
+For even numbers (e.g., 2, 4, 6, 8, 10), mid^1 equals mid + 1
+For example: 6 ^ 1 = 0110 ^ 0001 = 0111 = 7
+
+so we don't have to write :
+ if( ((mid&1)==0 && nums[mid]==nums[mid+1]) || ( (mid&1)==1 && nums[mid-1]==nums[mid] ) ) s=mid+1;
+ the check for mid+1 , mid-1 according to the condition that mid is odd or even is hadled by xor
+    */
+    
+    // Basically it is based on the fact that nuber's first occurance should be on even index, if it is not the case that something was wrong previosuly(some number has occured only once previously)
+// if first occurance is at even index ie everything is fine till now go search for next following part.
+    
+// even odd condition is handled by XOR
+
+// say idx is 3 and a[3] = 5, then a[2] should be 5 too as first occurance should eb at even number , odd indexes contains second occurance only
+    
+
+
 }
