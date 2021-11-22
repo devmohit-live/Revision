@@ -200,4 +200,78 @@ public class VariableSize {
         return max;
     }
 
+    // Pick Toy
+    /*
+     * John is at a toy store help him pick maximum number of toys. He can only
+     * select in a continuous manner and he can select only two types of toys.
+     * 
+     * 
+     * Example: Input: abaccab => exactly largest substring with no of unique
+     * character = k , here k =2
+     * 
+     */
+
+    // Leetcode 76 : Minimum Window Substring
+    public String minWindow(String s, String t) {
+        int n = s.length(), si = 0, ei = 0, min = Integer.MAX_VALUE;
+        HashMap<Character, Integer> map = new HashMap<>();
+        StringBuilder sb = new StringBuilder();
+        if (n < t.length())
+            return "";
+        if (s.equals(t))
+            return t;
+
+        for (char ch : t.toCharArray())
+            map.put(ch, map.getOrDefault(ch, 0) + 1);
+        int start = -1, end = -1, count = map.size();
+        // calculation will only be made for character presemt in t
+        while (ei < n) {
+            // calculation
+            char ch = s.charAt(ei);
+            if (map.containsKey(ch)) {
+                map.put(ch, map.get(ch) - 1);
+                if (map.get(ch) == 0)
+                    count--;
+            }
+
+            // condition
+            if (count > 0)
+                ei++;
+            else if (count == 0) {
+                // ans
+                if (min > ei - si + 1) {
+                    min = ei - si + 1;
+                    start = si;
+                    end = ei;
+                }
+                // try to get smaller window(removeing extra chars( greater > req) of )
+                while (count == 0) {
+                    // reverse calculation
+                    char rm = s.charAt(si);
+                    if (map.containsKey(rm) && map.get(rm) <= 0) {
+                        map.put(rm, map.get(rm) + 1);
+                        if (map.get(rm) > 0)
+                            count++;
+                    }
+                    si++; // everytime even if char was in t or not as we have to move the window
+
+                    // check for ans again
+                    if (min > ei - si + 1 && count == 0) {
+                        min = ei - si + 1;
+                        start = si;
+                        end = ei;
+                    }
+                }
+                ei++;
+            }
+        }
+
+        if (start == -1 || end == -1)
+            return "";
+        for (int i = start; i <= end; i++)
+            sb.append(s.charAt(i));
+
+        return sb.toString();
+    }
+
 }
