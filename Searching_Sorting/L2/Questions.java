@@ -1,7 +1,6 @@
 public class Questions {
     // Leetcode 34
-// Binary Search ceil types => retun si;(smallest in greater)
-// Binary Search floor types => retun ei;(largetst in smaller)
+
     public int[] searchRange(int[] num, int target) {
         return new int[] { firstIndex(num, target), lastIndex(num, target) };
     }
@@ -803,31 +802,5 @@ public class Questions {
     // should eb at even number , odd indexes contains second occurance only
 
     // Leetcode 744 :
-public char nextGreatestLetter0(char[] arr, char target) {
-        int n=arr.length, si=0,ei=n-1;
-        //wrap around: ex: target = z and no element > z so return a(0)
-        
-        // in case of ceil type return si
-        // in case of floor types return ei
-        
-        while(si<=ei){
-          int mid = si + (ei-si)/2;
-            char ch = arr[mid];
-            if(ch> target){
-                //look for more smaller ele 
-                ei = mid-1;
-            }else{
-                si = mid+1;
-            }
-        }
-        return arr[si%n];
-    }
 
-    
-}         
- 
-
-        
-
-            
-                            
+}
