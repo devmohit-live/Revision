@@ -1,6 +1,7 @@
 public class Questions {
     // Leetcode 34
-
+// Binary Search ceil types => retun si;(smallest in greater)
+// Binary Search floor types => retun ei;(largetst in smaller)
     public int[] searchRange(int[] num, int target) {
         return new int[] { firstIndex(num, target), lastIndex(num, target) };
     }
@@ -753,52 +754,80 @@ public class Questions {
         return count;
     }
 
-
-    //Leetcode 540: 
+    // Leetcode 540:
     public int singleNonDuplicate(int[] nums) {
-        int n = nums.length, si =0, ei = n-1;
-        
-        while(si<ei){
-            int mid = si + (ei -si)/2;
+        int n = nums.length, si = 0, ei = n - 1;
+
+        while (si < ei) {
+            int mid = si + (ei - si) / 2;
             // or
-// if( ((mid&1)==0 && nums[mid]==nums[mid+1]) || ( (mid&1)==1 && nums[mid-1]==nums[mid] ) ) s=mid+1;
-            
-            if(nums[mid] == nums[(mid^1)]){
-                //everything is fine till now check for the following parts
-                si = mid +1;
-            }else{
+            // if( ((mid&1)==0 && nums[mid]==nums[mid+1]) || ( (mid&1)==1 &&
+            // nums[mid-1]==nums[mid] ) ) s=mid+1;
+
+            if (nums[mid] == nums[(mid ^ 1)]) {
+                // everything is fine till now check for the following parts
+                si = mid + 1;
+            } else {
                 // something have went wrong previously, some element must have appeared
                 // once int the array before check for previos part
                 ei = mid; // this can be a possible ans
             }
         }
-        
-        
+
         return nums[si];
-        
+
     }
-}
 
- /*
+    /*
+     * 
+     * For odd numbers (e.g., 1, 3, 5, 7, 9), mid^1 equals mid - 1 For example: 3 ^
+     * 1 = 0011 ^ 0001 = 0010 = 2
+     * 
+     * For even numbers (e.g., 2, 4, 6, 8, 10), mid^1 equals mid + 1 For example: 6
+     * ^ 1 = 0110 ^ 0001 = 0111 = 7
+     * 
+     * so we don't have to write : if( ((mid&1)==0 && nums[mid]==nums[mid+1]) || (
+     * (mid&1)==1 && nums[mid-1]==nums[mid] ) ) s=mid+1; the check for mid+1 , mid-1
+     * according to the condition that mid is odd or even is hadled by xor
+     */
+
+    // Basically it is based on the fact that nuber's first occurance should be on
+    // even index, if it is not the case that something was wrong previosuly(some
+    // number has occured only once previously)
+    // if first occurance is at even index ie everything is fine till now go search
+    // for next following part.
+
+    // even odd condition is handled by XOR
+
+    // say idx is 3 and a[3] = 5, then a[2] should be 5 too as first occurance
+    // should eb at even number , odd indexes contains second occurance only
+
+    // Leetcode 744 :
+public char nextGreatestLetter0(char[] arr, char target) {
+        int n=arr.length, si=0,ei=n-1;
+        //wrap around: ex: target = z and no element > z so return a(0)
+        
+        // in case of ceil type return si
+        // in case of floor types return ei
+        
+        while(si<=ei){
+          int mid = si + (ei-si)/2;
+            char ch = arr[mid];
+            if(ch> target){
+                //look for more smaller ele 
+                ei = mid-1;
+            }else{
+                si = mid+1;
+            }
+        }
+        return arr[si%n];
+    }
+
     
-For odd numbers (e.g., 1, 3, 5, 7, 9), mid^1 equals mid - 1
-For example: 3 ^ 1 = 0011 ^ 0001 = 0010 = 2
+}         
+ 
 
-For even numbers (e.g., 2, 4, 6, 8, 10), mid^1 equals mid + 1
-For example: 6 ^ 1 = 0110 ^ 0001 = 0111 = 7
+        
 
-so we don't have to write :
- if( ((mid&1)==0 && nums[mid]==nums[mid+1]) || ( (mid&1)==1 && nums[mid-1]==nums[mid] ) ) s=mid+1;
- the check for mid+1 , mid-1 according to the condition that mid is odd or even is hadled by xor
-    */
-    
-    // Basically it is based on the fact that nuber's first occurance should be on even index, if it is not the case that something was wrong previosuly(some number has occured only once previously)
-// if first occurance is at even index ie everything is fine till now go search for next following part.
-    
-// even odd condition is handled by XOR
-
-// say idx is 3 and a[3] = 5, then a[2] should be 5 too as first occurance should eb at even number , odd indexes contains second occurance only
-    
-
-
-}
+            
+                            
