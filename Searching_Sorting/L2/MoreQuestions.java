@@ -55,4 +55,53 @@ public class MoreQuestions {
         }
         return -1;
     }
+
+    // binary search in order sorted array: order is not confirmed
+    public static int binarySearchOrder(int[] arr, int tar) {
+        int n = arr.length, si = 0, ei = n - 1;
+        boolean isAsc = arr[0] <= arr[ei];
+        while (si <= ei) {
+            int mid = si + (ei - si) / 2;
+            if (arr[mid] == tar)
+                return mid;
+            else if (tar > arr[mid]) {
+                if (isAsc) {
+                    si = mid + 1;
+                } else {
+                    ei = mid - 1;
+                }
+            } else {
+                if (isAsc) {
+                    ei = mid - 1;
+                } else {
+                    si = mid + 1;
+                }
+            }
+        }
+        return -1;
+        // not found
+    }
+
+    // Leetcode 162,852 exactly same
+    public int peakIndexInMountainArray(int[] arr) {
+        int n = arr.length, si = 0, ei = n - 1;
+        // we have to find the peak(greatest el in between)
+        while (si < ei) {
+            int mid = si + (ei - si) / 2;
+
+            if (arr[mid] > arr[mid + 1]) { // chunck is in descending order hence greater elemetns would lie on left
+                                           // part
+                ei = mid; // mid is greater it can be possible ans
+            } else {// chunck is in ascending order hence greater elemetns would lie on left part
+                si = mid + 1; // bc mid+1 is greater and can be the possible ans
+            }
+            // when si == ei => both are pointing to the same element (hence peak)
+        }
+
+        return si; // return the index
+
+    }
+
+    //Leetcode 
+
 }
