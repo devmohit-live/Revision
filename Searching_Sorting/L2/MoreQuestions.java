@@ -102,6 +102,35 @@ public class MoreQuestions {
 
     }
 
-    //Leetcode 
+    // Pivot != peak
+    // Pivot [5,6,7,8,1,2,3,4] => increasing ->8(pivot)-> increasing from another
+    // start point
+    // Peak [5,6,7,8,4,3,2] => increasing->8(peak)->decreasing
+
+    // find no of rotations done in the array
+    // https://practice.geeksforgeeks.org/problems/rotation4723/1#
+    int findKRotation(int arr[], int n) {
+        return findPivot(arr, n) + 1;
+    }
+
+    private int findPivot(int[] arr, int n) {
+        int si = 0, ei = n - 1;
+        while (si < ei) {
+            int mid = si + (ei - si) / 2;
+            // System.out.println(si+" "+ei+" "+mid);
+            if (mid + 1 < n && arr[mid] > arr[mid + 1]) {
+                return mid;
+            } else if (mid - 1 >= 0 && arr[mid] < arr[mid - 1]) {
+                return mid - 1;
+            } else if (arr[mid] <= arr[si]) {
+                // bigger ele is towars start
+                ei = mid; // mid can be the answer
+            } else {
+                si = mid + 1;
+            }
+
+        }
+        return -1;
+    }
 
 }
