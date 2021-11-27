@@ -1,5 +1,4 @@
 public class MoreQuestions {
-
     public static void main(String[] args) {
         int arr[] = new int[] { 3, 5, 7, 9, 10, 90, 100, 130, 140, 160, 170 };
         System.out.println(findInInfi(arr, 10));
@@ -150,73 +149,99 @@ public class MoreQuestions {
         return rightpart;
     }
 
-// Aggresive Cows : SPOJ
-import java.util.*;
-import java.lang.*;
+    // Aggresive Cows : SPOJ
+    private static int getMaxMinDistance(int[] arr, int cows) {
+        int n = arr.length;
+        Arrays.sort(arr);
+        int si = 1, ei = arr[n - 1] - arr[0];
+        int ans = -1;
+        while (si <= ei) {
+            int mid = si + (ei - si) / 2;
 
-class Main
-{
-	public static void main (String[] args) throws java.lang.Exception
-	{
-		final Scanner sc = new Scanner(System.in);
-		int t = sc.nextInt();
-		while(t-->0){
-			int n = sc.nextInt();
-			int cows = sc.nextInt();
-			int[] arr = new int[n];
-			for(int i=0;i<n;i++){
-				arr[i] = sc.nextInt();
-			}
-			System.out.println(getMaxMinDistance(arr,cows));
-		}
-		
-	}
-	
-	private static int getMaxMinDistance(int[]arr, int cows){
-		int n = arr.length;
-		Arrays.sort(arr);
-		int si = 1, ei = arr[n-1]-arr[0];
-		int ans = -1;
-		while(si<=ei){
-			int mid = si + (ei-si)/2;
-			
-			if(isValidMinDistance(arr,mid,cows)){
-				ans = mid;
-				// try for others greater values of minDtance
-				si = mid +1;
-				
-			}else{
-				ei = mid - 1 ;// we have to chekc for lesser min distance try smaller values
-				
-			}
-			
-		}
-		
-		return ans;
-		
-	}
-	
-	
-	
-	// sonwhow we got the min distance and we hacve to chek wheather we are able to place all the given cows
-	private static boolean isValidMinDistance(int[] arr, int minDist,int cows){
-		int n = arr.length;
-		int cowsPlaced = 1; // we have placed this cow at 0th postiton  
-		int placedAt = arr[0];
-		
-		for(int i=1;i<n;i++){
-			if(arr[i] - placedAt >= minDist){
-				cowsPlaced++;
-				placedAt = arr[i];
-			}
-			
-		}
-		
-		if(cowsPlaced >= cows) return true;
-		
-		return false;
-		
-	}
-}
+            if (isValidMinDistance(arr, mid, cows)) {
+                ans = mid;
+                // try for others greater values of minDtance
+                si = mid + 1;
+
+            } else {
+                ei = mid - 1;// we have to chekc for lesser min distance try smaller values
+
+            }
+
+        }
+
+        return ans;
+
+    }
+
+    // sonwhow we got the min distance and we hacve to chek wheather we are able to
+    // place all the given cows
+    private static boolean isValidMinDistance(int[] arr, int minDist, int cows) {
+        int n = arr.length;
+        int cowsPlaced = 1; // we have placed this cow at 0th postiton
+        int placedAt = arr[0];
+
+        for (int i = 1; i < n; i++) {
+            if (arr[i] - placedAt >= minDist) {
+                cowsPlaced++;
+                placedAt = arr[i];
+            }
+
+        }
+
+        if (cowsPlaced >= cows)
+            return true;
+
+        return false;
+
+    }
+
+    // Min allocation of pages
+    public int books(int[] books, int students) {
+        if (students > books.length)
+            return -1; // each studetns must be alloted 1 books
+        int sum = 0, max = -1;
+        for (int el : books) {
+            sum += el;
+            max = Math.max(max, el);
+        }
+        int si = max, ei = sum; // why max bcz that no of pages have to be alloted to some candiates
+        // we can't divide the pages
+        int ans = -1;
+        while (si <= ei) {
+            int mid = si + (ei - si) / 2;
+            if (isPossible(books, students, mid)) {
+                ans = mid;
+                // try to resuce burdern on each student
+                ei = mid - 1;
+            } else {
+                // more student we required to finish books
+                // increase the pages per head;
+                si = mid + 1;
+            }
+        }
+
+        return ans;
+
+    }
+
+    boolean isPossible(int[] arr, int students, int mid) {
+        int pages = 0, count = 1;
+        for (int el : arr) {
+            if (pages > mid)
+                return false;
+            pages += el;
+            if (pages > mid) {
+                pages = el;
+                count++;
+            }
+
+        }
+
+        if (count <= students)
+            return true;
+        return false;
+
+    }
 
 }
