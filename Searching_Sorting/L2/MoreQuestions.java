@@ -226,7 +226,7 @@ public class MoreQuestions {
     }
 
     boolean isPossible(int[] arr, int students, int mid) {
-        int pages = 0, count = 1;
+        int pages = 0, count = 1;// start with first student
         for (int el : arr) {
             if (pages > mid)
                 return false;
@@ -243,5 +243,57 @@ public class MoreQuestions {
         return false;
 
     }
+
+
+    // Kth elemets in 2 sorted arrays :
+    // when mergin isn't allowed: extra space isn't allowed
+    // time : O(log min(m,n)), space: O(1)
+    // https://practice.geeksforgeeks.org/problems/k-th-element-of-two-sorted-array1317/1#
+    public long kthElement(int arr1[], int arr2[], int n, int m, int k) {
+       // bs
+        // mid corresponds to the cut1 => cut i first aray
+
+        // cond le<r2 && l2<r1
+
+        if (n > m) {
+            return kthElement(arr2, arr1, m, n, k);
+        } // do the bs in shorter array
+
+        // we are doing bs in smaller array so the start and end point for bs should be
+        // valid
+        // basicallly low,high condition boils down for conditions when we try to take
+        // all k elemets from smaller and larger
+
+        int low = Math.max(0, k - m); // valid start = 0, or k-m
+        // k-m: k>m(bigger array size) if all elemet are taken from bigger array still
+        // there are some elemets left then we have to take them from smaller array so
+        // staring from 0(not taking any elemet wouldn't help)
+        int high = Math.min(k, n);// end point n(size of smaller array)<k ? n : k
+        // at most we can try taking all k from smaller array
+
+        while (low <= high) {
+            int cut1 = (low + high) >> 1;
+            int cut2 = k - cut1;
+            int l1 = cut1 == 0 ? Integer.MIN_VALUE : arr1[cut1 - 1];
+            int l2 = cut2 == 0 ? Integer.MIN_VALUE : arr2[cut2 - 1];
+            int r1 = cut1 == n ? Integer.MAX_VALUE : arr1[cut1];
+            int r2 = cut2 == m ? Integer.MAX_VALUE : arr2[cut2];
+
+            if (l1 <= r2 && l2 <= r1) {
+                return Math.max(l1, l2);
+            } else if (l1 > r2) {
+                high = cut1 - 1;
+            } else {
+                low = cut1 + 1;
+            }
+        }
+        return 1;
+    }
+
+    //similar stratergy in finding the median of 2 sorted arrays:
+    
+
+
+
 
 }
