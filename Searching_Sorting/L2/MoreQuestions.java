@@ -244,13 +244,12 @@ public class MoreQuestions {
 
     }
 
-
     // Kth elemets in 2 sorted arrays :
     // when mergin isn't allowed: extra space isn't allowed
     // time : O(log min(m,n)), space: O(1)
     // https://practice.geeksforgeeks.org/problems/k-th-element-of-two-sorted-array1317/1#
     public long kthElement(int arr1[], int arr2[], int n, int m, int k) {
-       // bs
+        // bs
         // mid corresponds to the cut1 => cut i first aray
 
         // cond le<r2 && l2<r1
@@ -290,10 +289,45 @@ public class MoreQuestions {
         return 1;
     }
 
-    //similar stratergy in finding the median of 2 sorted arrays:
-    
+    // similar stratergy in finding the median of 2 sorted arrays: Leetcode 4
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        int n = nums1.length, m = nums2.length;
+        if (n > m) {
+            return findMedianSortedArrays(nums2, nums1);
+        }
 
+        // apply bs in smaller array
+        int si = 0, ei = n;
+        int total = (n + m);
+        while (si <= ei) {
+            int cut1 = si + (ei - si) / 2;
+            int cut2 = (total + 1) / 2 - cut1;
 
+            int left1 = cut1 == 0 ? Integer.MIN_VALUE : nums1[cut1 - 1];
+            int left2 = cut2 == 0 ? Integer.MIN_VALUE : nums2[cut2 - 1];
+            int right1 = cut1 == n ? Integer.MAX_VALUE : nums1[cut1];
+            int right2 = cut2 == m ? Integer.MAX_VALUE : nums2[cut2];
 
+            // condition for correctness
+
+            if (left1 <= right2 && left2 <= right1 && Math.max(left1, left2) <= Math.min(right1, right2)) {
+                // even
+                if (total % 2 == 0) {
+                    double ans = (Math.max(left1, left2) + Math.min(right1, right2) * 1.0) / 2;
+                    return ans;
+                } else {
+                    return 1.0 * Math.max(left1, left2);
+                }
+                // odd
+            } else if (left1 > right2) {
+                ei = cut1 - 1;
+            } else {
+                si = cut1 + 1;
+            }
+
+        }
+
+        return 0.0;
+    }
 
 }
