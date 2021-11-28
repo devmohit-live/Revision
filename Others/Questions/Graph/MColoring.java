@@ -30,7 +30,7 @@ public class MColoring {
 
     private static boolean isSafe(List<Integer>[] G, int[] colors, int color, int node) {
         for (int nbr : G[node]) {
-            if (colors[nbr] == color)
+            if (colors[nbr] == color) // if any adjacent neighbour contains same color then it is not possible
                 return false;
         }
 
