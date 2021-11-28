@@ -149,7 +149,7 @@ public class MazePaths {
         // default ans indicating there there doesn't exixts any path from given point
         // to dest
         int shortestLen = (int) 1e9;
-        ;
+        
 
         for (int d = 0; d < dir.length; d++) {
             int r = sr + dir[d][0];
@@ -159,7 +159,7 @@ public class MazePaths {
                 if (board[r][c] == 0) {
                     int recAns = floodFill_shortestLen(r, c, board, dir);
                     // updating the value only when there is a valid path
-                    if (recAns != -1 && recAns + 1 < shortestLen) {
+                    if (recAns != (int) 1e9 && recAns + 1 < shortestLen) {
                         shortestLen = recAns + 1;
                     }
                 }
