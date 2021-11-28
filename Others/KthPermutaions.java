@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class KthPermutaions {
 
     // IDEA: reduce the problem from finding the kth permutaion from k! to finding
