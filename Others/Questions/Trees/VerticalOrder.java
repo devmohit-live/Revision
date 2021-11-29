@@ -3,6 +3,7 @@ package Questions.Trees;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
@@ -64,5 +65,47 @@ public class VerticalOrder {
 
     //
     // Approach 2:
+    // calculate the width first , and pass q.add(root,abs(min)) as base => no need
+    // of hasmap
+
+    private static void vminmax(TreeNode root, int level, int[] minmax) {
+        if (root == null)
+            return;
+        minmax[0] = Math.min(minmax[0], level);
+        minmax[1] = Math.max(minmax[1], level);
+
+        vminmax(root.left, level - 1, minmax);
+        vminmax(root.right, level + 1, minmax);
+    }
+
+    public List<List<Integer>> verticalTraversal2(TreeNode root) {
+        int[] minmax = new int[2];
+        vminmax(root, 0, minmax);
+        int length = minmax[1] - minmax[0] + 1;
+        List<List<Integer>> ans = new ArrayList<>();
+        for (int i = 0; i < length; i++)
+            ans.add(new ArrayList<>());
+        verticalTraversal2_(root, Math.abs(minmax[0]), ans);
+        return ans;
+
+    }
+
+    private void verticalTraversal2_(TreeNode root, int level, List<List<Integer>> ans) {
+        LinkedList<vpair> q = new LinkedList<>();
+        int hlevel = 0;
+        q.addLast(new vpair(root, level));
+        while (!q.isEmpty()) {
+            int size = q.size();
+            while (size-- > 0) {
+                vpair rm = q.removeFirst();
+                ans.get(rm.vlevel).add(rm.node.val);
+                if (rm.node.left != null)
+                    q.addLast(new vpair(rm.node.left, rm.vlevel - 1));
+                if (rm.node.left != null)
+                    q.addLast(new vpair(rm.node.right, rm.vlevel + 1));
+            }
+            hlevel++;
+        }
+    }
 
 }
