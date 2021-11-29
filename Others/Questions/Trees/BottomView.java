@@ -7,6 +7,11 @@ import java.util.LinkedList;
 import org.w3c.dom.Node;
 
 public class BottomView {
+    // https://practice.geeksforgeeks.org/problems/bottom-view-of-binary-tree/1#
+
+    // The last element we got for a specific level in the vertical order is viewd :
+    // so just update that level's value in arr
+
     public ArrayList<Integer> bottomView(Node root) {// Using Vertical 2
         // clean and uses less space
         int[] minmax = new int[2];
