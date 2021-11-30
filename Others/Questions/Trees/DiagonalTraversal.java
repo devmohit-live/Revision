@@ -106,7 +106,8 @@ public class DiagonalTraversal {
 
     }
 
-    //diagonal sum
+    // diagonal sum
+    // :https://practice.geeksforgeeks.org/problems/diagonal-sum-in-binary-tree/1#
     public static ArrayList<Integer> diagonalOrderSum(TreeNode root) {
         ArrayList<Integer> ans = new ArrayList<>();
 
