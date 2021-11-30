@@ -108,4 +108,7 @@ public class VerticalOrder {
         }
     }
 
+    // vertical order sum => sum of all the nodes on same vertical line
+    
+
 }

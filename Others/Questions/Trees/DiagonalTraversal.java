@@ -26,16 +26,46 @@ public class DiagonalTraversal {
             int size = q.size();
             ArrayList<Integer> diagonal = new ArrayList<>();
 
-            while (size-- > 0) { // traverse each components of that particular diagonal
+            while (size-- > 0) { // traverse each components(as components of a diagonal may not be connected
+                                 // (part of different subtree)) of that particular diagonal()
                 TreeNode rm = q.removeFirst();
 
-                while (rm != null) { // traverse a component
+                while (rm != null) { // traverse nodes in a component
                     diagonal.add(rm.val);
                     if (rm.left != null)
                         q.addLast(rm.left);
                     rm = rm.right;
                 }
 
+            }
+            ans.add(diagonal);
+        }
+
+        return ans;
+    }
+
+    // Anticlockwise
+    public static ArrayList<ArrayList<Integer>> diagonalOrderAntiClockWise(TreeNode root) {
+        LinkedList<TreeNode> q = new LinkedList<>();
+        ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
+        if (root == null)
+            return ans;
+
+        q.addLast(root);
+
+        while (q.size() > 0) { // traverse all diagonals
+            int size = q.size();
+            ArrayList<Integer> diagonal = new ArrayList<>();
+            while (size-- > 0) { // traverse all componenets (disconnected too)
+                TreeNode rm = q.removeFirst();
+
+                // iterate through each node of a current componenet
+                while (rm != null) {
+                    diagonal.add(rm.val);
+                    if (rm.right != null)
+                        q.addLast(rm.right);
+                    rm = rm.left;
+                }
             }
             ans.add(diagonal);
         }
