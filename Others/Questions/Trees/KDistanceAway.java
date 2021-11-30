@@ -5,8 +5,9 @@ import java.util.ArrayList;
 import javax.swing.tree.TreeNode;
 
 public class KDistanceAway {
-    
-    // Approach 1: Using n2r and kdown seperately and  creatinf extra space for n2r storage
+
+    // Approach 1: Using n2r and kdown seperately and creatinf extra space for n2r
+    // storage
     public static ArrayList<Integer> distanceK(TreeNode root, int target, int k) {
         // using extra space apart from recursion
         ArrayList<TreeNode> n2r = new ArrayList<>();
@@ -49,9 +50,55 @@ public class KDistanceAway {
 
     }
 
-    //Approach 2 : 
+    // Approach 2 :
 
+    public static ArrayList<Integer> distanceKSpacewOptimized(TreeNode root, int target, int k) {
+        // withou using extra space apart from recursion
 
-    
+        ArrayList<Integer> ans = new ArrayList<>();
+        node2rootPath2(root, target, k, ans);
+
+        return ans;
+    }
+
+    private static int node2rootPath2(TreeNode node, int data, int k, ArrayList<Integer> res) {
+        if (node == null)
+            return -1; // identification mark that data was not found
+
+        if (node.val == data) {
+            kDown(node, k - 0, null, res);
+            return 1; // distance of this node from it's parent
+        }
+
+        int ld = node2rootPath2(node.left, data, k, res);
+        if (ld != -1) {
+            // it means we have found data in left side
+            kDown2(node, k - ld, node.left, res);
+            return ld + 1;
+        }
+
+        int rd = node2rootPath2(node.right, data, k, res);
+        if (rd != -1) {
+            // it means we have found data in left side
+            kDown2(node, k - rd, node.right, res);
+            return rd + 1;
+        }
+
+        return -1;
+    }
+
+    private static void kDown2(TreeNode root, int k, TreeNode blocked, ArrayList<Integer> res) {
+        if (root == null || k < 0 || root == blocked)
+            return;
+
+        if (k == 0) {
+            res.add(root.val);
+            return; // reached the destination
+        }
+
+        kDown2(root.left, k - 1, blocked, res); // distance from root was k => distance from child will be k-1
+        kDown2(root.right, k - 1, blocked, res);
+
+    }
 
 }
