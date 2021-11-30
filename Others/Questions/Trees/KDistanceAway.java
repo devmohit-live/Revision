@@ -1,6 +1,7 @@
 package Questions.Trees;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.tree.TreeNode;
 
@@ -66,7 +67,7 @@ public class KDistanceAway {
             return -1; // identification mark that data was not found
 
         if (node.val == data) {
-            kDown(node, k - 0, null, res);
+            kDown2(node, k - 0, null, res);
             return 1; // distance of this node from it's parent
         }
 
@@ -88,6 +89,56 @@ public class KDistanceAway {
     }
 
     private static void kDown2(TreeNode root, int k, TreeNode blocked, ArrayList<Integer> res) {
+        if (root == null || k < 0 || root == blocked)
+            return;
+
+        if (k == 0) {
+            res.add(root.val);
+            return; // reached the destination
+        }
+
+        kDown2(root.left, k - 1, blocked, res); // distance from root was k => distance from child will be k-1
+        kDown2(root.right, k - 1, blocked, res);
+
+    }
+
+    
+    
+    // 863. All Nodes Distance K in Binary Tree
+    public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {
+        List<Integer> ans = new ArrayList<>();
+        node2rootPath2(root, target, k, ans);
+
+        return ans;
+    }
+
+    private int node2rootPath2(TreeNode node, TreeNode target, int k, List<Integer> res) {
+        if (node == null)
+            return -1; // identification mark that data was not found
+
+        if (node == target) {
+            kDown2(node, k - 0, null, res);
+            return 1; // distance of this node from it's parent
+        }
+
+        int ld = node2rootPath2(node.left, target, k, res);
+        if (ld != -1) {
+            // it means we have found data in left side
+            kDown2(node, k - ld, node.left, res);
+            return ld + 1;
+        }
+
+        int rd = node2rootPath2(node.right, target, k, res);
+        if (rd != -1) {
+            // it means we have found data in left side
+            kDown2(node, k - rd, node.right, res);
+            return rd + 1;
+        }
+
+        return -1;
+    }
+
+    private void kDown2(TreeNode root, int k, TreeNode blocked, List<Integer> res) {
         if (root == null || k < 0 || root == blocked)
             return;
 
