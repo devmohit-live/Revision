@@ -109,6 +109,37 @@ public class VerticalOrder {
     }
 
     // vertical order sum => sum of all the nodes on same vertical line
-    
+    public static ArrayList<Integer> verticalOrderSum(TreeNode root) {
+        int[] minmax = new int[2];
+        vminmax(root, 0, minmax);
+        int length = minmax[1] - minmax[0] + 1;
+        ArrayList<Integer> ans = new ArrayList<>();
+        for (int i = 0; i < length; i++)
+            ans.add(0); // default 0 sum
+
+        LinkedList<vpair> q = new LinkedList<>();
+        q.add(new vpair(root, Math.abs(minmax[0])));
+        int hl = 0;
+        while (!q.isEmpty()) {
+            int size = q.size();
+            while (size-- > 0) {
+                vpair rm = q.remove();
+                TreeNode node = rm.node;
+                int level = rm.vlevel;
+                int prev = ans.get(level);
+                ans.set(level, prev + node.val);
+
+                // add
+                if (node.left != null)
+                    q.addLast(new vpair(node.left, level - 1));
+                if (node.right != null)
+                    q.addLast(new vpair(node.right, level + 1));
+
+            }
+            hl++;
+        }
+
+        return ans;
+    }
 
 }
