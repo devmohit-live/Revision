@@ -105,6 +105,34 @@ public class DiagonalTraversal {
         return ans;
 
     }
-    
+
+    //diagonal sum
+    public static ArrayList<Integer> diagonalOrderSum(TreeNode root) {
+        ArrayList<Integer> ans = new ArrayList<>();
+
+        if (root == null)
+            return ans;
+
+        LinkedList<TreeNode> q = new LinkedList<>();
+        q.addLast(root);
+        while (!q.isEmpty()) { // diagonal
+            int size = q.size();
+            int sum = 0;
+            // all the componenets of diagonal
+            while (size-- > 0) {
+                TreeNode rm = q.removeFirst();
+                // each node in a current component
+                while (rm != null) {
+                    sum += rm.val;
+                    if (rm.left != null)
+                        q.addLast(rm.left);
+                    rm = rm.right;
+                }
+            }
+            ans.add(sum);
+
+        }
+        return ans;
+    }
 
 }
