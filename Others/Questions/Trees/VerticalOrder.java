@@ -141,5 +141,29 @@ public class VerticalOrder {
 
         return ans;
     }
+    // Vertical Order sum using
+    fs:rec:
+
+    public static ArrayList<Integer> verticalOrderSumDFS(TreeNode root) {
+        int[] minmax = new int[2];
+        vminmax(root, 0, minmax);
+        int length = minmax[1] - minmax[0] + 1;
+        ArrayList<Integer> ans = new ArrayList<>();
+        for (int i = 0; i < length; i++)
+            ans.add(0); // default 0 sum
+        // usinf dfs : recursion
+        dfs(root, Math.abs(minmax[0]), ans);
+
+        return ans;
+    }
+
+    private static void dfs(TreeNode root, int level, ArrayList<Integer> ans) {
+        if (root == null || level < 0)
+            return;
+
+        ans.set(level, ans.get(level) + root.val);
+        dfs(root.left, level - 1, ans);
+        dfs(root.right, level + 1, ans);
+    }
 
 }
