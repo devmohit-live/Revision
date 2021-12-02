@@ -8,6 +8,30 @@ import javax.swing.tree.TreeNode;
 public class PathSum {
     // LC: 112
 
+    public boolean hasPathSum(TreeNode root, int targetSum) {
+        if (root == null)
+            return false;
+        return sum(root, 0, targetSum);
+    }
+
+    private boolean sum(TreeNode node, int ssf, int tar) {
+        if (node == null)
+            return false;
+
+        if (node.left == null && node.right == null) {
+            // System.out.println(ssf+" "+node.val);
+            if (ssf + node.val == tar)
+                return true;
+            return false;
+        }
+
+        boolean res = false;
+        res = res || sum(node.left, ssf + node.val, tar);
+        res = res || sum(node.right, ssf + node.val, tar);
+
+        return res;
+    }
+
     // LC: 113
 
     public List<List<Integer>> pathSum(TreeNode root, int targetSum) {
