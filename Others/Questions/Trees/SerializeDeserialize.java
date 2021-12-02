@@ -1,5 +1,6 @@
 package Questions.Trees;
 
+// https://leetcode.com/problems/serialize-and-deserialize-binary-tree/discuss/1606109/Simple-Preorder-Traversal-Trick-of-using-references
 // Leetcode 297
 public class SerializeDeserialize {
     private int idx = 0;
