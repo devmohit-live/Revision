@@ -108,4 +108,40 @@ public class BFS {
         return -1; // not possible to rott all oranges
     }
 
+
+    // Shortest Path in Binary Matrix : 1091 (same as rotten oranges)
+    int[][] dir8 = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 }, { -1, -1 }, { 1, 1 }, { 1, -1 }, { -1, 1 } };
+
+    public int shortestPathBinaryMatrix(int[][] grid) {
+        LinkedList<Integer> q = new LinkedList<>();
+        int n = grid.length, level = 0, count = 1;
+        if (n == 0 || grid[0][0] != 0)
+            return -1;
+
+        grid[0][0] = 1;// mark visited
+        q.addLast(0);
+
+        while (!q.isEmpty()) {
+            int size = q.size();
+            while (size-- > 0) {
+                int rmIdx = q.removeFirst();
+                int sr = rmIdx / n, sc = rmIdx % n;
+                if (sr == n - 1 && sc == n - 1)
+                    return level + 1;
+                for (int[] d : dir8) {
+                    int r = sr + d[0];
+                    int c = sc + d[1];
+                    if (r >= 0 && c >= 0 && r < n && c < n && grid[r][c] == 0) {
+                        grid[r][c] = 1; // mark visited
+                        q.addLast(r * n + c);
+                    }
+
+                }
+
+            }
+            level++;
+        }
+
+        return -1;
+    }
 }
