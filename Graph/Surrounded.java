@@ -12,6 +12,10 @@ public class Surrounded {
     int[][] dir = { { 0, -1 }, { 0, 1 }, { -1, 0 }, { 1, 0 } };
     int n = 0, m = 0;
 
+    // why applying dfs from boundaries: boundary means it is an outlet for water
+    // stream in rain, x=> building
+    // surrounf region : empty space between the water haing n reachability to
+    // outlet
     public void solve(char[][] board) {
         n = board.length;
         m = board[0].length;
@@ -56,4 +60,7 @@ public class Surrounded {
         }
 
     }
+
+    // or
+
 }
