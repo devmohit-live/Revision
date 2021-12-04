@@ -1,6 +1,7 @@
 package Questions.Graph;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 public class BFS {
@@ -210,8 +211,89 @@ public class BFS {
         }
         return isBipartite;
     }
-    
-    // Leetcode 886 : Possible Bipartition
+
+    // Leetcode 886 : Possible Bipartition : Bipartie , also can be done using DSU
+    class LC886 {
+        // check for bipartitation
+        // just needed to create a graph
+
+        private ArrayList<Integer>[] graph;
+        private int[] vis;
+
+        public boolean possibleBipartition(int n, int[][] dislikes) {
+
+            createGraph(dislikes, n);
+            boolean res = true;
+            vis = new int[n + 1]; // n+1 => 1 based indexing
+            Arrays.fill(vis, -1);
+
+            for (int i = 1; i <= n; i++) {
+                if (this.vis[i] == -1)
+                    res = res && isBipartite(i);
+            }
+
+            return res;
+        }
+
+        private boolean isBipartite(int src) {
+            LinkedList<Integer> q = new LinkedList<>();
+            q.addLast(src);
+            boolean isCycle = false, bipartite = true;
+            int color = 0;
+
+            while (!q.isEmpty()) {
+                int size = q.size();
+                while (size-- > 0) {
+                    int rm = q.removeFirst();
+                    if (this.vis[rm] != -1) {
+                        isCycle = true;
+                        if (vis[rm] != color) {
+                            bipartite = false;
+                            return false;
+                        }
+                    }
+
+                    this.vis[rm] = color;
+
+                    for (int v : this.graph[rm]) {
+                        if (this.vis[v] == -1) {
+                            q.addLast(v);
+                        }
+                    }
+
+                }
+                color = (color + 1) % 2;
+
+            }
+
+            return bipartite;
+
+        }
+
+        /*
+         * class Edge{ int src, nbr; Edge(int src,int nbr){ this.src=src; this.nbr =
+         * nbr; } }
+         */
+
+        private void createGraph(int[][] arr, int n) {
+            this.graph = new ArrayList[n + 1];
+            for (int i = 1; i <= n; i++) {
+                // graph.put(i, new ArrayList<Integer>());
+                graph[i] = new ArrayList<>();
+            }
+
+            for (int[] edge : arr) {
+                addEdge(edge[0], edge[1]);
+            }
+
+        }
+
+        private void addEdge(int u, int v) {
+            this.graph[u].add(v);
+            this.graph[v].add(u);
+        }
+
+    }
 
     // Walls And Gates : https://www.lintcode.com/problem/663/ : Leetcode 286
 
