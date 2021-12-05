@@ -298,7 +298,8 @@ public class BFS {
     // Walls And Gates : https://www.lintcode.com/problem/663/ : Leetcode 286
     // Exactly similar to 542 : 01 matrix(reverse bfs)
     final int infi = 2147483647;
-    int n,m;
+    int n, m;
+
     public void wallsAndGates(int[][] rooms) {
         n = rooms.length;
         m = rooms[0].length;
