@@ -1,6 +1,7 @@
 package Questions.Graph;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -313,4 +314,42 @@ public class DirectedGraph {
             return 0;
     }
 
+    // topological sort with dfs with cycle detection case:
+    // -1 : not visited , 0 : current path, 1 => backtracked(visited but not in current path)
+    public static void topologicalSort_dfs_cycle(ArrayList<Edge>[] graph){
+        int n = graph.length;
+        int[] vis = new int[n];
+        Arrays.fill(vis,-1);
+        List<Integer>ans = new ArrayList<>();
+        boolean res = false;
+        for(int i=0;i<n;i++){
+            if(vis[i]==-1){
+                res = res || topologicalSort_dfs_cycle(graph,i,vis,ans);
+            }
+        }
+        if(res){
+            System.out.println("Cycle is present : hence deadlock : topologocal sorting not possible");
+            ans.clear();
+        }else{
+            System.out.println("Topologocal sort is: ");
+            for(int i=ans.size()-1;i>=0;i--)
+                System.out.print(ans.get(i)+" ");
+            System.out.println();
+        }
+    }
+
+    private boolean topologicalSort_dfs_cycle(ArrayList<Edge>[] graph, int src, int[] vis, List<Integer> ans){
+        boolean isCcycle = false;
+
+        vis[src] = 0; // add in current path
+       for(Edge e: graph[src]){
+           if(vis[e.nbr]==-1){
+               isCcycle = isCcycle || topologicalSort_dfs_cycle(graph,e.nbr,vis,ans);
+           }
+       }
+       vis[src] = 1; // backtracked
+       ans.add(src);
+
+       return isCcycle;
+    }
 }
