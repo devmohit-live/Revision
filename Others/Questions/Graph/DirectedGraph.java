@@ -345,6 +345,9 @@ public class DirectedGraph {
        for(Edge e: graph[src]){
            if(vis[e.nbr]==-1){
                isCcycle = isCcycle || topologicalSort_dfs_cycle(graph,e.nbr,vis,ans);
+           }else if(vis[e.nbr] == 0){
+               // is already visited and part of current path: cycle
+               return true;
            }
        }
        vis[src] = 1; // backtracked
