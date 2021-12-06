@@ -55,51 +55,54 @@ public class DirectedGraph {
     public static void Kahns_topological(ArrayList<Edge>[] graph) {
         int n = graph.length, count = 0;
         ArrayList<Integer> res = new ArrayList<>();
-        int[] indegree = nerw int[n];
+        int[] indegree = new int[n];
         boolean[] vis = new boolean[n];
-        //calculation indegree of vtces
-        for(ArrayList<Edge> edge : graph){
-            for(Edge e: edge){
+        // calculation indegree of vtces
+        for (ArrayList<Edge> edge : graph) {
+            for (Edge e : edge) {
                 indegree[e.nbr]++;
             }
         }
         // all the nodes having indegree 0 : all independent: used as src for bfs
 
-        LinkedList<Integer> q= new LinkedList<>();
-        for(int i=0;i<n;i++) if(indegree[i]==0) q.addLast(i);
-        int level =0;
-        count+=q.size();
+        LinkedList<Integer> q = new LinkedList<>();
+        for (int i = 0; i < n; i++)
+            if (indegree[i] == 0)
+                q.addLast(i);
+        int level = 0;
+        count += q.size();
 
-        //bfs
-        while(!q.isEmpty()){
+        // bfs
+        while (!q.isEmpty()) {
             int size = q.size();
 
-            while(size-->0){
+            while (size-- > 0) {
                 int rm = q.removeFirst();
                 vis[rm] = true;
                 count++;
                 res.add(rm);
 
-                for(Edge e: graph[rm]){
-                    if(!vis[e.nbr]){
+                for (Edge e : graph[rm]) {
+                    if (!vis[e.nbr]) {
                         indegree[e.nbr]--;
-                        if(indegree[e.nbr]==0){
+                        if (indegree[e.nbr] == 0) {
                             // add the next level sources
                             q.addLast(e.nbr);
-                        } 
+                        }
                     }
                 }
             }
             level++;
 
         }
-        if(count< n){ //  less than 
+        if (count < n) { // less than
             System.out.println("Graph contains cycle , Hence deadlock is occured : Topologcal sort not possible");
-        }else{
-            // count > = n (q can contains same thing twice: 1 task is dependent of more than 1 task)
+        } else {
+            // count > = n (q can contains same thing twice: 1 task is dependent of more
+            // than 1 task)
             System.out.println("Topological ordering is : ");
-            for(int i=res.size()-1;i>=0;i--){
-                System.out.print(res.get(i)+" ");
+            for (int i = res.size() - 1; i >= 0; i--) {
+                System.out.print(res.get(i) + " ");
             }
             System.out.println();
         }
