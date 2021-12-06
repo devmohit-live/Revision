@@ -23,7 +23,10 @@ public class dsu {
         this.n = edges.length;
         parent = new int[n];
         size = new int[n];
-        Arrays.fill(size, 1);
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+            size[i] = 1;
+        }
         this.edges = edges;
 
         for (int i = 0; i < n; i++) {
@@ -88,8 +91,10 @@ public class dsu {
     }
 
     private void clear() {
-        this.parent = new int[n];
-        this.size = new int[n];
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+            size[i] = 1;
+        }
     }
 
 }
