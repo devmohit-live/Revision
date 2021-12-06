@@ -143,4 +143,110 @@ public class DirectedGraph {
             ans.clear();
         }
     }
+
+
+    // Leetcode 210 : Course Scedule 2 :
+    public int[] findOrder(int n, int[][] arr) {
+
+        int[] ans = new int[n];
+        int[] indegree = new int[n];
+        // create graph as arr[0] doesn't gives the nbrs of 0
+        ArrayList<Integer>[] graph = new ArrayList[n];
+
+        for (int i = 0; i < n; i++)
+            graph[i] = new ArrayList<>();
+
+        for (int[] edge : arr) {
+            int u = edge[0], v = edge[1];
+            graph[u].add(v);
+            indegree[v]++; // calculate indegree
+        }
+
+        // add sources
+        LinkedList<Integer> q = new LinkedList<>();
+        for (int i = 0; i < n; i++)
+            if (indegree[i] == 0)
+                q.addLast(i); // adding all the independent process/sources
+
+        // bfs for khan's algo
+        int count = 0, level = 0, idx = n;
+        while (!q.isEmpty()) {
+            int size = q.size();
+            while (size-- > 0) {
+                int rm = q.removeFirst();
+                count++; //
+                ans[--idx] = rm;
+
+                // add children/nbr
+                for (int v : graph[rm]) {
+                    indegree[v]--; //
+                    if (indegree[v] == 0)
+                        q.addLast(v);
+                }
+
+            }
+        }
+
+        if (count == n) {
+            // valid topological sort : no deadlock is there
+            return ans;
+        } else {
+            return new int[0];
+        }
+    }
+
+    //Leetcode 207 : Course schedule 1 :
+    public boolean canFinish(int n, int[][] arr) {
+        // create graph first
+        ArrayList<Integer> graph[] = new ArrayList[n];
+        for (int i = 0; i < n; i++)
+            graph[i] = new ArrayList<>();
+
+        for (int[] row : arr) {
+            graph[row[0]].add(row[1]); // creating edge
+
+        }
+
+        int count = kahnsAlgo(graph);
+        return count == graph.length;
+    }
+
+    private int kahnsAlgo(ArrayList<Integer>[] graph) {
+        int n = graph.length;
+        int indegree[] = new int[n];
+        // calculating indegree
+        for (ArrayList<Integer> edges : graph) {
+            for (int v : edges)
+                indegree[v]++;
+        }
+
+        LinkedList<Integer> que = new LinkedList<>();
+        // ArrayList<Integer> ans = new ArrayList<>();
+
+        for (int i = 0; i < n; i++)
+            if (indegree[i] == 0)
+                que.addLast(i);
+
+        int level = 0;
+        int count = 0;
+        while (que.size() != 0) {
+            int size = que.size();
+            while (size-- > 0) {
+                int vtx = que.removeFirst();
+                count++;
+                // ans.add(vtx);
+
+                for (int v : graph[vtx]) {
+                    if (--indegree[v] == 0)
+                        que.addLast(v);
+                }
+
+            }
+            level++;
+        }
+
+        return count;
+    }
+
+
 }
