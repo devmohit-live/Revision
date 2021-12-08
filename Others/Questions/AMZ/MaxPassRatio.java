@@ -1,3 +1,5 @@
+import java.util.PriorityQueue;
+
 public class MaxPassRatio {
     // lc: 1792. Maximum Average Pass Ratio
     class Solution {
@@ -29,7 +31,7 @@ public class MaxPassRatio {
                 Pair pair = new Pair(classes[i]);
                 pq.add(pair);
             }
-
+            // add all the brilliant students to the calsses which wil cvause max growth
             while (extraStudents-- > 0) {
                 Pair rm = pq.remove();
                 // add the pair after modification

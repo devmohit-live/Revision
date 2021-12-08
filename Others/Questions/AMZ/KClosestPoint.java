@@ -1,5 +1,7 @@
 package Questions.AMZ;
 
+import java.util.PriorityQueue;
+
 public class KClosestPoint {
     public int[][] kClosest(int[][] points, int k) {
         // smallest => max pq for elimination
@@ -20,6 +22,9 @@ public class KClosestPoint {
             if (pq.size() > k)
                 pq.remove();
         }
+
+        if (pq.size() < k) // not possible to find k closests point
+            return new int[0][]; // -1
 
         int[][] ans = new int[k][];
         int idx = k;
