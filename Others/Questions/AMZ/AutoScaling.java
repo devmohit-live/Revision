@@ -32,6 +32,7 @@ public class AutoScaling {
                 inst = (int) Math.ceil(inst / 2);
                 i += 10;
             } else if (arr[i] > 60 && 2 * inst <= 2 * 108) {
+                // roll up
                 inst = inst * 2;
                 i += 10;
             }
@@ -42,5 +43,14 @@ public class AutoScaling {
         }
 
         return inst;
+    }
+
+    public static void main(String[] args) {
+        // int[] arr = { 25, 23, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 76, 80 }; // asn :2
+        // int inst = 2;
+        int[] arr = { 1, 3, 5, 10, 80 }; // asn :2
+        int inst = 1;
+        System.out.println(autoscaling(arr, inst));
+
     }
 }
