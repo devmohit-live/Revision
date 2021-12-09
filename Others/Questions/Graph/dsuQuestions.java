@@ -149,4 +149,43 @@ public class dsuQuestions {
         }
     }
 
+    // Leetcode 839 : Similar String Groups
+    public int numSimilarGroups(String[] strs) {
+        int n = strs.length, groups = n;
+        parent = new int[n];
+        for (int i = 0; i < n; i++)
+            parent[i] = i;
+
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = i + 1; j < n; j++) {
+                String a = strs[i], b = strs[j];
+                if (areSimilar(a, b)) {
+                    int p1 = findParent(i), p2 = findParent(j);
+                    if (p1 != p2) {
+                        // merge them
+                        parent[p2] = p1; // put them in common set
+                        // decrease the groups count;
+                        groups--;
+                    }
+                }
+            }
+        }
+
+        return groups;
+    }
+
+    // 2 elemts are not equal => 1 swap needed => similar
+    private boolean areSimilar(String a, String b) {
+        if (a.length() != b.length())
+            return false;
+        int count = 0;
+        for (int i = 0; i < a.length(); i++) {
+            if (a.charAt(i) != b.charAt(i))
+                count++;
+            if (count > 2)
+                return false;
+        }
+
+        return true;
+    }
 }
