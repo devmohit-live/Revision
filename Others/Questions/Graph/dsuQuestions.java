@@ -188,4 +188,60 @@ public class dsuQuestions {
 
         return true;
     }
+
+    // Number of Islands II : https://www.lintcode.com/problem/434/
+    int[][] mat;
+
+    // Time: O(m*n + k), Space: O(m*n);
+    public List<Integer> numIslands2(int n, int m, Point[] operators) {
+        // intitalize
+        mat = new int[n][m];
+        List<Integer> res = new ArrayList<>();
+        if (n <= 1 && m <= 1)
+            return res;
+        parent = new int[m * n];
+
+        // O(m*n)
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                parent[i * m + j] = i * m + j;
+            }
+        }
+
+        //
+        int comp = 0;
+        // O(k) k: points array length
+        for (Point p : operators) {
+            int sr = p.x, sc = p.y;
+
+            if (mat[sr][sc] == 1) { // overriding a land,: there was already a land present hence no chages will be
+                                    // made
+                res.add(comp);
+                continue;
+            }
+
+            mat[sr][sc] = 1;
+            comp++; // increase in a componenet
+
+            // if it will become a part of some componenet
+            for (int[] d : dir) { // O(4): O(1)
+                // O(1)
+                int r = sr + d[0];
+                int c = sc + d[1];
+                int p1 = findParent(sr * m + sc); // O(1) with path compression
+                if (r >= 0 && c >= 0 && r < n && c < m && mat[r][c] == 1) {
+                    // find parent and merge
+                    int p2 = findParent(r * m + c);
+                    if (p1 != p2) {
+                        comp--; // merged hence decrease in a componenet
+                        parent[p2] = p1; // O(1)
+                    }
+                }
+            }
+
+            res.add(comp);
+        }
+        return res;
+    }
+
 }
