@@ -115,4 +115,38 @@ public class dsuQuestions {
         return parent[x] = findParent(parent, parent[x]);
     }
 
+    // Leetcode 1061 : Lexicographically Smallest Equivalent String
+    public String smallestEquivalentString(String s1, String s2, String base) {
+        parent = new int[26];
+        for (int i = 0; i < 26; i++)
+            parent[i] = i;
+        // s1 -> mapped to s2
+        int n = s1.length(); // bot are of same length
+
+        // mapping
+        for (int i = 0; i < n; i++) {
+            char x = s1.charAt(i), y = s2.charAt(i);
+            union(x, y);
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (char ch : base.toCharArray()) {
+            int representative = findParent(ch - 'a');
+            sb.append((char) (representative + 'a'));
+        }
+        return sb.toString();
+    }
+
+    private void union(char x, char y) {
+        int a = findParent(x - 'a');
+        int b = findParent(y - 'a');
+        if (a == b)
+            return;
+        else if (x < y) {
+            parent[b] = a;
+        } else {
+            parent[a] = b;
+        }
+    }
+
 }

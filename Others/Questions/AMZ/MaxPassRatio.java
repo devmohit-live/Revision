@@ -1,7 +1,8 @@
 import java.util.PriorityQueue;
 
 public class MaxPassRatio {
-    // lc: 1792. Maximum Average Pass Ratio
+    // Five Star Seller
+    // lc: 1792. Maximum Average Pass Ratio,
     class Solution {
         class Pair {
             double ratioIfAdded, current;
