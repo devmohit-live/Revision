@@ -19,7 +19,7 @@ public class NMeetings {
         Arrays.sort(m, (a, b) -> {
             int d = a.et - b.et;
             if (d == 0) {
-                return -1; // relative order is amintained in case of equal
+                return -1; // relative order is maintained in case of equal
             }
             return d;
 
