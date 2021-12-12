@@ -315,4 +315,50 @@ public class dsuQuestions {
         return ans;
     }
 
+    // Mr. President:
+    // https://www.hackerearth.com/practice/algorithms/graphs/minimum-spanning-tree/practice-problems/algorithm/mr-president/
+
+    private int mrPresident(int[][] edges, int n, long k) {
+        Arrays.sort(edges, (a, b) -> {
+            return a[2] - b[2];
+        });// so that we first include min wt edges: mst
+
+        parent = new int[n + 1];
+        for (int i = 0; i <= n; i++)
+            parent[i] = i;
+
+        int components = n;
+        long cost = 0;
+        List<Integer> wt = new ArrayList<>();
+        // demolish roads such that it is still connected
+        // removes all cyclic edges(redundant roads, get componenets)
+        for (int[] e : edges) {
+            int u = e[0], v = e[1], w = e[2];
+            int p1 = findParent(u), p2 = findParent(v);
+            // make all roads connected
+            if (p1 != p2) {
+                parent[p2] = p1;
+                cost += w;
+                components--;
+                wt.add(w);
+            }
+        }
+
+        if (components > 1)
+            return -1; // gcc >1 not connected
+        int conversions = 0;
+        // try to convert max wt edges roads to super road
+        for (int i = wt.size() - 1; i >= 0; i--) {
+            if (cost <= k)
+                break; // try to reduce cost less than or = k
+
+            cost = cost - wt.get(i) + 1; // +1 for super road conversion
+            conversions++;
+        }
+
+        if (cost > k)
+            return -1; // unable to reduce cost
+        return conversions;
+    }
+
 }
