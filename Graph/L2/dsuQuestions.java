@@ -1,6 +1,7 @@
 package Questions.Graph;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class dsuQuestions {
@@ -262,6 +263,30 @@ public class dsuQuestions {
     // with weight of 8(actually it is just buildig well on 2nd vtce)
     // with this translation we can convert the question to single environment
 
-    
+    public int minCostToSupplyWater(int n, int[] wells, int[][] pipes) {
+        ArrayList<int[]> allPipes = new ArrayList<>();
+        for (int[] p : pipes)
+            allPipes.add(p); // pipes already have vtces from 1 to n
+        for (int i = 0; i < wells.length; i++) {
+            allPipes.add(new int[] { 0, i + 1, well[i] }); // 1 based (to make vtces in 1 based)
+        }
+
+        Collections.sort(allPipes, (a, b) -> { // get min wt edges
+            return a[2] - b[2]; //
+        });
+
+        // dsu
+        parent = new int[n + 1]; // 1 based indexing
+        int ans = 0;
+        for (int[] e : allPipes) {
+            int u = e[0], v = e[1], w = e[2];
+            int p1 = findParent(u), p2 = findParent(v);
+            if (p1 != p2) {
+                parent[p2] = p1;
+                ans += w;
+            }
+        }
+        return ans;
+    }
 
 }
