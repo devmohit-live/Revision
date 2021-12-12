@@ -52,8 +52,8 @@ public class Kruskal {
         spanningTree[v].add(new Edge(v, u, w));
     }
 
-    public static ArrayList<Edge>[] kruskal(int[][] graph) {
-        n = graph.length;
+    public static ArrayList<Edge>[] kruskal(int[][] graph,int n) {
+        // n =  n would be given or can be calulated max = max(,max,maX(e.v,e.u)) =? max of all vtces
         ArrayList<Edge>[] spanningTree = new ArrayList[n];
         for (int i = 0; i < n; i++) {
             spanningTree[i] = new ArrayList<>();

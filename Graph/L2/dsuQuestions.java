@@ -244,4 +244,24 @@ public class dsuQuestions {
         return res;
     }
 
+    // Leetcode 1168 : Optimize Water Distribution in a Village
+    // Question Description:
+    // https://leetcode.ca/2019-02-10-1168-Optimize-Water-Distribution-in-a-Village/
+    // Tst: graph7 02:07 hr
+    // Steps: 1. Understande why wells and pipes are differnt : can we convert wells
+    // into pipes:
+    // why pipes ? : bcz we can see pipes as weighted edgse
+
+    // Step2 : Convert the question into a 1 environment : pipes and wells => only
+    // pipes
+    // How wells to pipes ? : create an imaginary vtce say 0 and try connection it
+    // to
+    // differnt vtces you want to build well on (say well[2]=> 8) building well on
+    // 2nd vtce cost 8
+    // This can be translated as connecting a pipes from universal well 0 to vtcs 2
+    // with weight of 8(actually it is just buildig well on 2nd vtce)
+    // with this translation we can convert the question to single environment
+
+    
+
 }
