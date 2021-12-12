@@ -361,4 +361,55 @@ public class dsuQuestions {
         return conversions;
     }
 
+    // Leetcode regions-cut-by-slashes : 959
+    // Approach : regions is made on two conditions:
+    // 1. slashes starts from a boundry(any) and reach to another boundry (created)
+    // : put boundaries into same SET
+    // 2. if not the case of boundaries: cycle must be created internally(whitinn
+    // the boundary ex diamond in cetre of matrix that doesn't touches any boundary
+    // (clodes figure in the matrix)
+
+    // grid[][] postions represents idx of slash in matrix, to get the coordinated
+    // in terms of lines(not cells) we no +1 in n,m of grid
+    // /(forward slash) : (x+1,y) to (x,y+1)
+    // \\(backward slash) : (x,y) to (x+1,y+1)
+
+    public int regionsBySlashes(String[] grid) {
+        int n = grid.length, regions = 1, m = n + 1;
+        parent = new int[m * m];
+        for (int i = 0; i < parent.length; i++) {
+            parent[i] = i;
+            int r = i / m, c = i % m;
+            // putting boundaries int o same set and making 0 their global parent
+            if (r == 0 || r == m - 1 || c == 0 || c == m - 1)
+                parent[i] = 0;
+
+        }
+
+        for (int i = 0; i < grid.length; i++) {
+            String s = grid[i];
+            for (int j = 0; j < s.length(); j++) {
+                char ch = s.charAt(j);
+                int p1 = -1, p2 = -1;
+                if (ch == '/') {
+                    // (x+1,y) to (x,y+1)
+                    p1 = findParent((i + 1) * m + j);
+                    p2 = findParent(i * m + j + 1);
+                } else if (ch == '\\') {
+                    // (x,y) to (x+1,y+1)
+                    p1 = findParent(i * m + j);
+                    p2 = findParent((i + 1) * m + j + 1);
+                } else {
+                    continue; // space;
+                }
+
+                if (p1 != p2)
+                    parent[p2] = p1;
+                else
+                    regions++;
+            }
+        }
+        return regions;
+    }
+
 }
