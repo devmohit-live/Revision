@@ -277,6 +277,9 @@ public class dsuQuestions {
 
         // dsu
         parent = new int[n + 1]; // 1 based indexing
+        for (int i = 0; i <= n; i++)
+            parent[i] = i;
+
         int ans = 0;
         for (int[] e : allPipes) {
             int u = e[0], v = e[1], w = e[2];
@@ -286,6 +289,29 @@ public class dsuQuestions {
                 ans += w;
             }
         }
+        return ans;
+    }
+
+    // 684 Redundant Connections
+    public int[] findRedundantConnection(int[][] edges) {
+        int n = edges.length;
+        parent = new int[n + 1];
+
+        for (int i = 0; i <= n; i++) { // 1 based
+            parent[i] = i;
+        }
+        int[] ans = new int[2];
+        for (int[] e : edges) {
+            int p1 = findParent(e[0]), p2 = findParent(e[1]);
+            if (p1 != p2) {
+                parent[p2] = p1;
+            } else {
+                // redundant edge
+                ans[0] = e[0];
+                ans[1] = e[1];
+            }
+        }
+
         return ans;
     }
 
