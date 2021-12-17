@@ -1,8 +1,5 @@
-package Others.Questions.Graph;
 
 import java.util.ArrayList;
-
-import Stack_Queue.Questions.nger;
 
 public class Kruskal {
 
