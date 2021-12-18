@@ -52,4 +52,13 @@ public class ArticulationPoint {
 
     }
 
+    // Critical Edge: edge with 1 point as articulation point and with no direct
+    // backup edge to it
+
+    // Tree: all points except leaf are critical points ans all edges are critical
+    // edges(n-1)
+
+    // In a straight line (skew trees) all points except end points are critical
+    // points, all edges are critical edges(includung end ones)
+
 }
