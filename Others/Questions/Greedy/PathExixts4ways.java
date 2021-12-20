@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+// lc: 1971
 class PathExixts4Ways {
     int[] par;
 
@@ -29,10 +30,10 @@ class PathExixts4Ways {
         // return dfs(graph, src, des, vis); // slower
 
         // 2 bfs
-        return bfs(edges, src, des, n, vis); // faster
+        return bfs(graph, src, des, n, vis); // faster
     }
 
-    private boolean bfs(int[][] edges, int src, int des, int n, boolean[] vis) {
+    private boolean bfs(List<List<Integer>> graph, int src, int des, int n, boolean[] vis) {
         // bfs
         LinkedList<Integer> q = new LinkedList<>();
         q.addLast(src);
