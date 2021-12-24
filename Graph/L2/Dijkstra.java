@@ -91,4 +91,35 @@ class Dijkstra {
 
         System.out.println(sb.toString());
     }
+
+    // Better : Using parent and dis array
+
+    public static void dijikstra_02(ArrayList<Edge>[] graph, int src) {
+        int N = graph.length;
+        PriorityQueue<pair> pq = new PriorityQueue<>((a, b) -> {
+            return a.wsf - b.wsf;
+        });
+
+        int[] dis = new int[N];
+        int[] par = new int[N];
+        Arrays.fill(dis, (int) 1e9);
+        Arrays.fill(par, -1);
+
+        pq.add(new pair(src, 0));
+        dis[src] = 0;
+        while (pq.size() != 0) {
+            pair p = pq.remove();
+
+            if (p.wsf > dis[p.vtx])
+                continue;
+
+            for (Edge e : graph[p.vtx]) {
+                if (p.wsf + e.w < dis[e.v]) {
+                    dis[e.v] = p.wsf + e.w;
+                    par[e.v] = p.vtx;
+                    pq.add(new pair(e.v, p.wsf + e.w));
+                }
+            }
+        }
+    }
 }
