@@ -1,6 +1,7 @@
 
 import java.util.ArrayList;
-
+// all the edges are sorted first : apply kruskal for mst when list of edges is given
+// prims : when graph is given : pq(not necessarly sorted)
 public class Kruskal {
 
     static class Edge {
