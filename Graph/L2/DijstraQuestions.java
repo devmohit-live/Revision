@@ -31,4 +31,60 @@ public class DijstraQuestions {
         }
         return dis;
     }
+
+    // 743. Network Delay Time
+    public int networkDelayTime(int[][] times, int n, int k) {
+        // 1 based
+        class Pair {
+            int par, vtx, w, wsf;
+
+            // dij
+            Pair(int par, int vtx, int w, int wsf) {
+                this.par = par; // parent
+                this.vtx = vtx; // vtx
+                this.w = w;
+                this.wsf = wsf;
+            }
+        }
+
+        ArrayList<int[]>[] graph = new ArrayList[n + 1]; // v,w
+        for (int i = 1; i <= n; i++)
+            graph[i] = new ArrayList<>();
+
+        for (int[] e : times)
+            graph[e[0]].add(new int[] { e[1], e[2] });
+
+        int ans = 0;
+        boolean[] vis = new boolean[n + 1];
+        int count = n;
+
+        PriorityQueue<Pair> q = new PriorityQueue<>((a, b) -> {
+            return a.wsf - b.wsf;
+        });
+
+        q.add(new Pair(-1, k, 0, 0));
+        while (q.size() > 0) {
+            Pair rm = q.remove();
+
+            if (vis[rm.vtx])
+                continue;
+
+            vis[rm.vtx] = true;
+            ans = Math.max(ans, rm.wsf);
+            // ans += ,rm.wsf; // normally in dijstra
+            count--;
+
+            for (int[] nbr : graph[rm.vtx]) {
+                int v = nbr[0], wt = nbr[1];
+                if (!vis[v]) {
+                    q.add(new Pair(rm.vtx, v, wt, rm.wsf + wt));
+                }
+            }
+        }
+
+        if (count == 0)
+            return ans;
+        return -1;
+
+    }
 }
