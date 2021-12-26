@@ -70,8 +70,8 @@ public class DijstraQuestions {
                 continue;
 
             vis[rm.vtx] = true;
-            ans = Math.max(ans, rm.wsf);
-            // ans += ,rm.wsf; // normally in dijstra
+            ans = Math.max(ans, rm.wsf); // max time is required
+
             count--;
 
             for (int[] nbr : graph[rm.vtx]) {
