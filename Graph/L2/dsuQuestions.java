@@ -412,4 +412,53 @@ public class dsuQuestions {
         return regions;
     }
 
+    // Leetcode 924. Minimize Malware Spread
+
+    public int minMalwareSpread(int[][] graph, int[] initial) {
+        int n = graph.length;
+        par = new int[n];// leader of the country : id of a country
+        size = new int[n]; // population of a country
+        for (int i = 0; i < n; i++) {
+            par[i] = i;
+            ;
+            size[i] = 1;
+        }
+
+        for (int i = 0; i < n; i++) {
+            int p1 = findParent(i);
+            for (int j = 0; j < n; j++) {
+                if (i != j && graph[i][j] == 1) { // khud se connected ka kya mtlb
+                    int p2 = findParent(j);
+                    if (p1 != p2) {
+                        par[p2] = p1;
+                        size[p1] += size[p2];
+                    }
+                }
+
+            }
+        }
+
+        int maxpopulation = 0;
+        int[] infected = new int[n];
+
+        Arrays.sort(initial); // to get the smallest idx person
+
+        for (int el : initial) {
+            int country = findParent(el);
+            infected[country]++;
+        }
+        int ans = initial[0];
+        for (int el : initial) {
+            int country = findParent(el);
+            // save the country with only 1 infected people(lowest) and highest population
+            if (infected[country] == 1 && maxpopulation < size[country]) {
+                maxpopulation = size[country];
+                ans = el;
+            }
+        }
+
+        return ans;
+
+    }
+
 }
