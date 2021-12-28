@@ -39,6 +39,7 @@ public class TheMazeSet {
     }
 
     // https://www.lintcode.com/problem/the-maze-ii/: The Maze 2
+    // dijkstra
     public int shortestDistance(int[][] maze, int[] start, int[] destination) {
 
         class Pair implements Comparable<Pair> {
