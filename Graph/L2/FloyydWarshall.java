@@ -3,7 +3,7 @@ import java.util.Arrays;
 public class FloyydWarshall {
     // Step: convert it into 2d matrix representation
 
-    public static void floyydwarshall(int n, int[][] edges) {
+    public static int[][] floyydwarshall(int n, int[][] edges) {
         int[][] mat = new int[n][n];
         for (int[] d : mat)
             Arrays.fill(d, (int) 1e9);
@@ -43,6 +43,35 @@ public class FloyydWarshall {
             }
             System.out.println();
         }
+
+        return mat;
+    }
+
+    // Question based on floyyd warshall:
+    // 1334. Find the City With the Smallest Number of Neighbors at a Threshold
+    // Distance
+    public int findTheCity(int n, int[][] edges, int distanceThreshold) {
+        int[][] mat = floyydwarshall(n, edges);
+        int[] connectedTo = new int[n];
+        int ans = -1;
+        int mincities = (int) 1e9;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i != j && mat[i][j] <= distanceThreshold)
+                    connectedTo[i]++;
+            }
+        }
+
+        for (int i = 0; i < n; i++) {
+            if (connectedTo[i] < mincities) {
+                mincities = connectedTo[i];
+                ans = i;
+            } else if (connectedTo[i] == mincities)
+                ans = Math.max(i, ans);
+        }
+
+        return ans;
     }
 
     public static void main(String[] args) {
@@ -50,4 +79,5 @@ public class FloyydWarshall {
         int[][] edges = { { 0, 1, 3 }, { 1, 2, 1 }, { 1, 3, 4 }, { 2, 3, 1 } };
         floyydwarshall(n, edges);
     }
+
 }
