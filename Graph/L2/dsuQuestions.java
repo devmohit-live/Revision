@@ -438,16 +438,22 @@ public class dsuQuestions {
             }
         }
 
-        int maxpopulation = 0;
         int[] infected = new int[n];
 
         Arrays.sort(initial); // to get the smallest idx person
 
+        // saving : only 1 person is infected
+        // optimum : save the country with infected = 1 and population is geateres among
+        // all the country whose infected = 1
         for (int el : initial) {
             int country = findParent(el);
             infected[country]++;
         }
-        int ans = initial[0];
+        int ans = initial[0]; // putting smallest idx (bcz it may not be possible to save any country in that
+                              // case too we have to give smallest idx)
+        int maxpopulation = 0;
+        // max population bcz we want to minimize the M(initial): (NO OF INFECTED PERSON
+        // IN WHOLE NETWORK)
         for (int el : initial) {
             int country = findParent(el);
             // save the country with only 1 infected people(lowest) and highest population

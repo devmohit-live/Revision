@@ -174,7 +174,7 @@ class DijkstraAndPrims {
 
             for (Edge e : graph[rm.vtx]) {
                 if (!vis[e.v]) {
-                    pq.add(new PrismPair(e.v, rm.vtx, e.w));
+                    pq.add( new PrismPair(e.v, rm.vtx, e.w));
                 }
             }
 
