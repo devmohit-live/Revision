@@ -1,13 +1,15 @@
 public class FillNextPointer {
 
     // Leetcode : 116. Populating Next Right Pointers in Each Node
-    // dfs
+
+    // https://leetcode.com/problems/populating-next-right-pointers-in-each-node/discuss/1651712/2-ways-or-Easy-to-Understand-or-DFS-BFS
 
     public Node connect(Node root) {
         // return connectDfs(root); // faster
         return connectBFS(root); //
     }
 
+    // dfs
     public Node connectDFS(Node root) {
         if (root == null || root.left == null)
             return root;
@@ -15,8 +17,8 @@ public class FillNextPointer {
         if (root.next != null) {
             root.right.next = root.next.left;
         }
-        connect(root.left);
-        connect(root.right);
+        connectDFS(root.left);
+        connectDFS(root.right);
         return root;
     }
 
