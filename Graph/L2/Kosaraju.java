@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Kosaraju {
     // to get the strogly connected components: All cyclic path : 1 scc, 1 single
@@ -12,7 +13,7 @@ public class Kosaraju {
     // reachable now(hence able to get the cyclic and non cyclic componennts)
     // 3. Do dfs of obtained topological order(reverse ordere) to the the scc
 
-    class Edge {
+    static class Edge {
         int u, v, w;
 
         Edge(int u, int v, int w) {
@@ -24,39 +25,52 @@ public class Kosaraju {
 
     private static void dfs_topolical(ArrayList<Edge>[] graph, int src, ArrayList<Integer> order, boolean[] vis) {
         vis[src] = true;
-        for (Edge e : garph[src])
+        for (Edge e : graph[src])
             if (!vis[e.v])
                 dfs_topolical(graph, e.v, order, vis);
 
         order.add(src);
     }
 
-    private ArrayList<Edge>[] complimentGraph(ArrayList<Edge>[] graph) {
+    private static ArrayList<Edge>[] complimentGraph(ArrayList<Edge>[] graph) {
         int n = graph.length;
         ArrayList<Edge>[] ngraph = new ArrayList[n];
         for (int i = 0; i < n; i++)
-            graph[i] = new ArrayList<>();
+            ngraph[i] = new ArrayList<>();
 
         for (int i = 0; i < n; i++) {
             for (Edge e : graph[i]) {
-                int u = i, v = e.v, w = e.w;
+                int u = e.u, v = e.v, w = e.w;
                 ngraph[v].add(new Edge(v, u, w));
             }
         }
+        // display(ngraph);
         return ngraph;
     }
 
-    private void dfs_scc(ArrayList<Edge>[] graph, int src, List<Integer> ans, boolean[] vis) {
+    public static void display(ArrayList<Edge>[] graph) {
+        int N = graph.length;
+        for (int i = 0; i < N; i++) {
+            System.out.print(i + " -> ");
+            for (Edge e : graph[i]) {
+                System.out.print("(" + e.v + ", " + e.w + ") ");
+            }
+            System.out.println();
+        }
+
+    }
+
+    private static void dfs_scc(ArrayList<Edge>[] graph, int src, List<Integer> ans, boolean[] vis) {
         vis[src] = true;
         ans.add(src);
         for (Edge e : graph[src]) {
-            if (!vs[e.v])
-                dfs_scc(graph, src, scc, sm, vis);
+            if (!vis[e.v])
+                dfs_scc(graph, e.v, ans, vis);
         }
     }
 
-    public void kosaRaju(ArrayList<Edge>[] graph) {
-
+    public static void kosaRaju(ArrayList<Edge>[] graph) {
+        int n = graph.length;
         ArrayList<Integer> order = new ArrayList<>();
         boolean[] vis = new boolean[n];
         // 1
@@ -72,18 +86,41 @@ public class Kosaraju {
             List<Integer> comp = new ArrayList<>();
             int vtx = order.get(i);
             if (!vis[vtx])
-                dfs_scc(graph, vtx, comp, vis);
-            System.out.println(comp);
-            ans.add(comp);
+                dfs_scc(ngraph, vtx, comp, vis);
+            if (comp.size() != 0) {
+                // System.out.println(comp);
+                ans.add(comp);
+            }
         }
 
-        for (List<Inetger> small : ans)
+        for (List<Integer> small : ans)
             System.out.println(small);
+
+        System.out.println("Strongly Connected components are " + ans.size());
 
     }
 
     public static void main(String[] args) {
-        
+        int N = 9;
+        ArrayList<Edge>[] graph = new ArrayList[N];
+        for (int i = 0; i < N; i++)
+            graph[i] = new ArrayList<>();
+
+        addEdge(graph, 0, 1, 10);
+        addEdge(graph, 1, 2, 10);
+        addEdge(graph, 2, 3, 40);
+        addEdge(graph, 3, 0, 10);
+        addEdge(graph, 3, 4, 2);
+        addEdge(graph, 4, 5, 2);
+        addEdge(graph, 5, 6, 3);
+        addEdge(graph, 6, 4, 8);
+        addEdge(graph, 1, 7, 5);
+        addEdge(graph, 7, 8, 4);
+        kosaRaju(graph);
+    }
+
+    public static void addEdge(ArrayList<Edge>[] graph, int u, int v, int w) {
+        graph[u].add(new Edge(u, v, w));
     }
 
 }
