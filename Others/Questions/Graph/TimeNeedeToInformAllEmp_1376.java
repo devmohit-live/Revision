@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 class TimeNeedeToInformAllEmp_1376{
      class Pair{
             int vtx, time;
