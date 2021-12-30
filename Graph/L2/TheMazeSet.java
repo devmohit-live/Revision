@@ -91,7 +91,69 @@ public class TheMazeSet {
     }
 
     // The Maze 3: https://www.lintcode.com/problem/789
+    public String findShortestWay(int[][] maze, int[] ball, int[] hole) {
 
+        class Pair implements Comparable<Pair>  {
+            int vtx, r,c,dis;
+            String psf;
+            Pair(int r, int c, int dis, String psf){
+                this.r = r;
+                this.c= c;
+                this.dis = dis;
+                this.psf = psf;
+            }
+
+            // @Override
+            public int compareTo(Pair o){
+                if(this.dis  == o.dis){
+                    return this.psf.compareTo(o.psf);
+                }
+                return this.dis  - o.dis;
+            }
+        }
+
+        char[] dirs = {'u','d','l','r'};
+        int[][] dir = {{-1,0},{1,0},{0,-1},{0,1}};
+        int sr = ball[0], sc = ball[1], dr = hole[0],dc = hole[1], n = maze.length, m = maze[0].length;
+        boolean[][] vis = new boolean[n][m];
+        PriorityQueue<Pair> pq = new PriorityQueue<>();
+        pq.add(new Pair(sr, sc, 0, ""));
+
+        while(pq.size()>0){
+            Pair rm = pq.poll();
+            if (rm.r == hole[0] && rm.c == hole[1]) {
+                return rm.psf;
+            }
+            vis[rm.r][rm.c] = true;
+
+            for (int i = 0; i < dir.length; i++) {
+                int newr = rm.r;
+                int newc = rm.c;
+                int distance = rm.dis;
+                String psf = rm.psf;
+
+                // Explore current direction until hitting a wall or the hole
+                while (newr + dir[i][0] >= 0 &&
+                       newr + dir[i][0] < n &&
+                       newc + dir[i][1] >= 0 &&
+                       newc + dir[i][1] <m &&
+                       maze[newr + dir[i][0]][newc + dir[i][1]] != 1) {
+
+                    newr += dir[i][0];
+                    newc += dir[i][1];
+                    distance += 1;
+
+                    if (newr == hole[0] && newc == hole[1]) {
+                        break;
+                    }
+                }
+                if (!vis[newr][newc]) {
+                    pq.add(new Pair(newr, newc,distance, psf + dirs[i]));
+                }
+            }
+        }
+        return "impossible";
+    }   
     
 
 }
