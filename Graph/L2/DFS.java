@@ -1,5 +1,6 @@
 package Questions.Graph;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class DFS {
@@ -85,4 +86,37 @@ public class DFS {
 
         return res && grid1[sr][sc] == 1; // my decision if grid1 contains 1 at sr sc or ot
     }
+
+    // Mother Vtx
+    // https://practice.geeksforgeeks.org/problems/mother-vertex/1/#
+    public int findMotherVertex(int V, ArrayList<ArrayList<Integer>> adj) {
+        int n = V;
+
+        // ----- unioun find:
+        // not possible bcz it is not possible to maintain the fact that vtces unioned
+        // are unioned by the same(common vtx or by multiple vtx(visited states))
+        // ------------- dfs ------------------
+        for (int i = 0; i < n; i++) {
+            boolean[] vis = new boolean[n];
+            if (!vis[i]) {
+                int ans = dfs(i, adj, vis);
+                if (ans == V)
+                    return i;
+            }
+        }
+        return -1;
+    }
+
+    private int dfs(int src, ArrayList<ArrayList<Integer>> graph, boolean[] vis) {
+        vis[src] = true;
+        int count = 1;
+        for (int v : graph.get(src)) {
+            if (!vis[v]) {
+                count += dfs(v, graph, vis);
+
+            }
+        }
+        return count;
+    }
+
 }
