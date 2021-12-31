@@ -95,6 +95,9 @@ public class DFS {
         // ----- unioun find:
         // not possible bcz it is not possible to maintain the fact that vtces unioned
         // are unioned by the same(common vtx or by multiple vtx(visited states))
+        /*
+         * 4 3 ,0 1 ,0 3, 2 3
+         */
         // ------------- dfs ------------------
         for (int i = 0; i < n; i++) {
             boolean[] vis = new boolean[n];
