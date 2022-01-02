@@ -97,6 +97,8 @@ public class DFS {
         // are unioned by the same(common vtx or by multiple vtx(visited states))
         /*
          * 4 3 ,0 1 ,0 3, 2 3
+         * 
+         * Correct op : -1 , op : 0
          */
         // ------------- dfs ------------------
         for (int i = 0; i < n; i++) {
