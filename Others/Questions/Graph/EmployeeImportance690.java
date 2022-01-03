@@ -11,7 +11,7 @@ public class EmployeeImportance690 {
         // no need of visited : distinct subordinated list and w ehave to traverse in
         // that list only(n-ary tree)
         map = new HashMap<>();
-        Employee root = null;
+        Employee root = null;s
         for (Employee e : emp) {
             if (e.id == id) {
                 root = e;
