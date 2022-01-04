@@ -13,12 +13,13 @@ public class Basics {
         if (node == null)
             return;
         if (node.left == null && node.right == null) {
-            small.add(node.val);
-            ans.add(new ArrayList<>(small));
+            List<Integer> base = new ArrayList<>(small);
+            base.add(node.val);
+            ans.add(base);
         }
         small.add(root.val);
-        node2AllLeafes(node.left);
-        node2AllLeafes(node.right);
+        node2AllLeafes(node.left, small, ans);
+        node2AllLeafes(node.right, small, ans);
         small.remove(small.size() - 1);
 
     }
