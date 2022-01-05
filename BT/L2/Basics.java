@@ -15,6 +15,14 @@ public class TreeNode {
 }
 
 public class Basics {
+
+    // find
+    public static boolean find(TreeNode root, int val) {
+        if (root == null)
+            return false;
+        return root.val == val || find(root.left, val) || find(root.right, val);
+    }
+
     // node ro all leaf paths
     public static List<List<Integer>> node2AllLeafes(TreeNode node) {
         List<List<Integer>> ans = new ArrayList<>();
