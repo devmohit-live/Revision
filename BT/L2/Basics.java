@@ -28,6 +28,7 @@ public class Basics {
         List<List<Integer>> ans = new ArrayList<>();
         List<Integer> small = new ArrayList<>();
         node2AllLeafes(node, small, ans);
+        return ans;
     }
 
     // node2rootpath return type
