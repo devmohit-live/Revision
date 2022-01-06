@@ -106,7 +106,8 @@ public class Basics {
         exactlyOneChild(node.right, res);
     }
 
-    // count single child : void type: post order me kaam hoga
+    // count single child :
+    // Approach 1
     public int countSingleParents(TreeNode node) {
         int count = 0;
 
@@ -122,4 +123,18 @@ public class Basics {
 
         return count;
     }
+    // Approach 2: post order me kaam hoga
+
+    public int countSingleParents2(TreeNode node) {
+        if (node == null || (node.left == null && node.right == null))
+            return 0;
+
+        int left = countSingleParents(node.left);
+        int right = countSingleParents(node.right);
+        int ans = left + right;
+        if (node.left == null || node.right == null)
+            ans++;
+        return ans;
+    }
+
 }
