@@ -89,4 +89,37 @@ public class Basics {
         small.remove(small.size() - 1);
 
     }
+
+    // parent with single child
+    public static ArrayList<Integer> exactlyOneChild(TreeNode root) {
+        ArrayList<Integer> ans = new ArrayList<>();
+        exactlyOneChild(root, ans);
+        return ans;
+    }
+
+    private static void exactlyOneChild(TreeNode node, ArrayList<Integer> res) {
+        if (node == null)
+            return;
+        if (node.left == null ^ node.right == null)
+            res.add(node.val);
+        exactlyOneChild(node.left, res);
+        exactlyOneChild(node.right, res);
+    }
+
+    // count single child : void type: post order me kaam hoga
+    public int countSingleParents(TreeNode node) {
+        int count = 0;
+
+        if (node == null || (node.left == null && node.right == null))
+            return 0;
+
+        if (node.left == null && node.right != null)
+            count++;
+        else if (node.left != null && node.right == null)
+            count++;
+        count += countSingleParents(node.left);
+        count += countSingleParents(node.right);
+
+        return count;
+    }
 }
