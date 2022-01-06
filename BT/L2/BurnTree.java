@@ -1,6 +1,8 @@
 package Questions.Trees;
 // Why not levelorder traversal : because first we have to convert it inot thr graph first
 
+import java.util.ArrayList;
+
 // because we can't go directly to parent from node, in graph  we can go from a to b or b to a if there is an edge
 
 public class BurnTree {
@@ -56,76 +58,54 @@ public class BurnTree {
 
 
     // Retunrning all the nodes according to the burn time
-import java.util.*;
+    public static ArrayList<ArrayList<Integer>> burningTree(TreeNode root, int data) {
+        ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
+        // n2r/find data : boolean type code
+        burningTree(root, data, ans);
+        return ans;
 
-public class Main {
-    public static Scanner scn = new Scanner(System.in);
-
-    public static class TreeNode {
-        int val = 0;
-        TreeNode left = null;
-        TreeNode right = null;
-
-        TreeNode(int val) {
-            this.val = val;
-        }
     }
 
-    public static ArrayList<ArrayList<Integer>> burningTree2(TreeNode root, int data) {
-        ArrayList<ArrayList<Integer>> res = new ArrayList<>();
-        burningTree(root, data, res);
-        return res;
-    }
-
-    private static int burningTree(TreeNode root, int fire, ArrayList<ArrayList<Integer>> res) {
-
+    public static int burningTree(TreeNode root, int val, ArrayList<ArrayList<Integer>> res) {
         if (root == null)
             return -1;
 
-        if (root.val == fire) {
-            // burning startes here
-            burn(root, null, 0, res);// started burning from 0
-            return 1;// end burning this node in 1 sec
+        if (root.val == val) {
+            // found the source of burning tree: intial time is 0
+            kdown(root, null, 0, res);
+            return 1; // next nodes will b 1 distance away from this node
 
         }
 
-        int leftBurn = burningTree(root.left, fire, res);
-        if (leftBurn != -1) {
-
-            burn(root, root.left, leftBurn, res);
-
-            return leftBurn + 1;
+        int left = burningTree(root.left, val, res);
+        if (left != -1) {
+            kdown(root, root.left, left, res); // curr node = root, blocked = left(target of fire was found in left)
+                                               // (exactly like k distance away)
+            return left + 1; // next nodes will be curr + 1 distance away from this node
         }
 
-        int rightBurn = burningTree(root.right, fire, res);
-        if (rightBurn != -1) {
-
-            burn(root, root.right, rightBurn, res);
-
-            return rightBurn + 1;
+        int right = burningTree(root.right, val, res);
+        if (right != -1) {
+            kdown(root, root.right, right, res);
+            return right + 1;
         }
 
-        return -1;
+        return -1; // not found
+
     }
 
-    private static void burn(TreeNode root, TreeNode blocked, int time, ArrayList<ArrayList<Integer>> res) {
-
-        if (root == null || root == blocked)
+    // k = time : time will increse by 1 here, in k down ( it decreases by 1)
+    private static void kdown(TreeNode node, TreeNode blocked, int time, ArrayList<ArrayList<Integer>> res) {
+        if (node == null || node == blocked)
             return;
 
-        if (res.size() == time) {
-            // that means new max time is observed for which arraylist doesn't ecits
-            ArrayList<Integer> small = new ArrayList<>(); // create a contaienr
-            res.add(small);
-        }
+        if (res.size() == time)
+            res.add(new ArrayList<>()); // new time explored
 
-        // add to the appropriate container
-        res.get(time).add(root.val);
-
-        burn(root.left, blocked, time + 1, res);
-        burn(root.right, blocked, time + 1, res);
+        res.get(time).add(node.val); // adding val to respective time
+        kdown(node.left, blocked, time + 1, res);
+        kdown(node.right, blocked, time + 1, res);
     }
-
 
 
 }
