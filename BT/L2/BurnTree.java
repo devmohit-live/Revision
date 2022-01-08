@@ -2,19 +2,20 @@ package Questions.Trees;
 // Why not levelorder traversal : because first we have to convert it inot thr graph first
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 // because we can't go directly to parent from node, in graph  we can go from a to b or b to a if there is an edge
 
 public class BurnTree {
     // based on k level(in recursion with node2root path) down with node 2 root path
-    int max = 0;
+    static int max = 0, nodes_burned = 0;
 
-    public int solve(TreeNode A, int B) {
+    public static int solve(TreeNode A, int B) {
         burnTree(A, B);
         return max;
     }
 
-    private int burnTree(TreeNode root, int fire) {
+    private static int burnTree(TreeNode root, int fire) {
         if (root == null)
             return -1;
 
@@ -47,7 +48,7 @@ public class BurnTree {
         return -1;
     }
 
-    private void burn(TreeNode root, TreeNode blocked, int time) {
+    private static void burn(TreeNode root, TreeNode blocked, int time) {
         if (root == null || root == blocked)
             return;
 
@@ -56,12 +57,19 @@ public class BurnTree {
         burn(root.right, blocked, time + 1);
     }
 
+    static int size(TreeNode node) {
+        return (node == null) ? 0 : (size(node.left) + size(node.right) + 1);
+    }
 
     // Retunrning all the nodes according to the burn time
     public static ArrayList<ArrayList<Integer>> burningTree(TreeNode root, int data) {
         ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
         // n2r/find data : boolean type code
+
+        nodes_burned = 0;
+        max = 0;
         burningTree(root, data, ans);
+        System.out.println("Time Taken to burn a tree is " + max);
         return ans;
 
     }
@@ -102,10 +110,67 @@ public class BurnTree {
         if (res.size() == time)
             res.add(new ArrayList<>()); // new time explored
 
+        max = Math.max(max, time); // max time to burn a tree
+
         res.get(time).add(node.val); // adding val to respective time
         kdown(node.left, blocked, time + 1, res);
         kdown(node.right, blocked, time + 1, res);
     }
 
+
+    // FollowUp : Nodes also contains water nodes
+    //  1. Node with water nodes would not allow the water to go up (n2rpath)
+    //  2. We have to make a mark for something that indicated fire can't reach here: return to main on the spot no need to call;
+    //  3. -1: fire source not found, -2: fire can't be reached, t>0 : time taken by fire to reach here
+    //  4. count the max time ans no of nodes: by the way maxtime = arr.size()
+    public static List<List<Integer>> burnTreeWithWater(TreeNode root, int fire, List<Integer>waterNodes){
+        HashSet<Integer> water = new HashSet<>();
+        for(int el: waterNodes) water.add(el);
+        List<List<Integer>> ans= new ArrayList<>();
+        burningTree2(root, fire,water);
+        System.out.println("Nodes burned are " + nodes_burned);
+        System.out.println("Nodes left are " + (size(root) - nodes_burned));
+        // if asked the subtrees left unburned (call traverse from water nodes)
+    }
+    private static int burningTree2(TreeNode root, int fire,HashSet<Integer> water,List<List<Integer>> ans){
+        if(node == null) return -1;
+        if(node.val == fire){
+            if(water.contains(fire)) return -2;
+            kdown(node, null, 0, ans);
+            return 1;
+        }
+        int ld = burningTree2(root.left, fire, water, ans);
+        if(ld>0){
+            kdown(node, node.left, ld, ans);
+            return ld+1;
+        }
+
+        if(ld==-2) return -2; // in node to root path we have found wter source so return to main
+
+        int rd = burningTree2(root.right, fire, water, ans);
+        if(rd>0){
+            kdown(node, node.left, rd, ans);
+            return rd+1;
+        }
+        if(rd==-2) return -2;
+
+        return -1; // not found fire source
+
+    }
+
+    private static void kdown(TreeNode node, TreeNode blocked, int time, ArrayList<ArrayList<Integer>> res,HashSet<Integer> water) {
+        if (node == null || (node == blocked || water.contains(node.val)))
+            return;
+
+        if (res.size() == time)
+            res.add(new ArrayList<>()); // new time explored
+
+        max = Math.max(max, time); // max time to burn a tree
+        nodes_burned++; // no of nodes burned
+
+        res.get(time).add(node.val); // adding val to respective time
+        kdown(node.left, blocked, time + 1, res,water);
+        kdown(node.right, blocked, time + 1, res,water);
+    }
 
 }
