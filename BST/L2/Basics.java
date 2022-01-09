@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import javax.swing.tree.TreeNode;
 
@@ -25,7 +26,6 @@ public class Basics {
     private void rootToNodePath(TreeNode root, TreeNode node, List<TreeNode> list) {
         if (root == null)
             return;
-
         while (root != null) {
             list.add(root);
             if (root == node)
@@ -54,6 +54,71 @@ public class Basics {
             j--;
         }
         return list;
+    }
+
+    //
+
+    // LC173
+    // Approach 1: O(n) time ans space
+    class BSTIterator {
+        private List<Integer> list; // sapce:n
+        private int curr = 0;
+
+        public BSTIterator(TreeNode root) {
+            this.list = new ArrayList<>();
+            inorder(root, list);
+        }
+
+        // 1
+        public int next() {
+            return this.list.get(curr++);
+        }
+
+        // 1
+        public boolean hasNext() {
+            return curr < this.list.size();
+        }
+
+        // n
+        private void inorder(TreeNode root, List<Integer> ans) {
+            if (root == null)
+                return;
+            inorder(root.left, ans);
+            ans.add(root.val);
+            inorder(root.right, ans);
+        }
+    }
+
+    // log n time and sapce
+    class BSTIterator2 {
+        private Stack<TreeNode> st;
+
+        // addleft : log n : and also this will not be called eveytime: and eberytime
+        // the time will not be logn
+        public BSTIterator(TreeNode root) {
+            st = new Stack<>();
+            addLeft(root);
+        }
+
+        public int next() {
+            TreeNode rm = this.st.pop();
+            int val = rm.val;
+            addLeft(rm.right);
+
+            return val;
+        }
+
+        // logn
+        private void addLeft(TreeNode node) {
+            while (node != null) {
+                this.st.push(node);
+                node = node.left;
+            }
+        }
+
+        public boolean hasNext() {
+            return st.size() != 0;
+        }
     }
 
 }
