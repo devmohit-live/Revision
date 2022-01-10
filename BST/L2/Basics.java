@@ -1,3 +1,8 @@
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.tree.TreeNode;
+
 public class Basics {
     // IN BST try to do eveything iteratively
 
@@ -16,6 +21,7 @@ public class Basics {
 
     }
 
+    // n
     private void rootToNodePath(TreeNode root, TreeNode node, List<TreeNode> list) {
         if (root == null)
             return;
@@ -34,4 +40,20 @@ public class Basics {
         list.clear(); // not found clear list
         return;
     }
+
+    // 2n
+    private List<TreeNode> n2rp(TreeNode root, TreeNode node) {
+        List<TreeNode> list = new ArrayList<>();
+        rootToNodePath(root, node, list);
+        int i = 0, j = list.size();
+        while (i < j) {
+            TreeNode tmp = list.get(i);
+            list.set(i, list.get(j));
+            list.set(j, tmp);
+            i++;
+            j--;
+        }
+        return list;
+    }
+
 }
