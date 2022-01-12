@@ -63,7 +63,7 @@ public class EvaluateDivison399 {
 
     }
 
-    //Approach 2 : DFs: Return type  : identification marking is must
+    // Approach 2 : DFs: Return type : identification marking is must
     class DFS02 {
         public double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
             // graph: map : nodes: string
@@ -110,6 +110,14 @@ public class EvaluateDivison399 {
             }
             return -1;
         }
+
+    }
+
+    class BFS {
+
+    }
+
+    class DSU {
 
     }
 
