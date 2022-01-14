@@ -26,6 +26,7 @@ class StringToInteger_LC8 {
         // should only be in range 0-9
         while (i < s.length() && s.charAt(i) >= '0' && s.charAt(i) <= '9') {
             // check if we will go over the max
+            // first 9 digits are > Integermax or first 9 digits == intmax and last digit>7(last digit of int max is 7)
             if (res > Integer.MAX_VALUE / 10 || (res == Integer.MAX_VALUE / 10 && s.charAt(i) - '0' > 7)) {
                 if (sign == -1) {
                     return Integer.MIN_VALUE;
