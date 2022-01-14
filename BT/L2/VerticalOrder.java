@@ -141,8 +141,8 @@ public class VerticalOrder {
 
         return ans;
     }
-    // Vertical Order sum using
-    fs:rec:
+
+    // Vertical Order sum using Doubly LinkedList : working on shadows of Tree: no need to find shadow widdfs
 
     public static ArrayList<Integer> verticalOrderSumDFS(TreeNode root) {
         int[] minmax = new int[2];
@@ -164,6 +164,61 @@ public class VerticalOrder {
         ans.set(level, ans.get(level) + root.val);
         dfs(root.left, level - 1, ans);
         dfs(root.right, level + 1, ans);
+    }
+
+    // Vertical Order SUm Using Doubly LinkedList : Directly working on shadows of BT : no need to find shadow width
+
+    static class Node {
+        int val = 0;
+        Node prev, next;
+
+        Node(int val) {
+            this.val = val;
+            this.prev = this.next = null;
+        }
+    }
+
+    public static ArrayList<Integer> verticalOrderSumLL(TreeNode root) {
+        ArrayList<Integer> ans = new ArrayList<>();
+        if (root == null)
+            return ans;
+        Node nroot = new Node(0);
+        Node itr = nroot;
+        verticalOrderSumLL(root, nroot);
+        while (itr.prev != null)
+            itr = itr.prev; // going to leftmost (start)
+        while (itr != null) {
+            ans.add(itr.val);
+            itr = itr.next;
+        }
+
+        return ans;
+    }
+
+    public static void verticalOrderSumLL(TreeNode root, Node node) {
+        if (root == null)
+            return;
+
+        node.val = node.val + root.val;
+
+        if (root.left != null) {
+            if (node.prev == null) {
+                Node newNOde = new Node(0);
+                // attaching to left
+                node.prev = newNOde;
+                newNOde.next = node;
+            }
+            verticalOrderSumLL(root.left, node.prev);
+        }
+        if (root.right != null) {
+            if (node.next == null) {
+                Node newNOde = new Node(0);
+                // attaching to right
+                node.next = newNOde;
+                newNOde.prev = node;
+            }
+            verticalOrderSumLL(root.right, node.next);
+        }
     }
 
 }
