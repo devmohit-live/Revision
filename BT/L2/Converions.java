@@ -28,5 +28,20 @@ public class Converions {
         bToDLL_(root.right);
     }
 
-    // Ditto same: CIrcular DLL : just attach head to tail
+    // Ditto same: Circular DLL : just attach head to tail
+    // https://practice.geeksforgeeks.org/problems/binary-tree-to-cdll/1/#
+
+    Node bTreeToClist(Node root) {
+        Node dummy = new Node(-1);
+        prev = dummy;
+
+        bToDLL_(root);
+        Node head = dummy.right;
+        head.left = dummy.right = null;
+
+        prev.right = head; // tail to head
+        head.left = prev;// head to tail
+
+        return head;
+    }
 }
