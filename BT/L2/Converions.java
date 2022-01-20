@@ -1,3 +1,7 @@
+import java.util.LinkedList;
+
+import org.w3c.dom.Node;
+
 public class Converions {
 
     // Inorder : leftsubtree diubly ll bnado bactrach aate wqt right subtree ho
@@ -114,8 +118,39 @@ public class Converions {
         head.left = dummy.right = null;
 
         prev.right = head; // tail to head
-        head.left = prev;// head to tail
+        head.left = prev;// head to tail previouly head.left was pointing to dummy -1
 
         return head;
     }
+
+    // BT to DLL: Iterative
+    public static void insertAllLeft(LinkedList<Node> st, Node node) {
+        while (node != null) {
+            st.addFirst(node);
+            node = node.left;
+        }
+    }
+
+    public static Node bToDLL_itreative(Node node) {
+        Node dummy = new Node(-1);
+        Node prev = dummy;
+
+        LinkedList<Node> st = new LinkedList<>();
+        insertAllLeft(st, node);
+
+        while (st.size() != 0) {
+            Node curr = st.removeFirst();
+            prev.right = curr;
+            curr.left = prev;
+            prev = curr;
+
+            insertAllLeft(st, curr.right);
+        }
+
+        Node head = dummy.right;
+
+        head.left = dummy.right = null;
+        return head;
+    }
+    
 }
