@@ -45,6 +45,24 @@ public class GasStation134 {
         return net < 0 ? -1 : ans;
     }
 
-    
+    // Approach 3 : We would like to start from the point with max defficiency so
+    // that we can reach other stations(we can say for sure)
+    public int canCompleteCircuit3(int[] gas, int[] cost) {
+        int n = gas.length;
+        int minCityIdx = -1;
+        int gallon = 0, minGallon = Integer.MAX_VALUE;
+        for (int i = 0; i < n; ++i) { // starting from city 0
+            gallon += gas[i]; // refuel at i
+            gallon -= cost[i]; // deduct cost from i to i + 1
+            // update
+            if (gallon < minGallon) {
+                minGallon = gallon;
+                minCityIdx = (i + 1) % n; // consider the calculation for starting point at last
+            }
+        }
+        // when getting back to the starting point, check if the gallon is negative (no
+        // ample city)
+        return (gallon >= 0) ? minCityIdx : -1;
+    }
 
 }
