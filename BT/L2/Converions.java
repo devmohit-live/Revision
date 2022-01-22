@@ -247,4 +247,7 @@ public class Converions {
         return sortedDllToBst(head); // convert sorted dll to bst
     }
 
+    // To check correctness run the inorder of this BST : it will be in increasing
+    // order
+    // https://practice.geeksforgeeks.org/problems/inorder-traversal/1#
 }
