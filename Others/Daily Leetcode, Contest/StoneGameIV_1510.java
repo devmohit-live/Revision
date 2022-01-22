@@ -34,7 +34,7 @@ class StoneGameIV_1510 {
 
     }
 
-    //mem using int[]
+    // mem using int[]
     private int winnerSquareGameMem(int n, int[] dp) {
         if (dp[n] != -1)
             return dp[n];
@@ -75,7 +75,8 @@ class StoneGameIV_1510 {
                 if (dp[newN] == false) {
                     dp[n] = true; // we win
                     found = true;
-                    continue;
+                    break; // found a way to choose a square no need to chek for others
+                    // continue;
                 } // opponent loses
 
             }
