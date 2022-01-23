@@ -6,10 +6,35 @@ public class SequentialDigits1291 {
 
     // Approach1:
     // https://leetcode.com/problems/sequential-digits/discuss/1710951/Java-Just-generate-them-all-0ms
+    /*
+     * t means the number of times we are going to loop this layer (i.e. 12, 23, ..,
+     * 89 -> t = 8, 123, 234, ..., 789 -> t = 7)
+     * 
+     * inc is always 11 or 111 or 1111 depending on digits (i.e. inc = 10 * inc + 1)
+     * start marks the starting point of each digit, 1, 12, 123, 1234 (i.e. start =
+     * 10 * start + 10 - t)
+     */
+    public List<Integer> sequentialDigits1(int low, int high) {
+        int start = 1, cur = 1, inc = 11, t = 8;
+        List<Integer> ans = new ArrayList<>();
+        while (cur <= high) {
+            for (int i = 0; i < t; i++) {
+                cur += inc;
+                if (cur >= low && cur <= high)
+                    ans.add(cur);
+            }
+            inc = 10 * inc + 1;
+            start = 10 * start + 10 - t;
+            cur = start;
+            t--;
+        }
+
+        return ans;
+    }
 
     // Approach2: Using
     // String:https://thefellowprogrammer.blogspot.com/2020/09/sequential-digits.html
-    // not so efficient 
+    // not so efficient
     public List<Integer> sequentialDigits2(int low, int high) {
         List<Integer> result = new ArrayList();
         String str = "123456789";
