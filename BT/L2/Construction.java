@@ -72,4 +72,53 @@ public class Construction {
         return root;
     }
 
+
+    //BST From LevelOrder Traversal
+    //Steps:
+    // 1: define par, lr,rr
+    //2: check if the idx'es val is within the range of current parent : if nor continue with next parent(next el in q)
+    // else the only create a node and increment idx
+    // check where to attach this created node left/right of par acc to it's value (compare with par)
+    // add new elemets in q according to the cretaed node: acting as a parent havinfg a determined value for it's ledt and right range subtree
+    public static TreeNode constructBSTFromLevelOrder(int[] LevelOrder) {
+        if (LevelOrder.length == 0)
+            return null;
+
+        int idx = 0;
+        TreeNode root = new TreeNode(LevelOrder[idx++]);
+
+        LinkedList<BSTLPair> q = new LinkedList<>();
+        // initially root is taken as self parent
+        q.addLast(new BSTLPair(root, Integer.MIN_VALUE, root.val)); // define all the lest subtree child range <=
+                                                                    // root.val
+        q.addLast(new BSTLPair(root, root.val, Integer.MAX_VALUE)); // define all the right subtree child range >
+                                                                    // root.val
+
+        while (idx < LevelOrder.length) {
+            BSTLPair rm = q.removeFirst();
+            TreeNode par = rm.par;
+            int lr = rm.lr, rr = rm.rr;
+
+            int val = LevelOrder[idx];
+            // Important: first check if it is the the current paren node's range or not
+            if (val > rr || val < lr)
+                continue;
+
+            // withing range: create a node
+            TreeNode node = new TreeNode(LevelOrder[idx++]);
+
+            // attach to the correct location
+            if (par.val > node.val)
+                rm.par.left = node;
+            else
+                rm.par.right = node;
+
+            // add children
+            q.addLast(new BSTLPair(node, lr, node.val));
+            q.addLast(new BSTLPair(node, node.val, rr));
+        }
+        q = null;
+        return root;
+    }
+
 }
