@@ -11,6 +11,46 @@ public class SequentialDigits1291 {
     // String:https://thefellowprogrammer.blogspot.com/2020/09/sequential-digits.html
 
     // Approahc3: bfs
+    public List<Integer> sequentialDigits(int low, int high) {
+        // We have to be aware f the digits ending with 9as from that no of digits will
+        // increase not the consecutiveness of number
+        // Ex: 45->56->67->67->78->89, but 89->123 (bcz here no of digits changed from 2
+        // to 3)
+
+        // first add all the numbers from 1 to 9 to perform operations of increments of
+        // nimber and digits on them
+        List<Integer> ans = new ArrayList<>();
+        LinkedList<Integer> q = new LinkedList<>();
+        for (int i = 1; i <= 9; i++)
+            q.addLast(i); // adding intial seeders
+
+        // what bfs is doing:
+        /*
+         * 1 is adding 12 2 is adding 23 3 is adding 34 4 is adding 45 5 is adding 56 6
+         * is adding 67 7 is adding 78 8 is adding 89 12 is adding 123 23 is adding 234
+         * 34 is adding 345 45 is adding 456 123 is adding 1234 234 is adding 2345 3456
+         * is adding 34567 4567 is adding 45678 34567 is adding 345678 45678 is adding
+         * 456789 123456 is adding 1234567
+         */
+
+        while (!q.isEmpty()) {
+            int rm = q.removeFirst();
+
+            if (rm >= low && rm <= high)
+                ans.add(rm);
+            int lastdigit = rm % 10;
+            if (lastdigit != 9) {
+                // add the next consecutive element which have pattern of difference of
+                // 1,11,111,111 : rm*10 +rm%10 1
+                // read pepconding getting any digits from a number
+                int num = rm * 10 + rm % 10 + 1;
+                // System.out.println(rm+" is adding "+num);
+                q.addLast(num);
+            }
+        }
+
+        return ans;
+    }
 
     // Approahc 4: Specific to question contraints but amazing:
     // https://leetcode.com/problems/sequential-digits/discuss/451851/Java-Just-a-joke
