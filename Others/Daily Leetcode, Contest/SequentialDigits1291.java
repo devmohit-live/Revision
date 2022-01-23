@@ -9,9 +9,27 @@ public class SequentialDigits1291 {
 
     // Approach2: Using
     // String:https://thefellowprogrammer.blogspot.com/2020/09/sequential-digits.html
+    // not so efficient 
+    public List<Integer> sequentialDigits2(int low, int high) {
+        List<Integer> result = new ArrayList();
+        String str = "123456789";
+        int i, j, length = str.length(), num;
+        // i =2 min seq num formed can be 12
+        for (i = 2; i <= length; i++) {
+            for (j = 0; j <= length - i; j++) {
+                num = Integer.parseInt(str.substring(j, j + i));
+                if (num > high)
+                    return result;
+                if (num >= low)
+                    result.add(num);
+            }
+        }
+
+        return result;
+    }
 
     // Approahc3: bfs
-    public List<Integer> sequentialDigits(int low, int high) {
+    public List<Integer> sequentialDigits3(int low, int high) {
         // We have to be aware f the digits ending with 9as from that no of digits will
         // increase not the consecutiveness of number
         // Ex: 45->56->67->67->78->89, but 89->123 (bcz here no of digits changed from 2
