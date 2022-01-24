@@ -88,8 +88,9 @@ public class NextGreater {
     public static void main(String[] args) {
         int[] arr1 = { 4, 1, 2 };
         int[] arr2 = { 1, 3, 4, 2 };
+        int[] arr3 = { 2, 5, 9, 3, 1, 12, 6, 8, 7 };
         System.out.println("Origonal " + Arrays.toString(arr1));
-        System.out.println("NGOR : " + Arrays.toString(ngor(arr1)));
+        System.out.println("NGOR : " + Arrays.toString(ngor(arr3)));
         System.out.println("NGOL : " + Arrays.toString(ngol(arr1)));
         System.out.println("NSOR : " + Arrays.toString(nsor(arr1)));
         System.out.println("NSOl : " + Arrays.toString(nsol(arr1)));

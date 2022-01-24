@@ -13,6 +13,7 @@ public class Construction {
         }
     }
 
+    // ++++++++++++++++++++++++ BST Construction +++++++++++++++++++++++
     // NOTE: for addition/deletion of nodes in tree work in postorder
 
     // Preorder traversal to BST
@@ -65,21 +66,24 @@ public class Construction {
         if (idx < 0 || postorder[idx] < left_range || postorder[idx] > right_range)
             return null;
         TreeNode root = new TreeNode(postorder[idx--]);
-        //NOTE: making right call first as root is at last idx and just before that we have right child
+        // NOTE: making right call first as root is at last idx and just before that we
+        // have right child
 
         root.right = postOrderToBST(postorder, root.val, right_range);
         root.left = postOrderToBST(postorder, left_range, root.val);
         return root;
     }
 
-
-    //BST From LevelOrder Traversal
-    //Steps:
+    // BST From LevelOrder Traversal
+    // Steps:
     // 1: define par, lr,rr
-    //2: check if the idx'es val is within the range of current parent : if nor continue with next parent(next el in q)
+    // 2: check if the idx'es val is within the range of current parent : if nor
+    // continue with next parent(next el in q)
     // else the only create a node and increment idx
-    // check where to attach this created node left/right of par acc to it's value (compare with par)
-    // add new elemets in q according to the cretaed node: acting as a parent havinfg a determined value for it's ledt and right range subtree
+    // check where to attach this created node left/right of par acc to it's value
+    // (compare with par)
+    // add new elemets in q according to the cretaed node: acting as a parent
+    // havinfg a determined value for it's ledt and right range subtree
     public static TreeNode constructBSTFromLevelOrder(int[] LevelOrder) {
         if (LevelOrder.length == 0)
             return null;
@@ -120,5 +124,26 @@ public class Construction {
         q = null;
         return root;
     }
+
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    // ================== Building Binary Tree =======================
+    public static TreeNode preInBT(int[] preorder, int[] inorder) {
+        return null;
+    }
+
+    public static TreeNode postInBT(int[] preorder, int[] inorder) {
+        return null;
+    }
+
+    public static TreeNode inLvlBT(int[] preorder, int[] inorder) {
+        return null;
+    }
+
+    public static TreeNode prePost(int[] preorder, int[] inorder) {
+        return null;
+    }
+
+    // ===================================================================
 
 }
