@@ -129,7 +129,41 @@ public class Construction {
 
     // ================== Building Binary Tree =======================
     public static TreeNode preInBT(int[] preorder, int[] inorder) {
-        return null;
+        if (preorder.length != inorder.length || preorder.length == 0)
+            return null;
+        return preInBT(preorder, inorder, 0, inorder.length - 1, 0, preorder.length - 1);
+    }
+    
+    public static TreeNode preInBT(int[] pre, int[] in, int isi, int iei, int psi, int pei) {
+        if (iei < iei || pei < psi)
+            return null;
+
+        int rootval = pre[psi];
+        TreeNode root = new TreeNode(rootval);
+        // find the rootidx in inorder
+        int iridx = -1;
+        for (int i = isi; i <= iei; i++) {
+            if (in[i] == rootval) {
+                iridx = i;
+                break;
+            }
+        }
+
+        int tel = iridx - isi; // total no of elemets (will be helpful in finding th e no. of ele in left and right )
+        // range for left and right in prefix 
+        //Inorder: 
+        //left : si->root-, right: root+1->ei
+        //Preorder: psi => root in preorder
+        // left: no of elemets in left subtree of inorder : rootidx - si : psi+1->psi+tel
+        //right: starts from psi+tel+1 -> ei
+
+        TreeNode left = preInBT(pre, in, isi, iridx - 1, psi + 1, psi + tel);
+        TreeNode right = preInBT(pre, in, iridx + 1, iei, psi + tel + 1, pei);
+
+        root.left = left;
+        root.right = right;
+
+        return root;
     }
 
     public static TreeNode postInBT(int[] preorder, int[] inorder) {
