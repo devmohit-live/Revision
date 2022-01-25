@@ -122,25 +122,49 @@ public class Basics {
     }
 
     // Predecessor and succsor:
-    // inorder: increasing order: prede = root.left, succ = root.right , where root
-    // == node
+    // pred!=succ at anytime except there is a single node in a tree and pred = succ
+    // = null
+    // pred(lesser than me) => node == root => node.left ka rightmost (floor)
+    // succ(greater than me) => node == root => node.right ka leftmost (ceil)
+
+    public TreeNode getLeftMostNode(TreeNode node) {
+        if (node == null)
+            return node;
+        while (node.left != null)
+            node = node.left;
+        return node;
+    }
+
+    public TreeNode getRightMostNode(TreeNode node) {
+        if (node == null)
+            return node;
+        while (node.right != null)
+            node = node.right;
+        return node;
+    }
 
     public Treenode[] findSuccecor(TreeNode root, TreeNode node) {
-        TreeNode[] predsucc = new TreeNode[2];
-
+        TreeNode pred = null, succ = null, curr = root;
         if (node == null || root == null)
             return null;
-        while (root != null) {
-            if (root.val == node.val) {
-                predsucc[1] = root.right;
-                predsucc[0] = root.left;
+        while (curr != null) {
+            if (curr.val == node.val) {
+                TreeNode leftmost = getLeftMostNode(curr.right);
+                TreeNode righttmost = getRightMostNode(curr.left);
+                pred = righttmost != null ? righttmost : pred;
+                succ = leftmost != null ? leftmost : succ;
                 break;
-            } else if (root.val < node.val) {
-                root = root.right;
+            } else if (curr.val > node.val) {
+                // the node is lesser then me so I am greater hence a potential successor
+                succ = curr;
+                curr = curr.left;
             } else {
-                root = root.left;
+                // the node is greater then me so I am lesser hence a potential predecessor
+                pred = curr;
+                curr = curr.right;
             }
         }
+        Treenode[] predsucc = new TreeNode[] { pred, succ };
         return predsucc;
     }
 
