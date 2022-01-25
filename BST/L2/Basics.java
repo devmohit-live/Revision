@@ -121,6 +121,7 @@ public class Basics {
         }
     }
 
+    // 448 · Inorder Successor in BST: https://www.lintcode.com/problem/448/
     // Predecessor and succsor:
     // pred!=succ at anytime except there is a single node in a tree and pred = succ
     // = null
@@ -143,7 +144,7 @@ public class Basics {
         return node;
     }
 
-    public Treenode[] findSuccecor(TreeNode root, TreeNode node) {
+    public TreeNode[] findPredecesorAndSuccecor(TreeNode root, TreeNode node) {
         TreeNode pred = null, succ = null, curr = root;
         if (node == null || root == null)
             return null;
@@ -164,7 +165,7 @@ public class Basics {
                 curr = curr.right;
             }
         }
-        Treenode[] predsucc = new TreeNode[] { pred, succ };
+        TreeNode[] predsucc = new TreeNode[] { pred, succ };
         return predsucc;
     }
 
