@@ -121,4 +121,27 @@ public class Basics {
         }
     }
 
+    // Predecessor and succsor:
+    // inorder: increasing order: prede = root.left, succ = root.right , where root
+    // == node
+
+    public Treenode[] findSuccecor(TreeNode root, TreeNode node) {
+        TreeNode[] predsucc = new TreeNode[2];
+
+        if (node == null || root == null)
+            return null;
+        while (root != null) {
+            if (root.val == node.val) {
+                predsucc[1] = root.right;
+                predsucc[0] = root.left;
+                break;
+            } else if (root.val < node.val) {
+                root = root.right;
+            } else {
+                root = root.left;
+            }
+        }
+        return predsucc;
+    }
+
 }
