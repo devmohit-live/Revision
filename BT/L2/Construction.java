@@ -167,7 +167,33 @@ public class Construction {
     }
 
     public static TreeNode postInBT(int[] preorder, int[] inorder) {
-        return null;
+        int n = inorder.length, m = postorder.length;
+        if (n != m || n == 0)
+            return null;
+
+        return postInBT(inorder, postorder, 0, n - 1, 0, m - 1);
+    }
+    
+    public static TreeNode postInBT(int[] in, int[] post, int isi, int iei, int psi, int pei) {
+        if (isi > iei || psi > pei)
+            return null;
+
+        TreeNode root = new TreeNode(post[pei]);
+
+        int ridx = -1;
+        for (int i = 0; i < in.length; i++)
+            if (post[pei] == in[i]) {
+                ridx = i;
+                break;
+            }
+
+        int tel = ridx - isi;
+
+        TreeNode left = postInBT(in, post, isi, ridx - 1, psi, psi + tel - 1);
+        TreeNode right = postInBT(in, post, ridx + 1, iei, psi + tel, pei - 1);// root : pei
+        root.left = left;
+        root.right = right;
+        return root;
     }
 
     public static TreeNode inLvlBT(int[] preorder, int[] inorder) {
