@@ -137,4 +137,56 @@ public class Basics {
         return ans;
     }
 
+    // find predecessor,succesor of a node and floor and ceil of a data(may not be
+    // present)
+
+    class PSFC {
+        TreeNode pred, succ;
+        TreeNode prev; // to vaoid static and maintains prev,curr relationship and inorder traversal
+                       // for pred,,succ
+        int floor, ceil;
+
+        PSFC() {
+            this.prev = this.succ = this.prev = null;
+            this.floor = Integer.MIN_VALUE;
+            this.ceil = nteger.MAX_VALUE;
+        }
+    }
+
+    public void findPredSucc_floorCeil(TreeNode root, TreeNode node, int x) {
+        PSFC ans = new PSFC();
+        inorder(root, x, ans);
+        System.out.println("Predecessor and Successor of " + root.val + " is " + ans.pred + " " + ans.succ);
+        System.out.println("Floor and Ceil of " + x + " is " + ans.floor + " " + ans.ceil);
+    }
+
+    // inorder traversal stratergy of maintains a global prev and performing
+    // operation on prev(global),curr(recursive stack)
+    private void inorder(TreeNode root, TreeNode node, int x, PSFC ans) {
+        if (root == null)
+            return;
+
+        inorder(root.left, node, x, ans);
+
+        // pred,succ
+
+        if (root == node) { // curr node is equal to the given node
+            ans.pred = ans.prev; // prev node is pointing to predecessor
+        }
+        if (ans.prev != null && ans.prev == node) { // curr node is pointing to succ and prev node is now on node
+            ans.succ = root; // curr node at succ
+        }
+
+        // floor and ceil
+
+        if (root.val > x)
+            ans.ceil = Math.min(ans.ceil, root.val);
+        if (root.val < x)
+            ans.ceil = Math.max(ans.floor, root.val);
+
+        ans.prev = root; // curr
+
+        inorder(root.left, node, x, ans);
+    }
+
 }
