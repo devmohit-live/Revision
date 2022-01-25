@@ -149,24 +149,30 @@ public class Basics {
         PSFC() {
             this.prev = this.succ = this.prev = null;
             this.floor = Integer.MIN_VALUE;
-            this.ceil = nteger.MAX_VALUE;
+            this.ceil = Integer.MAX_VALUE;
         }
     }
 
-    public void findPredSucc_floorCeil(TreeNode root, TreeNode node, int x) {
+    public void findPredSucc(TreeNode root, TreeNode node, int x) {
+        if (root == null || node == null)
+            return;
         PSFC ans = new PSFC();
-        inorder(root, x, ans);
+        inorder(root, node, ans);
         System.out.println("Predecessor and Successor of " + root.val + " is " + ans.pred + " " + ans.succ);
+    }
+
+    public void floorAndCeil(TreeNode root, int x) {
+        PSFC ans = new PSFC();
         System.out.println("Floor and Ceil of " + x + " is " + ans.floor + " " + ans.ceil);
     }
 
     // inorder traversal stratergy of maintains a global prev and performing
     // operation on prev(global),curr(recursive stack)
-    private void inorder(TreeNode root, TreeNode node, int x, PSFC ans) {
+    private void inorder(TreeNode root, TreeNode node, PSFC ans) {
         if (root == null)
             return;
 
-        inorder(root.left, node, x, ans);
+        inorder(root.left, node, ans);
 
         // pred,succ
 
@@ -177,6 +183,17 @@ public class Basics {
             ans.succ = root; // curr node at succ
         }
 
+        ans.prev = root; // curr
+
+        inorder(root.right, node, ans);
+    }
+
+    private void inorder(TreeNode root, TreeNode node, int x, PSFC ans) {
+        if (root == null)
+            return;
+
+        inorder(root.left, node, x, ans);
+
         // floor and ceil
 
         if (root.val > x)
@@ -186,7 +203,7 @@ public class Basics {
 
         ans.prev = root; // curr
 
-        inorder(root.left, node, x, ans);
+        inorder(root.right, node, x, ans);
     }
 
 }
