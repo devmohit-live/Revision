@@ -169,29 +169,49 @@ public class Basics {
         return predsucc;
     }
 
-    //Kth smallest element in BST : LC 230
-        // providing k-1 in recursion for left and right calls and checking k==0 doesn't works
-        // have to count k time using a global param
+    // Kth smallest element in BST : LC 230
+    // providing k-1 in recursion for left and right calls and checking k==0 doesn't
+    // works
+    // have to count k time using a global param
 
     // int count = 0, ans = 0;
-    //recursive
-        public int kthSmallest(TreeNode root, int k) {
-            int[] ans = { k, -1 };
-            inorder(root, ans);
-            return ans[1];
-        }
+    // recursive
+    public int kthSmallest(TreeNode root, int k) {
+        int[] ans = { k, -1 };
+        inorder(root, ans);
+        return ans[1];
+    }
 
-        private void inorder(TreeNode root, int[] ans) {
-            if (root == null)
-                return;
-            inorder(root.left, ans);
-            ans[0]--;
-            if (ans[0] == 0) {
-                ans[1] = root.val;
-                return;
-            }
-            inorder(root.right, ans);
+    private void inorder(TreeNode root, int[] ans) {
+        if (root == null)
+            return;
+        inorder(root.left, ans);
+        ans[0]--;
+        if (ans[0] == 0) {
+            ans[1] = root.val;
+            return;
         }
+        inorder(root.right, ans);
+    }
 
+    // largest :
+    public int kthLargest(Node root, int k) {
+        int[] ans = { k, -1 };
+        inorder(root, ans);
+        return ans[1];
+    }
+
+    private void inorder(Node root, int[] ans) {
+        if (root == null)
+            return;
+        // just mae the right call first : desccending order
+        inorder(root.right, ans);
+        ans[0]--;
+        if (ans[0] == 0) {
+            ans[1] = root.data;
+            return;
+        }
+        inorder(root.left, ans);
+    }
 
 }
