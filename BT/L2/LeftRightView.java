@@ -71,4 +71,51 @@ public class LeftRightView {
         return ans;
     }
 
+    //Left and right view using dfs : If someone asks to do it withot Queue
+    //Approac: In bfs we weretaking decisions based on level 
+    //at every new level we have to take a starting/ending elemet(if using linkedlist)
+    //else if using standard q : taking the first element at every new level and making the left,right or right,left calls accordingly
+    //left call first in left view and right call first in right view
+
+    // LC 199 : Right view
+    public List<Integer> rightSideView(TreeNode root) {
+        List<Integer> ans = new ArrayList<>();
+        rightSideViewDFS(root, 0, ans);
+        return ans;
+    }
+
+    public void rightSideViewDFS(TreeNode root, int level, List<Integer> ans) {
+        if (root == null)
+            return;
+
+        if (level == ans.size()) { // insures a new level is achevied
+            ans.add(root.val);
+        }
+
+        // right view so making right call first
+        rightSideViewDFS(root.right, level + 1, ans);
+        rightSideViewDFS(root.left, level + 1, ans);
+
+    }
+
+    public List<Integer> leftSideView(TreeNode root) {
+        List<Integer> ans = new ArrayList<>();
+        leftSideViewDFS(root, 0, ans);
+        return ans;
+    }
+
+    public void leftSideViewDFS(TreeNode root, int level, List<Integer> ans) {
+        if (root == null)
+            return;
+
+        if (level == ans.size()) { // insures a new level is achevied
+            ans.add(root.val);
+        }
+
+        // left view so making left call first
+        leftSideViewDFS(root.left, level + 1, ans);
+        leftSideViewDFS(root.right, level + 1, ans);
+
+    }
+
 }
