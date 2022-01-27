@@ -127,50 +127,62 @@ public class BurnTree {
         HashSet<Integer> water = new HashSet<>();
         for(int el: waterNodes) water.add(el);
         List<List<Integer>> ans= new ArrayList<>();
-        burningTree2(root, fire,water);
+        burningTree2(root, fire,water,ans);
         System.out.println("Nodes burned are " + nodes_burned);
         System.out.println("Nodes left are " + (size(root) - nodes_burned));
         // if asked the subtrees left unburned (call traverse from water nodes)
     }
-    private static int burningTree2(TreeNode root, int fire,HashSet<Integer> water,List<List<Integer>> ans){
-        if(node == null) return -1;
-        if(node.val == fire){
-            if(water.contains(fire)) return -2;
-            kdown(node, null, 0, ans);
+    
+    public static int burningTreeWithWater(TreeNode root, int fire, Set<Integer> water, List<List<Integer>> ans) {
+        if (root == null)
+            return -1; // fire node not found
+
+        if (root.val == fire) {
+            if (water.contains(fire))
+                return -2;
+
+            burnTree(root, null, water, 0, ans);
             return 1;
         }
-        int ld = burningTree2(root.left, fire, water, ans);
-        if(ld>0){
-            kdown(node, node.left, ld, ans);
-            return ld+1;
+
+        int lt = burningTree(root.left, fire, water, ans); // searching fire node in left subtree
+        if (lt == -2)
+            return -2; // means fire node was presaent but water was also there return from this path
+        if (lt > -1) {
+            if (water.contains(root.val))
+                return -2;
+
+            burnTree(root, root.left, water, lt, ans);
+            return lt + 1;
         }
 
-        if(ld==-2) return -2; // in node to root path we have found wter source so return to main
+        int rt = burningTree(root.right, fire, water, ans);
+        if (rt == -2)
+            return -2;
+        if (rt > -1) {
+            if (water.contains(root.val))
+                return -2;
 
-        int rd = burningTree2(root.right, fire, water, ans);
-        if(rd>0){
-            kdown(node, node.left, rd, ans);
-            return rd+1;
+            burnTree(root, root.right, water, rt, ans);
+            return rt + 1;
         }
-        if(rd==-2) return -2;
-
-        return -1; // not found fire source
-
+        return -1;
     }
 
-    private static void kdown(TreeNode node, TreeNode blocked, int time, ArrayList<ArrayList<Integer>> res,HashSet<Integer> water) {
-        if (node == null || (node == blocked || water.contains(node.val)))
+    private static void burnTree(TreeNode root, TreeNode blocked, Set<Integer> water, int time,
+            List<List<Integer>> ans) {
+        if (root == null || root == blocked || water.contains(root.val))
             return;
 
-        if (res.size() == time)
-            res.add(new ArrayList<>()); // new time explored
+        nodes_burned++;
+        if (ans.size() == time)
+            ans.add(new ArrayList<>());
+        ans.get(time).add(root.val);
+        max = Math.max(max, time);
 
-        max = Math.max(max, time); // max time to burn a tree
-        nodes_burned++; // no of nodes burned
+        burnTree(root.left, blocked, water, time + 1, ans);
+        burnTree(root.right, blocked, water, time + 1, ans);
 
-        res.get(time).add(node.val); // adding val to respective time
-        kdown(node.left, blocked, time + 1, res,water);
-        kdown(node.right, blocked, time + 1, res,water);
     }
 
 }
