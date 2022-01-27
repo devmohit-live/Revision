@@ -2,7 +2,7 @@ public class ALV_and_Operations {
 
     // add into bst
 
-    public TreeNode insertIntoBST(TreeNode root, int val) {
+    public static TreeNode insertIntoBST(TreeNode root, int val) {
         if (root == null)
             return new TreeNode(val);
         if (root.val > val)
@@ -15,7 +15,7 @@ public class ALV_and_Operations {
     }
 
     // iterative
-    public TreeNode insertIntoBST2(TreeNode root, int val) {
+    public static TreeNode insertIntoBST2(TreeNode root, int val) {
         if (root == null)
             return new TreeNode(val);
 
@@ -40,7 +40,7 @@ public class ALV_and_Operations {
     }
 
     // Delete Node LC 450
-    private int getMaximum(TreeNode root) {
+    private static int getMaximum(TreeNode root) {
         if (root == null)
             return -1;
         while (root.right != null) {
@@ -50,7 +50,7 @@ public class ALV_and_Operations {
         return root.val;
     }
 
-    private TreeNode delete(TreeNode root, int data) {
+    private static TreeNode delete(TreeNode root, int data) {
         if (root == null)
             return null;
 
@@ -75,7 +75,7 @@ public class ALV_and_Operations {
     }
 
     // ============================ AVL ==============================
-    class TreeNode {
+    static class TreeNode {
         int val, bal, height;
         TreeNode left, right;
 
@@ -98,7 +98,8 @@ public class ALV_and_Operations {
     }
 
     // O(1)
-    private static TreeNode rotateLeft(TreeNode A) {
+    private static TreeNode rotateRight(TreeNode A) {
+        // right rotation means strucure was ll
         TreeNode B = A.left;
         TreeNode BRight = B.right;
         B.right = A;
@@ -109,7 +110,8 @@ public class ALV_and_Operations {
     }
 
     // O(1)
-    private static TreeNode rotateRight(TreeNode A) {
+    private static TreeNode rotateLeft(TreeNode A) {
+        // left rotation means strucure was rr
         TreeNode B = A.right;
         TreeNode BLeft = B.left;
         B.left = A;
@@ -123,7 +125,7 @@ public class ALV_and_Operations {
     // identigy rotation
     private static TreeNode getRotation(TreeNode root) {
         upateBalanceHeight(root);
-        int bf = root.bf;
+        int bf = root.bal;
         if (bf == 2) {// ll,lr
             if (root.left.bal == 1) {
                 // ll
@@ -147,6 +149,28 @@ public class ALV_and_Operations {
         }
 
         return root;
+    }
+
+    // check
+    private static void display(TreeNode root) {
+        if (root == null)
+            return;
+        StringBuilder sb = new StringBuilder();
+        sb.append((root.left == null ? '.' : root.left.val));
+        sb.append(" ->  " + root.val + " <- ");
+        sb.append((root.right == null ? '.' : root.right.val));
+        System.out.println(sb.toString());
+
+        display(root.left);
+        display(root.right);
+    }
+
+    public static void main(String[] args) {
+        TreeNode root = null;
+        for (int i = 1; i <= 10; i++) {
+            root = insertIntoBST(root, i * 10);
+        }
+        display(root);
     }
 
 }
