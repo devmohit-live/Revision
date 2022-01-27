@@ -152,4 +152,28 @@ public class ALV_and_Operations {
         display(root);
     }
 
+    // LC 1382 : Balance a BST
+    TreeNode res = null;
+
+    public TreeNode balanceBST(TreeNode root) {
+        if (root == null)
+            return null;
+        // List<Integer> ans = new ArrayList<>();
+        // traverse(root,ans);
+        traverse(root);
+
+        // TreeNode res = null;
+        // for(int el : ans) res = insertIntoBST(res, el);
+
+        return res;
+    }
+
+    private void traverse(TreeNode root) {
+        if (root == null)
+            return;
+        traverse(root.left);
+        res = insertIntoBST(res, root.val);
+        traverse(root.right);
+    }
+
 }
