@@ -14,31 +14,6 @@ public class ALV_and_Operations {
         return root;
     }
 
-    // iterative
-    public static TreeNode insertIntoBST2(TreeNode root, int val) {
-        if (root == null)
-            return new TreeNode(val);
-
-        TreeNode ans = root;
-        while (root != null) {
-            if (root.val > val) {
-                if (root.left == null) {
-                    root.left = new TreeNode(val);
-                    break;
-                }
-                root = root.left;
-            } else {
-                if (root.right == null) {
-                    root.right = new TreeNode(val);
-                    break;
-                }
-                root = root.right;
-            }
-        }
-
-        return ans;
-    }
-
     // Delete Node LC 450
     private static int getMaximum(TreeNode root) {
         if (root == null)
@@ -83,7 +58,8 @@ public class ALV_and_Operations {
             this.val = val;
             this.bal = 0;
             this.height = 0;
-            this.left = this.right = null;
+            this.left = null;
+            this.right = null;
         }
     }
 
@@ -125,6 +101,7 @@ public class ALV_and_Operations {
     // identigy rotation
     private static TreeNode getRotation(TreeNode root) {
         upateBalanceHeight(root);
+
         int bf = root.bal;
         if (bf == 2) {// ll,lr
             if (root.left.bal == 1) {
@@ -156,9 +133,9 @@ public class ALV_and_Operations {
         if (root == null)
             return;
         StringBuilder sb = new StringBuilder();
-        sb.append((root.left == null ? '.' : root.left.val));
+        sb.append((root.left == null ? "." : root.left.val));
         sb.append(" ->  " + root.val + " <- ");
-        sb.append((root.right == null ? '.' : root.right.val));
+        sb.append((root.right == null ? "." : root.right.val));
         System.out.println(sb.toString());
 
         display(root.left);
@@ -166,6 +143,8 @@ public class ALV_and_Operations {
     }
 
     public static void main(String[] args) {
+        System.out.println();
+        System.out.println("Using ALV Structring : ");
         TreeNode root = null;
         for (int i = 1; i <= 10; i++) {
             root = insertIntoBST(root, i * 10);
