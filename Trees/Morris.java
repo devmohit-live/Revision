@@ -57,7 +57,33 @@ public class Morris {
 
     public static List<Integer> morrisPreordreTraversal(TreeNode root) {
         List<Integer> ans = new ArrayList<>();
+        TreeNode curr = root;
+        while (curr != null) {
+            TreeNode left = curr.left;
+            if (left == null) {
+                ans.add(curr.val);// leave nodes
+                curr = curr.right;
+            } else {
+                TreeNode rightmostNode = getRightMostNode(left, curr);
+                if (rightmostNode.right == null) {
+                    ans.add(curr.val);
+                    // create thread : crearion is done in preorder
+                    rightmostNode.right = curr;
+                    curr = curr.left;
+                } else {
+                    // rihtmost.right == curr (already)
+                    // delete thread
+                    rightmostNode.right = null;
+                    // print curr
+                    // ans.add(curr.val);
+                    curr = curr.right;
+                }
+
+            }
+
+        }
 
         return ans;
     }
+
 }
