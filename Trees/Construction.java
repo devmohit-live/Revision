@@ -1,3 +1,7 @@
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Set;
+
 public class Construction {
     class TreeNode {
         int val;
@@ -133,7 +137,7 @@ public class Construction {
             return null;
         return preInBT(preorder, inorder, 0, inorder.length - 1, 0, preorder.length - 1);
     }
-    
+
     public static TreeNode preInBT(int[] pre, int[] in, int isi, int iei, int psi, int pei) {
         if (iei < iei || pei < psi)
             return null;
@@ -149,13 +153,15 @@ public class Construction {
             }
         }
 
-        int tel = iridx - isi; // total no of elemets (will be helpful in finding th e no. of ele in left and right )
-        // range for left and right in prefix 
-        //Inorder: 
-        //left : si->root-, right: root+1->ei
-        //Preorder: psi => root in preorder
-        // left: no of elemets in left subtree of inorder : rootidx - si : psi+1->psi+tel
-        //right: starts from psi+tel+1 -> ei
+        int tel = iridx - isi; // total no of elemets (will be helpful in finding th e no. of ele in left and
+                               // right )
+        // range for left and right in prefix
+        // Inorder:
+        // left : si->root-, right: root+1->ei
+        // Preorder: psi => root in preorder
+        // left: no of elemets in left subtree of inorder : rootidx - si :
+        // psi+1->psi+tel
+        // right: starts from psi+tel+1 -> ei
 
         TreeNode left = preInBT(pre, in, isi, iridx - 1, psi + 1, psi + tel);
         TreeNode right = preInBT(pre, in, iridx + 1, iei, psi + tel + 1, pei);
@@ -173,7 +179,7 @@ public class Construction {
 
         return postInBT(inorder, postorder, 0, n - 1, 0, m - 1);
     }
-    
+
     public static TreeNode postInBT(int[] in, int[] post, int isi, int iei, int psi, int pei) {
         if (isi > iei || psi > pei)
             return null;
@@ -196,8 +202,55 @@ public class Construction {
         return root;
     }
 
-    public static TreeNode inLvlBT(int[] preorder, int[] inorder) {
-        return null;
+    public static TreeNode inLvlBT(int[] level, int[] inorder) {
+        int n = inorder.length;
+        return inLvlBT(inorder, 0, n - 1, level);
+    }
+
+    private static TreeNode inLvlBT(int[] in, int isi, int iei, int[] lv) {
+        if (isi > iei)
+            return null;
+        TreeNode root = new TreeNode(lv[0]);
+        if (lv.length == 1)
+            return root;
+
+        int ridx = 0;
+        while (in[ridx] != root.val)
+            ridx++;
+
+        // now differetiate between leftsubtree elemets and righsubtree elements in
+        // levelorder
+        Set<Integer> leftsubtree = new HashSet<>();
+
+        for (int i = 0; i < ridx; i++) {
+            leftsubtree.add(in[i]); // adding left subtree fro inorder array
+        }
+
+        // make leftr and right subtree array for leveorder left and right call
+        int[] lvl_left = new int[ridx - isi];
+        int[] lvl_right = new int[iei - ridx];
+        int left = 0, right = 0;
+
+        // why running loop from level order array ? => to maintain the elements
+        // relative order for tree creation
+        // 0th elemet is root (already considered)
+        for (int i = 1; i < lv.length; i++) {
+            if (leftsubtree.size() > 0 && leftsubtree.contains(lv[i])) {
+                // part of leftarray
+                lvl_left[left++] = lv[i];
+                leftsubtree.remove(lv[i]);
+
+            } else {
+                // part of leftarray
+                lvl_right[right++] = lv[i];
+            }
+        }
+
+        root.left = inLvlBT(in, isi, ridx - 1, lvl_left);
+        root.right = inLvlBT(in, ridx + 1, iei, lvl_right);
+
+        return root;
+
     }
 
     public static TreeNode prePost(int[] preorder, int[] inorder) {
