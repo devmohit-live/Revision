@@ -253,8 +253,32 @@ public class Construction {
 
     }
 
-    public static TreeNode prePost(int[] preorder, int[] inorder) {
-        return null;
+    public static TreeNode prePost(int[] preorder, int[] postOrder) {
+        // Approach : in postorder the root is at last after all it's childreb
+        // so for left subtree the left subtree's root will be at last before all of its
+        // children in left subtree
+        // similarly the left subtree root in pre order is printed before all it's
+        // children
+        // using this we can get the number of elements, range in left subtree
+
+        int n = preorder.length;
+        return prePost(preorder, postOrder, 0, n - 1, 0, n - 1);
+    }
+
+    private static TreeNode prePost(int[] pre, int[] post, int psi, int pei, int posi, int poei) {
+        if (psi == pei || posi == poei)
+            return new TreeNode(pre[psi]);
+
+        TreeNode root = new TreeNode(pre[psi]);
+        int ridx = 0;
+        // left subtree's root finding in postorder
+        while (post[ridx] != pre[psi + 1])
+            ridx++;
+        int tel = ridx - posi + 1; // ridx is also included this time(root of left subtree)
+        root.left = prePost(pre, post, psi + 1, psi + tel, posi, ridx);
+        root.right = prePost(pre, post, psi + 1 + tel, pei, ridx + 1, poei - 1);
+        return root;
+
     }
 
     // ===================================================================
