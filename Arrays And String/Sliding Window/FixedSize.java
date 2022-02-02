@@ -44,7 +44,7 @@ public class FixedSize {
         return ans;
     }
 
-    // Proper way of writing Sliding windoe : Template
+    // Proper way of writing Sliding window : Template
 
     // Leetocde 567 : Permutaion in String
     // Basically anagrams of s1 in present in a s2
