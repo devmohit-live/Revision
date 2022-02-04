@@ -86,4 +86,87 @@ public class Morris {
         return ans;
     }
 
+    // is valid bst : 3 ways
+    // 1 using recursion
+    private boolean validate(TreeNode root, TreeNode[] prev) {
+        boolean res = true;
+        if (root == null)
+            return res;
+
+        res = res && validate(root.left, prev);
+        if (prev[0] != null && prev[0].val >= root.val)
+            res = res && false;
+        prev[0] = root;
+        res = res && validate(root.right, prev);
+
+        return res;
+    }
+
+    // using stack
+    public boolean isValidBST2(TreeNode root) {
+        Integer pre = null;
+        Stack<TreeNode> stack = new Stack<>();
+        while (true) {
+            while (root != null) {
+                stack.push(root);
+                root = root.left;
+            }
+            if (stack.isEmpty()) {
+                return true;
+            }
+            TreeNode node = stack.pop();
+            if (pre != null && pre >= node.val) {
+                return false;
+            }
+            pre = node.val;
+            root = node.right;
+        }
+    }
+    // using morris
+
+    private boolean validateMorris(TreeNode root) {
+        if (root == null)
+            return true;
+
+        TreeNode curr = root;
+        long prev = -(long) 1e17;
+
+        while (curr != null) {
+            TreeNode left = curr.left;
+            if (left == null) {
+                // ans
+                if (prev >= curr.val)
+                    return false;
+                prev = curr.val;
+
+                curr = curr.right;
+
+            } else {
+                TreeNode righMost = getRightMost(left, curr);
+                if (righMost.right == null) {
+                    // thread creation
+                    righMost.right = curr;
+                    curr = curr.left;
+
+                } else {
+                    // thread deletion
+                    righMost.right = null;
+
+                    // work.ans
+
+                    if (prev >= curr.val)
+                        return false;
+                    prev = curr.val;
+
+                    // right call
+                    curr = curr.right;
+                }
+
+            }
+
+        }
+
+        return true;
+    }
+
 }
