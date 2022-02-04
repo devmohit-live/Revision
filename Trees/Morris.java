@@ -168,5 +168,83 @@ public class Morris {
 
         return true;
     }
+    // Kth smallest elemet in BST using Morris : no need of recursive space, static
+    // var/array of size 1 for k
+
+    // can also be done itertaively in contant space: Using stack
+
+    private int morris(TreeNode root, int k) {
+        TreeNode curr = root;
+        while (curr != null) {
+            TreeNode left = curr.left;
+            if (left == null) {
+                if (--k == 0)
+                    return curr.val;
+                curr = curr.right;
+            } else {
+                TreeNode rightmost = getRightMost(left, curr);
+                if (rightmost.right == null) {
+                    // thread creation
+                    rightmost.right = curr;
+                    // go towards left
+                    curr = curr.left;
+                } else {
+                    // thread deletion
+                    rightmost.right = null;
+
+                    // go to right now (right call in rec)
+                    // work
+                    if (--k == 0)
+                        return curr.val;
+                    curr = curr.right;
+                }
+            }
+        }
+
+        return -1; // null
+    }
+
+    // Kth largest element: run reverse Inorder
+    // In morris: jusr swap left and right => right,left calls and l=rihtmost =
+    // leftmost
+    private Node getLeftMost(Node node, Node curr) {
+        while (node.left != null && node.left != curr)
+            node = node.left;
+        return node;
+    }
+
+    private int morrisReverseInorder(Node root, int k) {
+        if (root == null || k < 0)
+            return -1;
+
+        // just make reverse calls : right first
+
+        Node curr = root;
+        while (curr != null) {
+            Node right = curr.right;
+            if (right == null) {
+                if (--k == 0)
+                    return curr.data;
+                curr = curr.left;
+            } else {
+                Node leftmost = getLeftMost(right, curr);
+                if (leftmost.left == null) {
+                    // thread creation
+                    leftmost.left = curr;
+                    curr = curr.right;
+                } else {
+                    // thread deletion
+                    leftmost.left = null;
+
+                    // inorder and right call : inversae means left
+                    if (--k == 0)
+                        return curr.data;
+                    curr = curr.left;
+                }
+            }
+        }
+
+        return -1;
+    }
 
 }
