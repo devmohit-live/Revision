@@ -250,4 +250,58 @@ public class Converions {
     // To check correctness run the inorder of this BST : it will be in increasing
     // order
     // https://practice.geeksforgeeks.org/problems/inorder-traversal/1#
+
+    // BST To DLL : Use morris Traversal
+    private static Node getRightMost(Node node, Node curr) {
+        while (node.right != null && node.right != curr)
+            node = node.right;
+        return node;
+    }
+
+    public static Node bstToDLL(Node root) {
+        if (root == null)
+            return null;
+        Node dummy = new Node(-1), prev = dummy;
+
+        Node curr = root;
+        while (curr != null) {
+            Node left = curr.left;
+            if (left == null) {
+                // work
+                prev.right = curr; // next
+                curr.left = prev; // prev
+                prev = curr;
+                // right call
+                curr = curr.right;
+            } else {
+                Node rightmost = getRightMost(left, curr);
+                if (rightmost.right == null) {
+                    // thread creation
+                    rightmost.right = curr;
+
+                    curr = curr.left;
+
+                } else {
+                    rightmost.right = null;
+                    // work
+                    prev.right = curr; // next
+                    curr.left = prev; // prev
+                    prev = curr;
+                    // right call
+                    curr = curr.right;
+                }
+            }
+        }
+
+        Node head = dummy.right;
+        head.left = dummy.right = null;
+
+        // //cicular link
+        // head.left = prev;
+        // prev.right = head;
+
+        return head;
+
+    }
+
 }
