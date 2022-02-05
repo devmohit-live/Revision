@@ -18,6 +18,22 @@ public class DiamterAndQuestions {
         }
     }
 
+    public class Node {
+        int val;
+        Node left;
+        Node right;
+
+        Node(int val) {
+            this.val = val;
+        }
+
+        Node(int val, Node left, Node right) {
+            this.val = val;
+            this.left = left;
+            this.right = right;
+        }
+    }
+
     private int height(TreeNode root) {
         if (root == null)
             return -1;
@@ -112,6 +128,49 @@ public class DiamterAndQuestions {
         pathSum(node.right, tar - node.val, small, ans);
 
         small.remove(small.size() - 1);
+    }
+
+    // Leaf to Leaf sum :
+    // https://practice.geeksforgeeks.org/problems/maximum-path-sum/1/#
+
+    class Sum {
+        int ltls = -(int) 1e9; // leaf to leaf sum
+        int ntls = -(int) 1e9;// node to leaf sum
+    }
+
+    public int maxPathSum(Node root) {
+        Sum ans = pathSum(root);
+        // it is stated in gfg single child node is also treated as leaf
+        return (ans.ltls == -(int) 1e9) ? ans.ntls : ans.ltls;
+
+        // actual ans : ans.ltls;
+    }
+
+    private Sum pathSum(Node root) {
+        if (root == null)
+            return new Sum();
+
+        if (root.left == null && root.right == null) {
+            Sum base = new Sum();
+            base.ntls = root.data;
+            return base;
+        }
+
+        Sum left = pathSum(root.left);
+        Sum right = pathSum(root.right);
+
+        Sum myans = new Sum();
+        myans.ltls = Math.max(left.ltls, right.ltls);
+
+        // both the left and right exists => not a single child node
+
+        if (root.left != null && root.right != null) {
+            myans.ltls = Math.max(myans.ltls, left.ntls + root.data + right.ntls);
+        }
+
+        // ntls
+        myans.ntls = Math.max(left.ntls, right.ntls) + root.data;
+        return myans;
     }
 
 }
