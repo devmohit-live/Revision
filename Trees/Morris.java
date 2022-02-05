@@ -299,12 +299,64 @@ public class Morris {
         Node head = dummy.right;
         head.left = dummy.right = null;
 
+        // https://www.lintcode.com/problem/1534/
         // //cicular link
         // head.left = prev;
         // prev.right = head;
 
         return head;
 
+    }
+
+    //BST Iterator: LC: 173. Binary Search Tree Iterator
+    class BSTIterator {
+        // Using morris
+        private TreeNode curr;
+
+        private TreeNode getRightMost(TreeNode node, TreeNode curr) {
+            while (node.right != null && node.right != this.curr)
+                node = node.right;
+            return node;
+        }
+
+        public BSTIterator(TreeNode root) {
+            this.curr = root;
+        }
+
+        public int next() {
+            int rv = -1;
+            while (this.curr != null) {
+                TreeNode left = this.curr.left;
+                if (left == null) {
+                    rv = this.curr.val;
+                    this.curr = this.curr.right;
+                    break;
+                } else {
+                    TreeNode rightmost = getRightMost(left, this.curr);
+                    if (rightmost.right == null) {
+                        // thread creation
+                        rightmost.right = curr;
+                        this.curr = this.curr.left;
+                    } else {
+                        // thread deletion
+                        rightmost.right = null;
+
+                        // work
+                        rv = this.curr.val;
+                        // call
+                        this.curr = this.curr.right;
+
+                        break;
+                    }
+                }
+            }
+
+            return rv;
+        }
+
+        public boolean hasNext() {
+            return this.curr != null;
+        }
     }
 
 }
