@@ -59,7 +59,8 @@ public class DiamterAndQuestions {
 
     }
 
-    // retutning height and static is saving max dia till now
+    // retutning height and static is saving max of left and right diameter till now
+    // : faith
     private int dia3(TreeNode root, int[] ans) {
         if (root == null)
             return -1;
@@ -68,4 +69,18 @@ public class DiamterAndQuestions {
         ans[0] = Math.max(lh + rh + 2, ans[0]);
         return Math.max(lh, rh) + 1;
     }
+
+    // LC : 112 ; Path sum
+    public boolean hasPathSum(TreeNode root, int targetSum) {
+        if (root == null)
+            return false;
+        if (root.left == null && root.right == null) {
+            return (targetSum - root.val) == 0;
+        }
+
+        boolean ans = hasPathSum(root.left, targetSum - root.val) || hasPathSum(root.right, targetSum - root.val);
+        return ans;
+    }
+
+    // LC 113: Path Sum 2
 }
