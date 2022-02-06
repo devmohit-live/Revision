@@ -70,5 +70,76 @@ public class BitSet {
             return this.sb.toString();
         }
     }
+    // Approach 2 : same time ans space: just using 1 array/stringbuilder
+
+    // Tracking isFlip
+    class Bitset_FlipBit {
+
+        char bit[];
+        boolean isflip = false;
+        int count;
+
+        public Bitset_FlipBit(int size) {
+            bit = new char[size];
+            Arrays.fill(bit, '0');
+            count = 0;
+        }
+
+        public void fix(int idx) {
+            if (!isflip && bit[idx] == '0') {
+                count += 1;
+                bit[idx] = '1';
+            } else if (isflip && bit[idx] == '1') {
+                count += 1;
+                bit[idx] = '0';
+
+            }
+        }
+
+        public void unfix(int idx) {
+            if (!isflip && bit[idx] == '1') {
+                count -= 1;
+                bit[idx] = '0';
+            } else if (isflip && bit[idx] == '0') {
+                count -= 1;
+                bit[idx] = '1';
+            }
+
+        }
+
+        public void flip() {
+            isflip = !isflip;
+            count = bit.length - count;
+        }
+
+        public boolean all() {
+            return count == bit.length;
+        }
+
+        public boolean one() {
+            return count > 0;
+
+        }
+
+        public int count() {
+            return count;
+        }
+
+        public String toString() {
+
+            if (isflip) {
+                char b[] = bit.clone();
+                for (int i = 0; i < bit.length; i++) {
+                    if (b[i] == '1') {
+                        b[i] = '0';
+                    } else {
+                        b[i] = '1';
+                    }
+                }
+                return String.valueOf(b);
+            } else
+                return String.valueOf(bit);
+        }
+    }
 
 }
