@@ -56,22 +56,29 @@ public class LCA {
     // so instead of doing lca = root, we have set some property of it to save the
     // permanent data
 
+    // https://www.lintcode.com/problem/474 : Leetcode 1644
     private boolean lca(TreeNode root, TreeNode p, TreeNode q, TreeNode ans) {
         if (root == null)
             return false;
-        boolean self = false;
-        // found data
-        if (root == p || root == q) {
+        boolean self = false, left = false, right = false;
+        if (root == A || root == B) {
             self = true;
+            if (A == B) {
+                left = right = true; // since both are same left and right should be set true
+                // or no need to make further calls both are foubd here
+                // TC: tree = {1} A = 1 B = 1
+            }
         }
-        boolean left = lca(root.left, p, q, ans);
-        boolean right = lca(root.right, p, q, ans);
+        left = left || n2rp(root.left, A, B, ans);
+        right = right || n2rp(root.right, A, B, ans);
 
-        if ((left & right) || (left & self) || (self & right)) { // only set lca when both the data is found
-            ans.left = root;
+        if ((self && left) || (self && right) || (left && right)) {
+            // only set lca when both the data are true
+            if (ans.right == null)
+                ans.right = root;
         }
 
-        return left || self || right; // return true if found data
+        return self || left || right;
 
     }
 }
