@@ -28,5 +28,38 @@ public class SumTechnquies_Cover {
         return 0;
     }
 
-   
+    // LC 337 : House RObberIII
+    class ROB {
+        int robbingCurrent, leavingCurrent;
+
+        ROB() {
+            this.robbingCurrent = robbingCurrent;
+            this.leavingCurrent = leavingCurrent;
+        }
+
+    }
+
+    public int rob(TreeNode root) {
+        ROB ans = robbery(root);
+        return Math.max(ans.robbingCurrent, ans.leavingCurrent);
+    }
+
+    public ROB robbery(TreeNode root) {
+        if (root == null)
+            return new ROB();
+
+        ROB left = robbery(root.left);
+        ROB right = robbery(root.right);
+
+        // robbing current house : can't rob next adjancent houses (left,right)
+        ROB myans = new ROB();
+        myans.robbingCurrent = root.val + left.leavingCurrent + right.leavingCurrent;
+
+        // not robbing this house : 2 choice either to rob the adjacent houses or leave
+        // them too
+        myans.leavingCurrent = Math.max(left.leavingCurrent, left.robbingCurrent)
+                + Math.max(right.leavingCurrent, right.robbingCurrent);
+        return myans;
+    }
+
 }
