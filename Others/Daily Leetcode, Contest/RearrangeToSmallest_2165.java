@@ -1,5 +1,7 @@
 class RearrangeToSmallest_2165 {
     // LC : 2165 : Weekly Contest 2779 : Q 2
+
+    // https://leetcode.com/problems/smallest-value-of-the-rearranged-number/discuss/1748511/Sort-and-Swap
     public long smallestNumber(long num) {
         int flag = 1;
         if (num < 0)
