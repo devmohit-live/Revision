@@ -94,4 +94,31 @@ public class SumTechnquies_Cover {
         int maxlen = 0;
     }
 
+    // Approach 2 : usins static: static saves max till now either start,in subtree
+    static int maxlen;
+
+    public int longestZigZag2(TreeNode root) {
+        maxlen = 0;
+        longestZigZag_(root);
+        return maxlen;
+    }
+
+    // {forw,back}
+    private int[] longestZigZag_2(TreeNode root) {
+        if (root == null)
+            return new int[] { -1, -1 };
+
+        int[] left = longestZigZag_2(root.left);
+        int[] right = longestZigZag_2(root.right);
+
+        int[] myans = new int[2];
+
+        myans[0] = right[1] + 1;
+        myans[1] = left[0] + 1;
+
+        maxlen = Math.max(maxlen, Math.max(myans[0], myans[1]));
+        return myans;
+
+    }
+
 }
