@@ -20,7 +20,7 @@ public class RemovingIllegalCars {
             // the option to either
             // remove it in a consecutive fashion starting from the left OR to remove it as
             // if it is picked from the middle.
-            left = Math.min(left + (s[i] - '0') * 2, i + 1);
+            left = Math.min(left + (s.charAt(i) - '0') * 2, i + 1);
             // Here is the key part. "left + n - 1 - i" means the total cost with the cars
             // from s[i + 1] to s[n - 1] to be removed
             // starting from the right consecutively, and we compare it with the current
