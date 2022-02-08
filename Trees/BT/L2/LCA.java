@@ -57,7 +57,7 @@ public class LCA {
     // permanent data
 
     // https://www.lintcode.com/problem/474 : Leetcode 1644
-    private boolean lca(TreeNode root, TreeNode p, TreeNode q, TreeNode ans) {
+    private boolean lca(TreeNode root, TreeNode A, TreeNode B, TreeNode ans) {
         if (root == null)
             return false;
         boolean self = false, left = false, right = false;
@@ -69,8 +69,8 @@ public class LCA {
                 // TC: tree = {1} A = 1 B = 1
             }
         }
-        left = left || n2rp(root.left, A, B, ans);
-        right = right || n2rp(root.right, A, B, ans);
+        left = left || lca(root.left, A, B, ans);
+        right = right || lca(root.right, A, B, ans);
 
         if ((self && left) || (self && right) || (left && right)) {
             // only set lca when both the data are true
