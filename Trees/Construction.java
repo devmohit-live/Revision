@@ -265,18 +265,25 @@ public class Construction {
         return prePost(preorder, postOrder, 0, n - 1, 0, n - 1);
     }
 
+    //Works on Full Binary Tree
+
     private static TreeNode prePost(int[] pre, int[] post, int psi, int pei, int posi, int poei) {
-        if (psi == pei || posi == poei)
-            return new TreeNode(pre[psi]);
+        if (psi > pei || posi > poei)
+            return null;
 
         TreeNode root = new TreeNode(pre[psi]);
-        int ridx = 0;
+        if (psi == pei)
+            return root; // only 1 element
+
+        int idx = posi; // will store: start of left subtree in postorder
+        
         // left subtree's root finding in postorder
-        while (post[ridx] != pre[psi + 1])
-            ridx++;
-        int tel = ridx - posi + 1; // ridx is also included this time(root of left subtree)
-        root.left = prePost(pre, post, psi + 1, psi + tel, posi, ridx);
-        root.right = prePost(pre, post, psi + 1 + tel, pei, ridx + 1, poei - 1);
+        while (post[idx] != pre[psi + 1])
+            idx++;
+
+        int tel = idx - posi + 1; // ridx is also included this time(root of left subtree)
+        root.left = prePost(pre, post, psi + 1, psi + tel, posi, idx);
+        root.right = prePost(pre, post, psi + 1 + tel, pei, idx + 1, poei - 1);
         return root;
 
     }
