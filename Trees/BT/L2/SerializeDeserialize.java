@@ -16,6 +16,7 @@ public class SerializeDeserialize {
 
     }
 
+    // preorder
     private void traverse(TreeNode node, StringBuilder res) {
         if (node == null) {
             res.append("null,");
@@ -30,7 +31,6 @@ public class SerializeDeserialize {
 
     private TreeNode deserialize(String[] arr) {
         if (this.idx >= arr.length) {
-            idx++;
             return null;
         }
 
@@ -50,5 +50,61 @@ public class SerializeDeserialize {
         String[] nodes = data.split(",");
         // System.out.println("Deserialized: "+Arrays.toString(nodes)+""+nodes.length);
         return deserialize(nodes);
+    }
+
+    // LevelOrder Approach
+
+    public String serializeLevelOrder(TreeNode root) {
+        if (root == null)
+            return "";
+        StringBuilder sb = new StringBuilder();
+        LinkedList<TreeNode> q = new LinkedList<>();
+        q.addLast(root);
+        while (!q.isEmpty()) {
+            TreeNode rnode = q.removeFirst();
+            if (rnode == null) {
+                sb.append("# ");
+                continue; // else will give null ptr exception while adding left,right child of null
+            } else
+                sb.append(rnode.val + " ");
+
+            q.addLast(rnode.left);
+            q.addLast(rnode.right);
+
+        }
+
+        return sb.toString();
+    }
+
+    public TreeNode deserializeLevelOrder(String data) {
+        if (data.length() == 0)
+            return null;
+        String[] s = data.split(" ");
+        int idx = 1, n = s.length;
+        TreeNode root = new TreeNode(Integer.parseInt(s[0]));
+        LinkedList<TreeNode> q = new LinkedList<>();
+        q.addLast(root);
+        // starts from 1
+        while (idx < n) {
+            TreeNode rnode = q.removeFirst();
+            // left
+            if (!s[idx].equals("#")) {
+                TreeNode left = new TreeNode(Integer.parseInt(s[idx]));
+                q.addLast(left);
+                rnode.left = left;
+            }
+            idx++;
+
+            // right
+            if (!s[idx].equals("#")) {
+                TreeNode right = new TreeNode(Integer.parseInt(s[idx]));
+                q.addLast(right);
+                rnode.right = right;
+            }
+            idx++;
+
+        }
+
+        return root;
     }
 }

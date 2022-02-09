@@ -1,4 +1,16 @@
 public class SumTechnquies_Cover {
+    static class TreeNode {
+        int val;
+        TreeNode left, right;
+
+        TreeNode(int val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+
+    }
+
     // LC 968. Binary Tree Cameras
     public int minCameraCover(TreeNode root) {
         int[] cameras = new int[1];
