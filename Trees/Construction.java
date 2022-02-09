@@ -139,7 +139,7 @@ public class Construction {
     }
 
     public static TreeNode preInBT(int[] pre, int[] in, int isi, int iei, int psi, int pei) {
-        if (iei < iei || pei < psi)
+        if (iei < isi || pei < psi)
             return null;
 
         int rootval = pre[psi];
@@ -265,7 +265,7 @@ public class Construction {
         return prePost(preorder, postOrder, 0, n - 1, 0, n - 1);
     }
 
-    //Works on Full Binary Tree
+    // Works on Full Binary Tree
 
     private static TreeNode prePost(int[] pre, int[] post, int psi, int pei, int posi, int poei) {
         if (psi > pei || posi > poei)
@@ -276,7 +276,7 @@ public class Construction {
             return root; // only 1 element
 
         int idx = posi; // will store: start of left subtree in postorder
-        
+
         // left subtree's root finding in postorder
         while (post[idx] != pre[psi + 1])
             idx++;
@@ -289,5 +289,71 @@ public class Construction {
     }
 
     // ===================================================================
+
+    // Chek if a given in,pre and post order of a tree are valid/ belongs to same
+    // tree
+    static int postidx;
+    static boolean res;
+
+    public static boolean validateTraversal(int[] pre, int[] post, int[] in) {
+        int n = pre.length, m = post.length, p = in.length;
+        if (m != n || m != p || n != p)
+            return false;
+        postidx = 0;
+        res = true;
+        preInBuild(pre, in, 0, n - 1, 0, n - 1, n, post);
+        return res;
+    }
+
+    private static void preInBuild(int[] pre, int[] in, int isi, int iei, int psi, int pei, int n, int[] post) {
+        if (isi > iei || psi > pei || postidx >= n)
+            return;
+
+        int rootval = pre[psi];
+        // find it in inorder
+        int ridx = isi;
+        while (ridx < iei && in[ridx] != rootval)
+            ridx++;
+        if (ridx == n) { // data not found in inorder
+            res = false;
+            return;
+        }
+        int tel = ridx - isi;
+        // left
+        preInBuild(pre, in, isi, ridx - 1, psi + 1, psi + tel, n, post);
+        // right
+        preInBuild(pre, in, ridx + 1, iei, psi + 1 + tel, pei, n, post);
+
+        // post area
+        if (post[postidx] != rootval) {
+            res = false;
+            return;
+        }
+        postidx++;
+
+    }
+// https://www.geeksforgeeks.org/check-if-given-preorder-inorder-and-postorder-traversals-are-of-same-tree/#:~:text=The%20most%20basic%20approach%20to,print%20Yes%20otherwise%20print%20No.
+    public static void main(String[] args) {
+        // BufferedReader inp = new BufferedReader(new InputStreamReader(System.in));
+        // String line;
+        // while ((line = inp.readLine()) != null) {
+        // TreeNode root = Wrapper.stringToTreeNode(line);
+        // Wrapper.prettyPrintTree(root);
+        // }
+        int in[] = { 4, 2, 5, 1, 3 };
+        int pre[] = { 1, 2, 4, 5, 3 };
+        int post[] = { 4, 5, 2, 3, 1 }; // valid
+
+        int in2[] = { 4, 2, 5, 1, 3 };
+        int pre2[] = { 1, 2, 5, 4, 3 };
+        int post2[] = { 4, 5, 2, 3, 1 }; // not valid
+
+        boolean ans1 = validateTraversal(pre, post, in);
+        System.out.println("Given traversal of a tree is " + (ans1 ? "valid" : "not valid "));
+
+        boolean ans2 = validateTraversal(pre2, post2, in2);
+        System.out.println("Given traversal of a tree is " + (ans2 ? "valid" : "not valid "));
+
+    }
 
 }
