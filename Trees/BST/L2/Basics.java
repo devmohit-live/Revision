@@ -214,4 +214,41 @@ public class Basics {
         inorder(root.left, ans);
     }
 
+    // Inorder SuccessorII Leetcode 510 (Premium)
+
+    class Node {
+        Node left = null, right = null, parent = null;
+        int val;
+
+        Node(int val) {
+            this.val = val;
+        }
+    }
+
+    public Node getLeftMostNode(Node node) {
+        if (node == null)
+            return node;
+        while (node.left != null)
+            node = node.left;
+        return node;
+    }
+
+    // directly node is given not the root
+    public Node inorderSuccesosor(Node node) {
+        // Succesor : right's leftmost or parent's parents
+
+        Node right = node.right;
+        if (node != null) {
+            return getLeftMostNode(node);
+        }
+        // go till the parent for which currnt node is a left child:
+        // succesor is parent when I am the left child , else parent is predecessor
+        while (node.parent != null && node.parent.left != node) {
+            node = node.parent;
+        }
+
+        return node; // either current successor or null
+
+    }
+
 }
