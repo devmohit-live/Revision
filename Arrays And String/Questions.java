@@ -312,4 +312,26 @@ public class Questions {
         System.out.println("After: " + Arrays.toString(arr));
     }
 
+    // LC: 532. K-diff Pairs in an Array
+
+    /*
+     * Similar to Two sum Count the elements with Counter If k > 0, for each element
+     * i, check if i + k exist. If k == 0, for each element i, check if count[i] > 1
+     * // appears more than once x-x => 0
+     * 
+     */
+    public int findPairs(int[] nums, int k) {
+        Map<Integer, Integer> cnt = new HashMap<>();
+        for (int x : nums) {
+            cnt.put(x, cnt.getOrDefault(x, 0) + 1);
+        }
+        int res = 0;
+        for (int x : cnt.keySet()) {
+            if ((k > 0 && cnt.containsKey(x + k)) || (k == 0 && cnt.get(x) > 1)) {
+                res++;
+            }
+        }
+        return res;
+    }
+
 }
