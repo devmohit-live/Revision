@@ -334,4 +334,28 @@ public class Questions {
         return res;
     }
 
+    //lC : 506 : Subarray Sum equals k : no sliding window as it contains -ve element
+     /*
+    I see ...After spending some time on the analysis, I found the reason behind having initialize preSum.put(0,1)....it is for those (sum - k) == 0 calculations which are valid subarrays but need to get counted. e.g. if k = 7 and sum = 7 (at second element for array is : 3, 4, 3, 8) at some iteration.....then sum - k = 0....this 0 will get counted in statement result += preSum.get(sum - k);
+
+#############
+
+So in conclusion, the initial entry preSum.put(0, 1) can be exchanged with statement :
+if (sum == k) count++;
+we can put it just below sum += nums[i]; statement. This will make code more intuitive...as we are trying to find the sum which matches to k!
+    
+    */
+    public int subarraySum(int[] nums, int k) {
+        int count = 0, sum = 0;
+        HashMap < Integer, Integer > sumOccurrencesMap = new HashMap < > ();
+        sumOccurrencesMap.put(0, 1); // sum = 0, which will occur but not counted for first iteration/occurance
+        for (int i = 0; i < nums.length; i++) {
+            sum += nums[i];
+            if (sumOccurrencesMap.containsKey(sum - k))
+                count += sumOccurrencesMap.get(sum - k);
+            sumOccurrencesMap.put(sum, sumOccurrencesMap.getOrDefault(sum, 0) + 1);
+        }
+        return count;
+    }
+
 }
