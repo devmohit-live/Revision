@@ -335,60 +335,110 @@ public class BFS {
 
     // Leetcode 815 : Bus Route
 
-     // route :  bust: bustands
+    // route : bust: bustands
     // map : bustand: all the bus coming to it
     // vis[] : visited array for all the bus taken
     // visited : hashset for all the bus stand visited with a bus
     public int numBusesToDestination(int[][] routes, int source, int target) {
-        if(source == target) return 0;
+        if (source == target)
+            return 0;
         int n = routes.length;
         // create a mapping
-        HashMap<Integer,ArrayList<Integer>> map = new HashMap<>();
-        
-        for(int bus=0;bus<n;bus++){ // bus
-            for(int stand: routes[bus]){
+        HashMap<Integer, ArrayList<Integer>> map = new HashMap<>();
+
+        for (int bus = 0; bus < n; bus++) { // bus
+            for (int stand : routes[bus]) {
                 map.putIfAbsent(stand, new ArrayList<Integer>());
                 map.get(stand).add(bus);
-            }            
+            }
         }
         boolean[] vis = new boolean[n];
         HashSet<Integer> visited = new HashSet<>();
-        LinkedList<Integer> q= new LinkedList<>();
-        q.addLast(source); //stand
+        LinkedList<Integer> q = new LinkedList<>();
+        q.addLast(source); // stand
         visited.add(source);
         int interchanges = 0;
-        //bfs
-        while(!q.isEmpty()){
+        // bfs
+        while (!q.isEmpty()) {
             int size = q.size();
-            
-            while(size-->0){
+
+            while (size-- > 0) {
                 int rmStand = q.removeFirst();
-                if(target == rmStand) return interchanges;
-                
-            
-                
+                if (target == rmStand)
+                    return interchanges;
+
                 // get all the bused coming to this bus-stand;
                 List<Integer> buses = map.get(rmStand);
                 // add all the routed/stands these buses can take to : for all buses
-                for(int bus : buses){
-                    if(vis[bus]) continue;
-                    for(int stand: routes[bus]){
-                        if(!visited.contains(stand)){ // avaoid going in loop to same routes
+                for (int bus : buses) {
+                    if (vis[bus])
+                        continue;
+                    for (int stand : routes[bus]) {
+                        if (!visited.contains(stand)) { // avaoid going in loop to same routes
                             visited.add(stand);
                             q.addLast(stand);
                         }
                     }
-                 vis[bus] = true; // mark thiss bus
+                    vis[bus] = true; // mark thiss bus
                 }
-                
-                
+
             }
             interchanges++;
         }
-        
-        
-         return -1;
+
+        return -1;
     }
-    
+
+    // Leetcode 127 : Word Ladder
+    // Treat every word as node and every transformation as an edge or wt 1;
+    // shortest path in terms of edges: bfs
+
+    // Space: O(n) Haset, Q: O(l*26*N) : O(l*n)
+    // Time: set: O(n) + ( possible word creation: O(26*l*l*) * N(we are adding only
+    // elements in q which exists in wordlist) : O(n) + O(N*26*l*l) => O(N*l*l)
+
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        int lv = 0, n = wordList.size(), l = endWord.length();
+        Set<String> set = new HashSet<>();
+        set.addAll(wordList); // N
+
+        if (!set.contains(endWord))
+            return 0; // end woprd not present in wordlist: not possible
+        // System.out.println(set);
+        LinkedList<String> q = new LinkedList<>();
+        q.addLast(beginWord);
+        if (set.contains(beginWord))
+            set.remove(beginWord);
+
+        while (!q.isEmpty()) {
+            int size = q.size();
+            while (size-- > 0) {
+                String rm = q.removeFirst();
+                // System.out.println(rm);
+                if (rm.equals(endWord))
+                    return lv + 1; // l
+
+                // generate all possible words which can be formed by chagin a single letter in
+                // rm
+                for (int i = 0; i < l; i++) { // l
+                    char ch[] = rm.toCharArray();
+                    for (char c = 'a'; c <= 'z'; c++) { // 26
+                        ch[i] = c;
+                        String modified = new String(ch); // l
+                        if (set.contains(modified)) {
+                            q.addLast(modified);
+                            set.remove(modified); // transformed once
+                            // hence remove from set(node need fo transformation again : no need for cycle)
+                        }
+                    }
+                }
+
+            }
+
+            lv++;
+        }
+
+        return 0; // not possible
+    }
 
 }
