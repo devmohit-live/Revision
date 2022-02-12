@@ -40,7 +40,19 @@ public class MakingALargeIsland_827 {
         return area;
     }
 
-    // Approach 2 int[][] dir = {{0,-1},{0,1},{-1,0},{1,0}};
+    // Approach 2
+
+    // space:
+    // map=>O(n/2)(alternate 0 and 1 causing n/2 colors) set=>O(n) + O(4) visColor
+    // +O(n*m) recursion
+    // Space: O(n*m)
+
+    // Time : O(n*m) : In DFS every cell I search at most once. : One I have
+    // floodfilled the cell with a particular color it will not be visited again
+    // so for loops: O(n*m) (inside for loop dfs(n*m) but it will not run every time
+    // and not with n*m elements )
+
+    int[][] dir = { { 0, -1 }, { 0, 1 }, { -1, 0 }, { 1, 0 } };
 
     public int largestIsland2(int[][] grid) {
         int max = 0, n = grid.length, m = grid[0].length, color = 2;
