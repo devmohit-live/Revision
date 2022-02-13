@@ -73,7 +73,8 @@ public class RecursionTreePermComb {
         return count;
     }
 
-    // ************** */ SUBSEQUENCE METHOD (EQUIVALENT)
+    // ************** */ SUBSEQUENCE METHOD (EQUIVALENT) : While creating all combination try using subseq method only
+
 
     public static int singleCombination_subseq(int[] coins, int tar, int idx, String asf) {
         if (tar == 0 || idx >= coins.length) {
@@ -230,7 +231,7 @@ public class RecursionTreePermComb {
         return ans;
 
     }
-
+    //========================== Equivalent of Suseq of creating all combination  =================================
     public int subsets(ArrayList<Integer> nums, int idx, ArrayList<Integer> small, ArrayList<ArrayList<Integer>> ans) {
         // empty subseq is counted so count=1 at start
         // Pre Area
