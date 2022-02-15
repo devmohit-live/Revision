@@ -124,4 +124,25 @@ public class DFS {
         return count;
     }
 
+    // LC 841 : Keys and Rooms
+    public boolean canVisitAllRooms(List<List<Integer>> rooms) {
+        int n = rooms.size();
+        Set<Integer> keys = new HashSet<>();
+        boolean[] vis = new boolean[n];
+        dfs(rooms, 0, vis);
+        for (boolean v : vis)
+            if (!v)
+                return false;
+        return true;
+    }
+
+    private void dfs(List<List<Integer>> graph, int src, boolean[] vis) {
+
+        vis[src] = true;
+        for (int nbr : graph.get(src)) {
+            if (!vis[nbr])
+                dfs(graph, nbr, vis);
+        }
+    }
+
 }
