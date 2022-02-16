@@ -127,7 +127,6 @@ public class DFS {
     // LC 841 : Keys and Rooms
     public boolean canVisitAllRooms(List<List<Integer>> rooms) {
         int n = rooms.size();
-        Set<Integer> keys = new HashSet<>();
         boolean[] vis = new boolean[n];
         dfs(rooms, 0, vis);
         for (boolean v : vis)

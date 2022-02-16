@@ -328,6 +328,29 @@ public class Basics {
         return size;
     }
 
+    // Leetcode 24 : Swap Node in Pairs
+    public ListNode swapPairs(ListNode head) {
+        ListNode curr = head;
+        if (curr == null || curr.next == null)
+            return curr;
+        ListNode dummy = new ListNode(-1),first = null, second = null;
+        dummy.next = curr.next;
+        while (curr != null && curr.next != null) {
+            first = curr;
+            second = curr.next;
+            ListNode third = second.next;
+            if (third == null)
+                first.next = null;
+            else
+                first.next = third.next;
+            second.next = first;
+
+            curr = third;
+        }
+        first.next = curr; // 1 left in odd cases where curr.next == null
+        return dummy.next;
+    }
+
     // have to make it global for addFirstNode fucntion(just as we do while
     // implemeting ll)
     private static ListNode th = null, tt = null;
