@@ -330,25 +330,78 @@ public class Basics {
 
     // Leetcode 24 : Swap Node in Pairs
     public ListNode swapPairs(ListNode head) {
+
+        // Approach 1:
+        // return approach1(head);
+        // Appraoch 2:
+
+        return approach2_evenodd(head);
+    }
+
+    private ListNode approach1(ListNode head) {
         ListNode curr = head;
         if (curr == null || curr.next == null)
             return curr;
-        ListNode dummy = new ListNode(-1),first = null, second = null;
-        dummy.next = curr.next;
+        ListNode dummy = new ListNode(-1), first = null, second = null;
+        dummy.next = curr.next; // scond node will be the new head;
         while (curr != null && curr.next != null) {
             first = curr;
             second = curr.next;
             ListNode third = second.next;
+
             if (third == null)
                 first.next = null;
             else
-                first.next = third.next;
+                first.next = third.next; // points to the node which will appear first in pair (even no.)
             second.next = first;
 
-            curr = third;
+            curr = third; // new first (odd)
         }
         first.next = curr; // 1 left in odd cases where curr.next == null
         return dummy.next;
+    }
+
+    // even odd technique
+    private ListNode approach2_evenodd(ListNode head) {
+        if (head == null || head.next == null)
+            return head;
+        ListNode even = new ListNode(-1), odd = new ListNode(-1), e = even, o = odd, curr = head, ptr = null;
+        int idx = 1;
+
+        // segregate odd even palce nodes
+        while (curr != null) {
+            ListNode forw = curr.next;
+            if ((idx & 1) != 0) {
+                o.next = curr;
+                o = o.next;
+            } else {
+                e.next = curr;
+                e = e.next;
+            }
+            // ptrs
+            idx++;
+            curr.next = null;
+            curr = forw;
+        }
+
+        // make pointers point to correct place
+        // save the last pointer into a variable for odd length ll cases connections
+        ListNode evenptr = even.next;
+        ListNode oddptr = odd.next;
+        while (evenptr != null && oddptr != null) {
+            ListNode nexteven = evenptr.next, nextodd = oddptr.next;
+            evenptr.next = oddptr;
+            oddptr.next = nexteven;
+
+            ptr = oddptr; // last pointer of this iteration
+            oddptr = nextodd;
+            evenptr = nexteven;
+
+        }
+        // last node left in odd length linkedlist
+        if (oddptr != null)
+            ptr.next = oddptr;
+        return even.next;
     }
 
     // have to make it global for addFirstNode fucntion(just as we do while
