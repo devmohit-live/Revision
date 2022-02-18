@@ -145,7 +145,6 @@ public class DirectedGraph {
         }
     }
 
-
     // Leetcode 210 : Course Scedule 2 :
     public int[] findOrder(int n, int[][] arr) {
 
@@ -196,7 +195,7 @@ public class DirectedGraph {
         }
     }
 
-    //Leetcode 207 : Course schedule 1 :
+    // Leetcode 207 : Course schedule 1 :
     public boolean canFinish(int n, int[][] arr) {
         // create graph first
         ArrayList<Integer> graph[] = new ArrayList[n];
@@ -250,7 +249,7 @@ public class DirectedGraph {
     }
 
     // Leetcode 329: Longest Increasing Path in a Matrix
-    // Kahn's on 2 d matrix 
+    // Kahn's on 2 d matrix
     int[][] dir = { { 0, -1 }, { 0, 1 }, { -1, 0 }, { 1, 0 } };
 
     public int longestIncreasingPath(int[][] matrix) {
@@ -315,44 +314,114 @@ public class DirectedGraph {
     }
 
     // topological sort with dfs with cycle detection case:
-    // -1 : not visited , 0 : current path, 1 => backtracked(visited but not in current path)
-    public static void topologicalSort_dfs_cycle(ArrayList<Edge>[] graph){
+    // -1 : not visited , 0 : current path, 1 => backtracked(visited but not in
+    // current path)
+    public static void topologicalSort_dfs_cycle(ArrayList<Edge>[] graph) {
         int n = graph.length;
         int[] vis = new int[n];
-        Arrays.fill(vis,-1);
-        List<Integer>ans = new ArrayList<>();
+        Arrays.fill(vis, -1);
+        List<Integer> ans = new ArrayList<>();
         boolean res = false;
-        for(int i=0;i<n;i++){
-            if(vis[i]==-1){
-                res = res || topologicalSort_dfs_cycle(graph,i,vis,ans);
+        for (int i = 0; i < n; i++) {
+            if (vis[i] == -1) {
+                res = res || topologicalSort_dfs_cycle(graph, i, vis, ans);
             }
         }
-        if(res){
+        if (res) {
             System.out.println("Cycle is present : hence deadlock : topologocal sorting not possible");
             ans.clear();
-        }else{
+        } else {
             System.out.println("Topologocal sort is: ");
-            for(int i=ans.size()-1;i>=0;i--)
-                System.out.print(ans.get(i)+" ");
+            for (int i = ans.size() - 1; i >= 0; i--)
+                System.out.print(ans.get(i) + " ");
             System.out.println();
         }
     }
 
-    private boolean topologicalSort_dfs_cycle(ArrayList<Edge>[] graph, int src, int[] vis, List<Integer> ans){
+    private boolean topologicalSort_dfs_cycle(ArrayList<Edge>[] graph, int src, int[] vis, List<Integer> ans) {
         boolean isCcycle = false;
 
         vis[src] = 0; // add in current path
-       for(Edge e: graph[src]){
-           if(vis[e.nbr]==-1){
-               isCcycle = isCcycle || topologicalSort_dfs_cycle(graph,e.nbr,vis,ans);
-           }else if(vis[e.nbr] == 0){
-               // is already visited and part of current path: cycle
-               return true;
-           }
-       }
-       vis[src] = 1; // backtracked
-       ans.add(src);
+        for (Edge e : graph[src]) {
+            if (vis[e.nbr] == -1) {
+                isCcycle = isCcycle || topologicalSort_dfs_cycle(graph, e.nbr, vis, ans);
+            } else if (vis[e.nbr] == 0) {
+                // is already visited and part of current path: cycle
+                return true;
+            }
+        }
+        vis[src] = 1; // backtracked
+        ans.add(src);
 
-       return isCcycle;
+        return isCcycle;
     }
+
+    // Leetcode 802 : Eventual Safe states
+    public List<Integer> eventualSafeNodes(int[][] graph) {
+        int n = graph.length;
+        // boolean[] vis = new boolean[n], partOfPath = new boolean[n], partOfCycle =
+        // new boolean[n];
+        // boolean[] partOfCycle = new boolean[n];
+        Set<Integer> partOfCycle = new HashSet<>();
+        int[] vis = new int[n];
+        Arrays.fill(vis, -1);
+        for (int i = 0; i < n; i++) {
+            // if(!vis[i]) dfs_directed_cycle(graph,i,vis,partOfPath,partOfCycle);
+            if (vis[i] == -1)
+                topological_dfs_cycle(graph, i, vis, partOfCycle);
+        }
+        List<Integer> ans = new ArrayList<>();
+
+        // for(int i=0;i<n;i++) if(!partOfCycle[i]) ans.add(i);
+        for (int i = 0; i < n; i++)
+            if (!partOfCycle.contains(i))
+                ans.add(i);
+
+        return ans;
+    }
+
+    private boolean dfs_directed_cycle(int[][] graph, int src, boolean[] vis, boolean[] partOfPath,
+            boolean[] partOfCycle) {
+        vis[src] = true;
+        partOfPath[src] = true;
+
+        // desicion was for src so partOfCycle[src] = true if cycle found
+        // nbr means that we founnd cycle at nbr
+
+        for (int nbr : graph[src]) {
+            if (!vis[nbr]) {
+                boolean rec = dfs_directed_cycle(graph, nbr, vis, partOfPath, partOfCycle);
+                if (rec) {
+                    return partOfCycle[src] = true;
+                }
+            } else if (vis[nbr] && partOfPath[nbr])
+                return partOfCycle[src] = true;
+
+        }
+        partOfPath[src] = false; // not a part of this path anymore
+        // here in topological sort we add the vertex;
+        return false;
+    }
+
+    private boolean topological_dfs_cycle(int[][] graph, int src, int[] vis, Set<Integer> partOfCycle) {
+        vis[src] = 0;
+
+        for (int nbr : graph[src]) {
+            if (vis[nbr] == -1) { // not visited/explored yet
+                boolean rec = topological_dfs_cycle(graph, nbr, vis, partOfCycle);
+                if (rec) {
+                    partOfCycle.add(src);
+                    return true;
+                }
+            } else if (vis[nbr] == 0) { // visited and part of path : cycle
+                partOfCycle.add(src);
+                return true;
+            }
+        }
+
+        vis[src] = 1; // visited but not a part of path anyomore
+        // topological.add(src); we add vtx in topological sort here
+        return false; // no cycle detected
+    }
+
 }
