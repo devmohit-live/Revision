@@ -779,6 +779,24 @@ public class StringSet {
 
     }
 
+    private static String printLCS(int[][] dp, String a, String b) {
+        StringBuilder sb = new StringBuilder();
+        int i = a.length() - 1, j = b.length() - 1;
+        while (i >= 0 && j >= 0) {
+            if (a.charAt(i) == b.charAt(j)) {
+                sb.append(a.charAt(i));
+                i--;
+                j--;
+            } else {
+                if (dp[i - 1][j] > dp[j - 1][i])
+                    i--;
+                else
+                    j--;
+            }
+        }
+        return sb.reverse().toString();
+    }
+
     public static void main(String[] args) {
         // String s1 = "geek", s2 = "acef";
         // String s = "geeksforgeeks", t = "gks";
