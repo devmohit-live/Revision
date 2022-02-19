@@ -779,12 +779,26 @@ public class StringSet {
 
     }
 
+    private static int lcs(String a, String b, int n, int m, int[][] dp) {
+        if (n == 0 || m == 0)
+            return dp[n][m] = 0;
+
+        if (dp[n][m] != -1)
+            return dp[n][m];
+        char x = a.charAt(n - 1), y = b.charAt(m - 1);
+        if (x == y) {
+            return dp[n][m] = 1 + lcs(a, b, n - 1, m - 1, dp);
+        } else {
+            return dp[n][m] = Math.max(lcs(a, b, n - 1, m, dp), lcs(a, b, n, m - 1, dp));
+        }
+    }
+
     private static String printLCS(int[][] dp, String a, String b) {
         StringBuilder sb = new StringBuilder();
-        int i = a.length() - 1, j = b.length() - 1;
-        while (i >= 0 && j >= 0) {
-            if (a.charAt(i) == b.charAt(j)) {
-                sb.append(a.charAt(i));
+        int i = a.length(), j = b.length();
+        while (i > 0 && j > 0) {
+            if (a.charAt(i - 1) == b.charAt(j - 1)) {
+                sb.append(a.charAt(i - 1));
                 i--;
                 j--;
             } else {
@@ -794,7 +808,57 @@ public class StringSet {
                     j--;
             }
         }
+
+        // any of the string is empty : no need to add the leftovers of other : as
+        // common is needed
         return sb.reverse().toString();
+    }
+
+    // Print Shortest Common SuperSequence
+
+    private static String printShortestCommonSuperseq(int[][] dp, String a, String b) {
+        StringBuilder sb = new StringBuilder();
+        int i = a.length(), j = b.length();
+        while (i > 0 && j > 0) {
+            if (a.charAt(i - 1) == b.charAt(j - 1)) {
+                sb.append(a.charAt(i - 1));
+                i--;
+                j--;
+            } else {
+                if (dp[i - 1][j] > dp[j - 1][i]) {
+                    sb.append(a.charAt(i - 1));
+                    i--;
+                } else {
+                    sb.append(b.charAt(j - 1));
+                    j--;
+                }
+            }
+        }
+
+        // here we need to add the leftovers of the string as i and j any of them may
+        // become zero
+        while (i > 0) {
+            sb.append(a.charAt(i - 1));
+            i--;
+        }
+        while (j > 0) {
+            sb.append(b.charAt(j - 1));
+            j--;
+        }
+
+        return sb.reverse().toString();
+    }
+
+    // https://www.geeksforgeeks.org/print-shortest-common-supersequence/
+    private static int ShortestCommonSuperseq(String a, String b, int n, int m) {
+        int[][] dp = new int[n + 1][m + 1];
+        for (int[] d : dp)
+            Arrays.fill(d, -1);
+        int lcs = lcs(a, b, n, m, dp);
+        System.out.println("length of shortest Super Seq is " + (n + m - lcs));
+        System.out.println("LCS is " + printLCS(dp, a, b) + " with len " + lcs);
+        System.out.println("Shortest Super Seq is " + printShortestCommonSuperseq(dp, a, b));
+        return (n + m - lcs);
     }
 
     public static void main(String[] args) {
