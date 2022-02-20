@@ -117,4 +117,34 @@ public class FixedSize {
         }
         return ans;
     }
+
+    //Chocltae Distribution : Part of searching ans sorting as well as slw
+
+    //https://practice.geeksforgeeks.org/problems/chocolate-distribution-problem3825/1/#
+    
+     //Time: nlogn + n
+    public long findMinDiff (ArrayList<Long> a, long n, long m){
+        int si = 0, ei = 0;
+        
+        //Sorting so that we can easily get the min ans max value of a widow easily
+        //otherwise for every window of size m we have to find the min and max value
+        // then time will be : n * m
+        long ans = Long.MAX_VALUE;
+        Collections.sort(a);
+        while(ei<n){
+            //cal
+            if(ei - si +1 < m) ei++;
+            else if( ei - si +1 == m){
+                //ans
+                long maxel = a.get(ei);
+                long minel = a.get(si);
+                ans = Math.min(maxel - minel, ans);
+                //calculation undo
+                si++;
+                ei++;
+            }
+        }
+        
+        return ans;
+    }
 }
