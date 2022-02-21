@@ -174,7 +174,7 @@ public class lis {
         return dp;
     }
 
-    // basically LDS => jo mujhse shuru hota hai(na ki mujhpe khtm honta ho)
+    // basically LDS => jo mujhse shuru hota hai(na ki mujhpe khtm hota ho)
     int[] Lis_RL(int[] arr) {
         int n = arr.length, maxlen = 0;
         int[] dp = new int[n];
