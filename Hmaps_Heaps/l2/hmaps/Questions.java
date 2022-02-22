@@ -200,7 +200,7 @@ public class Questions {
             else
                 right.add(num);
 
-            if (left.size() - right.size() == 2)
+            if (left.size() - right.size() == 2) //left oriented
                 right.add(left.remove());
             else if (right.size() - left.size() == 1)
                 left.add(right.remove());
@@ -214,34 +214,34 @@ public class Questions {
             return 1.0 * left.peek();
 
         }
+    }
 
-        // 1027 : Longest Arithmetic Subsequence :TODO:toask
-        public int longestArithSeqLength(int[] A) {
-            int n = A.length;
-            // dp => mujhe khtm hone wala lis with n differences like where d = 1,2,3,...
-            // d= common differenece (ranges from A[x] - A[y] , x=0->n, y=1->n)
-            HashMap<Integer, Integer>[] dp = new HashMap[n];
+    // 1027 : Longest Arithmetic Subsequence :TODO:toask
+    public int longestArithSeqLength(int[] A) {
+        int n = A.length;
+        // dp => mujhe khtm hone wala lis with n differences like where d = 1,2,3,...
+        // d= common differenece (ranges from A[x] - A[y] , x=0->n, y=1->n)
+        HashMap<Integer, Integer>[] dp = new HashMap[n];
 
-            for (int i = 0; i < n; i++)
-                dp[i] = new HashMap<>();
+        for (int i = 0; i < n; i++)
+            dp[i] = new HashMap<>();
 
-            int len = 0;
-            for (int i = 0; i < n; i++) {
-                for (int j = i - 1; j >= 0; j--) {
-                    int diff = A[i] - A[j];
+        int len = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = i - 1; j >= 0; j--) {
+                int diff = A[i] - A[j];
 
-                    // present length of lis upto me with some differences
-                    int currLen = dp[i].getOrDefault(diff, 0);
-                    // length of lis befre me with same common diff
-                    int newLen = dp[j].getOrDefault(diff, 1) + 1;
-                    // my updated length for that common difference
-                    dp[i].put(diff, Math.max(currLen, newLen));
-                    len = Math.max(len, dp[i].get(diff));
-                }
+                // present length of lis upto me with some differences
+                int currLen = dp[i].getOrDefault(diff, 0);
+                // length of lis befre me with same common diff
+                int newLen = dp[j].getOrDefault(diff, 1) + 1;
+                // my updated length for that common difference
+                dp[i].put(diff, Math.max(currLen, newLen));
+                len = Math.max(len, dp[i].get(diff));
             }
-
-            return len;
         }
+
+        return len;
     }
 
     // Leetcode contest 5898. Kth Distinct String in an Array

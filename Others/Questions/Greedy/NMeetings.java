@@ -37,6 +37,8 @@ public class NMeetings {
             }
         }
 
+        //or ans = 1, start from i = 1
+
         return ans;
 
     }

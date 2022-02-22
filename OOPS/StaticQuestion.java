@@ -1,5 +1,4 @@
-public class StaticQuestion
-{
+public class StaticQuestion{
     static {
         System.out.println("b");
     }
