@@ -117,6 +117,5 @@ public class Tries {
         System.out.println("contains with go " + trie.search("go"));
         System.out.println("contains with gol " + trie.search("gol"));
         System.out.println("starts with gol " + trie.startsWith("gol"));
-
     }
 }

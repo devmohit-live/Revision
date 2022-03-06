@@ -123,6 +123,9 @@ class Pair {
     }
 }
 
+
+//  =================================== HashMap ========================================
+
 class MyHashMap<K, V> {
     // ============================ Data Members
     private int size; // bucket length
