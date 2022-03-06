@@ -2,11 +2,11 @@ public class Tries {
 
     static class TRIE {
         private class Node {
-            int isEnd;
+            boolean isEnd;
             Node[] children;
 
             Node() {
-                this.isEnd = 0;
+                this.isEnd = false;
                 this.children = new Node[26];
             }
         }
@@ -30,7 +30,7 @@ public class Tries {
                 ptr = ptr.children[idx];
             }
 
-            ptr.isEnd++;
+            ptr.isEnd = true;
         }
 
         // searches word in linear fasion : only 1 choice for each character present or
@@ -48,7 +48,7 @@ public class Tries {
                 ptr = ptr.children[idx];
             }
 
-            return ptr.isEnd > 0;
+            return ptr.isEnd;
         }
 
         // search in recursive way : useful in case of presencve of wildchrs: were we
@@ -60,7 +60,7 @@ public class Tries {
 
         private boolean find(String word, int idx, char wildcard, Node ptr) {
             if (idx == word.length())
-                return ptr.isEnd > 0;
+                return ptr.isEnd;
             boolean res = false;
             char ch = word.charAt(idx);
             if (ch != wildcard) {
