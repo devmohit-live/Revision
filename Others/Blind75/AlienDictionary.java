@@ -1,31 +1,43 @@
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 
 class AlienDictionary {
 
     // For leetcode not Lintocde
-    public static String alienOrder(String[] words) {
+    public static String alienOrderMine(String[] words) {
         if (words.length == 0)
             return "";
 
-        Map<Integer, Set<Integer>> graph = new HashMap<>();
-        int[] vis = new int[26];
-        boolean validDictionary = buildGraph(graph, vis, words);
+        Map<Integer, Set<Integer>> graph = new HashMap<>(); // using map bcz arraylist[26] will not determine which
+                                                            // characters are actually present in words
+        // map only contains entry for the characters which are present in all the word
+        // in words
+        int[] vis = new int[26]; // for topoDFS
+        Map<Integer, Integer> indegree = new HashMap<>(); // for topoBFS
+
+        boolean validDictionary = buildGraph(graph, vis, words, indegree);
         if (!validDictionary)
             return "";
 
         // topological sort
 
-        boolean acyclic = true;
         StringBuilder sb = new StringBuilder();
-        // vis=> 0: unvisited, 1: vis and part of current path, -1 : visisted but not a
-        // prt of current path
-        for (int el : graph.keySet())
-            if (vis[el] == 0)
-                acyclic = acyclic && topoDFS(graph, el, vis, sb);
-        return acyclic ? sb.reverse().toString() : "";
+
+        // DFS:
+        /*
+         * boolean acyclic = true; // vis=> 0: unvisited, 1: vis and part of current
+         * path, -1 : visisted but not a // prt of current path for (int el :
+         * graph.keySet()) if (vis[el] == 0) acyclic = acyclic && topoDFS(graph, el,
+         * vis, sb); return acyclic ? sb.reverse().toString() : "";
+         */
+
+        // BFS
+        boolean acyclic = topoBfs(graph, indegree, sb);
+        return acyclic ? sb.toString() : "";
 
     }
 
@@ -46,7 +58,8 @@ class AlienDictionary {
         return res;
     }
 
-    private static boolean buildGraph(Map<Integer, Set<Integer>> graph, int[] vis, String[] words) {
+    private static boolean buildGraph(Map<Integer, Set<Integer>> graph, int[] vis, String[] words,
+            Map<Integer, Integer> indegree) {
         // initialize map : only contains the words which are actually present in words
         // chars
         for (String word : words) {
@@ -69,6 +82,7 @@ class AlienDictionary {
                 if (u != v) {
                     // edge
                     graph.get(u - 'a').add(v - 'a');
+                    indegree.put(u - 'a', indegree.getOrDefault(u - 'a', 0) + 1);
                     samePrefix = false;
                     break;
                 }
@@ -83,5 +97,160 @@ class AlienDictionary {
     }
 
     // Using Bfs topological sort: Kahn's Algo
+    private static boolean topoBfs(Map<Integer, Set<Integer>> graph, Map<Integer, Integer> indegree, StringBuilder sb) {
+        LinkedList<Integer> q = new LinkedList<>();
+        boolean[] vis = new boolean[26];
+        for (int i = 0; i < indegree.size(); i++)
+            if (indegree.get(i) == 0)
+                q.addLast(i);
+
+        int lv = 0;
+        while (!q.isEmpty()) {
+            int size = 0;
+            while (size-- > 0) {
+                int rm = q.removeFirst();
+                sb.append((char) (rm + 'a'));
+                for (int nbr : graph.getOrDefault(rm, new HashSet<>())) {
+                    if (!vis[nbr]) {
+                        indegree.put(nbr, indegree.get(nbr) - 1);
+                        if (indegree.get(nbr) == 0)
+                            q.addLast(nbr);
+                    }
+
+                }
+            }
+            lv++;
+        }
+
+        if (sb.length() != indegree.size())
+            return true;
+        return false; // cycle
+    }
+
+    // pep
+    public static String alienOrderPep(String[] words) {
+        Map<Character, Set<Character>> map = new HashMap<Character, Set<Character>>();
+        Map<Character, Integer> degree = new HashMap<Character, Integer>();
+        StringBuilder result = new StringBuilder();
+        if (words == null || words.length == 0)
+            return result.toString();
+        for (String s : words) {
+            for (char c : s.toCharArray()) {
+                degree.put(c, 0);
+            }
+        }
+        for (int i = 0; i < words.length - 1; i++) {
+            boolean flag = false;
+            String cur = words[i];
+            String next = words[i + 1];
+            int length = Math.min(cur.length(), next.length());
+            for (int j = 0; j < length; j++) {
+                char c1 = cur.charAt(j);
+                char c2 = next.charAt(j);
+                if (c1 != c2) {
+                    Set<Character> set = new HashSet<Character>();
+                    if (map.containsKey(c1))
+                        set = map.get(c1);
+                    if (!set.contains(c2)) {
+                        set.add(c2);
+                        map.put(c1, set);
+                        degree.put(c2, degree.get(c2) + 1);
+                    }
+                    flag = true;
+                    break;
+                }
+            }
+
+            if (flag == false && next.length() < cur.length()) {
+                return "";
+            }
+        }
+        Queue<Character> q = new LinkedList<Character>();
+        for (char c : degree.keySet()) {
+            if (degree.get(c) == 0)
+                q.add(c);
+        }
+        while (!q.isEmpty()) {
+            char c = q.remove();
+            result.append(c);
+            if (map.containsKey(c)) {
+                for (char c2 : map.get(c)) {
+                    degree.put(c2, degree.get(c2) - 1);
+                    if (degree.get(c2) == 0)
+                        q.add(c2);
+                }
+            }
+        }
+
+        if (result.length() != degree.size()) {
+            return "";
+        }
+
+        return result.toString();
+    }
+
+    // Lintcode: Giver the lexo smaller in case of TIE:
+    public String alienOrder(String[] words) {
+        Map<Character, Set<Character>> map = new HashMap<Character, Set<Character>>();
+        Map<Character, Integer> degree = new HashMap<Character, Integer>();
+        StringBuilder result = new StringBuilder();
+        if (words == null || words.length == 0)
+            return result.toString();
+        for (String s : words) {
+            for (char c : s.toCharArray()) {
+                degree.put(c, 0);
+            }
+        }
+        for (int i = 0; i < words.length - 1; i++) {
+            boolean flag = false;
+            String cur = words[i];
+            String next = words[i + 1];
+            int length = Math.min(cur.length(), next.length());
+            for (int j = 0; j < length; j++) {
+                char c1 = cur.charAt(j);
+                char c2 = next.charAt(j);
+                if (c1 != c2) {
+                    Set<Character> set = new HashSet<Character>();
+                    if (map.containsKey(c1))
+                        set = map.get(c1);
+                    if (!set.contains(c2)) {
+                        set.add(c2);
+                        map.put(c1, set);
+                        degree.put(c2, degree.get(c2) + 1);
+                    }
+                    flag = true;
+                    break;
+                }
+            }
+
+            if (flag == false && next.length() < cur.length()) {
+                return "";
+            }
+        }
+        PriorityQueue<Character> q = new PriorityQueue<Character>((a, b) -> {
+            return a - b;
+        });
+        for (char c : degree.keySet()) {
+            if (degree.get(c) == 0)
+                q.add(c);
+        }
+        while (!q.isEmpty()) {
+            char c = q.remove();
+            result.append(c);
+            if (map.containsKey(c)) {
+                for (char c2 : map.get(c)) {
+                    degree.put(c2, degree.get(c2) - 1);
+                    if (degree.get(c2) == 0)
+                        q.add(c2);
+                }
+            }
+        }
+
+        if (result.length() != degree.size()) {
+            return "";
+        }
+
+        return result.toString();
+    }
 
 }
