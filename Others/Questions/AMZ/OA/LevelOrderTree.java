@@ -1,3 +1,4 @@
+package Others.Questions.AMZ.OA;
 public class LevelOrderTree {
     public List<List<Integer>> levelOrder(TreeNode root) {
         Queue<TreeNode> q = new LinkedList<>();

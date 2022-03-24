@@ -1,4 +1,4 @@
-package Questions.AMZ;
+package Others.Questions.AMZ.OA;
 
 import java.util.ArrayList;
 import java.util.Collections;

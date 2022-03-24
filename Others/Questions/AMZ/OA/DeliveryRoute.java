@@ -1,3 +1,4 @@
+package Others.Questions.AMZ.OA;
 public class DeliveryRoute {
     static int[][] dir = { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 } };
     static String[] dirS = { "L", "D", "R", "T" };

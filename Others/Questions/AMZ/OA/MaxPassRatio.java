@@ -1,3 +1,4 @@
+package Others.Questions.AMZ.OA;
 import java.util.PriorityQueue;
 
 public class MaxPassRatio {

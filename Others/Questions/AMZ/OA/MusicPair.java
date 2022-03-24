@@ -1,3 +1,4 @@
+package Others.Questions.AMZ.OA;
 public class MusicPair {
     public int numPairsDivisibleBy60(int[] time) {
         // complemetnt , count of complement

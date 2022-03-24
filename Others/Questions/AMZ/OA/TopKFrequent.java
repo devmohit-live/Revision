@@ -1,4 +1,4 @@
-package Questions.AMZ;
+package Others.Questions.AMZ.OA;
 
 public class TopKFrequent {
     public List<String> topKFrequent(String[] words, int k) {

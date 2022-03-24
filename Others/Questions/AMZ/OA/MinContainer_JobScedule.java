@@ -1,3 +1,4 @@
+package Others.Questions.AMZ.OA;
 
 // Minimum Total Container Size/ Minimum Difficulty of a Job Schedule
 // split jobs in to d days with some condition

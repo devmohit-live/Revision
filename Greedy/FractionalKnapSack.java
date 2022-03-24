@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class FractionalKnapSack {
     double fractionalKnapsack(int W, Item arr[], int n) {
         Arrays.sort(arr, (a, b) -> {
