@@ -358,4 +358,29 @@ we can put it just below sum += nums[i]; statement. This will make code more int
         return count;
     }
 
+    //1029: Two City Scheduing
+    // Approach:
+    // https://leetcode.com/problems/two-city-scheduling/discuss/667786/Java-or-C%2B%2B-or-Python3-or-With-detailed-explanation
+    public int twoCitySchedCost(int[][] costs) {
+        // try sending everyone to city A
+        int cost = 0, n = costs.length;
+        for (int[] el : costs)
+            cost += el[0];
+
+        // now try for send half persons to city B such that we can get refunds =>
+        // we have send person to city a with cost x and if we try to send them for B
+        // instead the difference of ticket prices will be refunded
+        int[] refund = new int[n];
+
+        for (int i = 0; i < n; i++)
+            refund[i] = costs[i][1] - costs[i][0];
+        // -ve value means we get refund +ve means we have to pay those extra
+        Arrays.sort(refund); // put -ve at start
+        for (int i = 0; i < n / 2; i++)
+            cost += refund[i];
+
+        return cost;
+
+    }
+
 }
