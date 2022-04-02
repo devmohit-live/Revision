@@ -68,4 +68,39 @@ public class Backtracking {
             vis[i] = false;
         }
     }
+
+    // 47 : Permutaions II
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        List<List<Integer>> ans = new ArrayList<>();
+        if (nums == null || nums.length == 0)
+            return ans;
+        Arrays.sort(nums);
+        permsLimited2(nums, new ArrayList<>(), ans, new boolean[nums.length]);
+        return ans;
+
+    }
+
+    private void permsLimited2(int[] nums, List<Integer> small, List<List<Integer>> ans, boolean[] vis) {
+
+        // make sure all the elemets are added into tmp ans
+        // or we can also take an idx var which check how may items are being added idx
+        // == arr.length
+        if (small.size() == nums.length) {
+            ans.add(new ArrayList<>(small));
+            return;
+        }
+
+        int prev = -1000;
+        for (int i = 0; i < nums.length; i++) {
+            if (vis[i] || (prev == nums[i]))
+                continue;
+
+            vis[i] = true;
+            small.add(nums[i]);
+            prev = nums[i];
+            permsLimited(nums, small, ans, vis);
+            small.remove(small.size() - 1);
+            vis[i] = false;
+        }
+    }
 }
