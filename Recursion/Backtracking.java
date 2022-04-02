@@ -1,7 +1,7 @@
 public class Backtracking {
 
-    //  LC 22.Generate Parentheses
-    
+    // LC 22.Generate Parentheses
+
     public List<String> generateParenthesis(int n) {
         List<String> ans = new ArrayList<>();
         if (n == 0)
@@ -35,6 +35,37 @@ public class Backtracking {
             sb.append(")");
             addBrackets(opening, closing + 1, n, sb, ans);
             sb.deleteCharAt(sb.length() - 1);
+        }
+    }
+
+    // 46 Permutations
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> ans = new ArrayList<>();
+        if (nums == null || nums.length == 0)
+            return ans;
+        permsLimited(nums, new ArrayList<>(), ans, new boolean[nums.length]);
+        return ans;
+    }
+
+    private void permsLimited(int[] nums, List<Integer> small, List<List<Integer>> ans, boolean[] vis) {
+
+        // make sure all the elemets are added into tmp ans
+        // or we can also take an idx var which check how may items are being added idx
+        // == arr.length
+        if (small.size() == nums.length) {
+            ans.add(new ArrayList<>(small));
+            return;
+        }
+
+        for (int i = 0; i < nums.length; i++) {
+            if (vis[i])
+                continue;
+
+            vis[i] = true;
+            small.add(nums[i]);
+            permsLimited(nums, small, ans, vis);
+            small.remove(small.size() - 1);
+            vis[i] = false;
         }
     }
 }
