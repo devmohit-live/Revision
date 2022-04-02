@@ -103,4 +103,45 @@ public class Backtracking {
             vis[i] = false;
         }
     }
+
+    // Rat In a MAze:
+    // https://practice.geeksforgeeks.org/problems/rat-in-a-maze-problem/1
+
+    static int[][] dir = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
+    static char[] dirs = { 'U', 'D', 'L', 'R' };
+
+    public static ArrayList<String> findPath(int[][] m, int n) {
+        if (m == null || m.length == 0 || m[0].length == 0)
+            return new ArrayList<>();
+        ;
+        if (m[0][0] == 0 || m[n - 1][n - 1] == 0)
+            return new ArrayList<>();
+        ;
+
+        ArrayList<String> ans = new ArrayList<>();
+        backtrack(m, n, 0, 0, new boolean[n][n], new StringBuilder(), ans);
+        return ans;
+    }
+
+    private static void backtrack(int[][] grid, int n, int sr, int sc, boolean[][] vis, StringBuilder sb,
+            ArrayList<String> ans) {
+        if (sr == n - 1 && sc == n - 1) {
+            ans.add(sb.toString());
+            return;
+        }
+
+        vis[sr][sc] = true;
+        for (int i = 0; i < 4; i++) {
+            int r = sr + dir[i][0];
+            int c = sc + dir[i][1];
+            char ch = dirs[i];
+            if (r >= 0 && c >= 0 && r < n && c < n && !vis[r][c] && grid[r][c] != 0) {
+                sb.append(ch);
+                backtrack(grid, n, r, c, vis, sb, ans);
+                sb.deleteCharAt(sb.length() - 1);
+            }
+
+        }
+        vis[sr][sc] = false;
+    }
 }
