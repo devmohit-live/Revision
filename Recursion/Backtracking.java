@@ -1,3 +1,7 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Backtracking {
 
     // LC 22.Generate Parentheses
@@ -144,4 +148,35 @@ public class Backtracking {
         }
         vis[sr][sc] = false;
     }
+
+    // Factor Combination :
+    // https://www.lintcode.com/problem/factor-combinations/description
+
+    public List<List<Integer>> getFactors(int n) {
+        List<List<Integer>> ans = new ArrayList<>();
+        solve(n, 2, new ArrayList<>(), ans);
+        ans.remove(ans.size() - 1);
+        // or checking in the recursion base case that
+        // small.size(()) >1
+        return ans;
+    }
+
+    private int solve(int n, int sp, List<Integer> small, List<List<Integer>> ans) {
+        if (n == 1) {
+            ans.add(new ArrayList<>(small));
+            return 1;
+        }
+
+        int count = 0;
+        for (int i = sp; i <= n; i++) {
+            if (n % i == 0) {
+                small.add(i);
+                count += solve(n / i, i, small, ans);
+                small.remove(small.size() - 1);
+            }
+        }
+
+        return count;
+    }
+
 }
