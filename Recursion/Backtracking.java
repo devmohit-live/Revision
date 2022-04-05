@@ -213,4 +213,77 @@ public class Backtracking {
         }
         return dp[sr][sc] = count;
     }
+
+    //Palindrome partitioing Letcode(Different from MCM and Knapsack) :131
+    
+    public List<List<String>> partition(String s) {
+        List<List<String>> ans = new ArrayList<>();
+        // brute(s,ans);
+        // brute2(s);
+        solve(s, 0, new ArrayList<>(), ans);
+        return ans;
+    }
+
+    // NOT WORK:
+    // not mormal substring and pal check
+    // as b is occuring in two child lists
+    // //Brute:
+    // private void brute(String s,List<List<String>> ans){
+    // int n = s.length();
+    // for(int len=0;len<n;len++){
+    // List<String> small = new ArrayList<>();
+    // for(int j=0;j<n;j++){
+    // if( isPalindrome(s,j,j+len) )
+    // small.add(s.substring(j,j+len+1));
+    // }
+
+    // ans.add(small);
+    // }
+    // }
+
+    // private void brute2(String s){
+    // List<String> ans = new ArrayList<>();
+    // int n = s.length();
+    // for(int len=0;len<n;len++){
+    // for(int j=0;j<n;j++){
+    // if( isPalindrome(s,j,j+len) )
+    // ans.add(s.substring(j,j+len+1));
+    // }
+    // }
+    // System.out.println(ans.size() + " " +ans);
+    // }
+
+    private boolean isPalindrome(String s, int i, int j) {
+        if (j >= s.length())
+            return false;
+
+        while (i < j)
+            if (s.charAt(i++) != s.charAt(j--))
+                return false;
+        return true;
+    }
+
+    // combinations => ncr
+    // time: n(pal check) * 2^n
+    // space : O(n)
+
+    private void solve(String s, int idx, List<String> small, List<List<String>> ans) {
+
+        if (idx == s.length()) {
+            ans.add(new ArrayList<>(small));
+            return;
+        }
+
+        for (int i = idx; i < s.length(); i++) {
+            if (isPalindrome(s, idx, i)) {
+                small.add(s.substring(idx, i + 1));
+                solve(s, i + 1, small, ans);
+                small.remove(small.size() - 1);
+            }
+        }
+
+    }
+
+
+
 }
