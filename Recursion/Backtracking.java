@@ -215,7 +215,7 @@ public class Backtracking {
     }
 
     //Palindrome partitioing Letcode(Different from MCM and Knapsack) :131
-    
+
     public List<List<String>> partition(String s) {
         List<List<String>> ans = new ArrayList<>();
         // brute(s,ans);
@@ -284,6 +284,47 @@ public class Backtracking {
 
     }
 
+    // 784. Letter Case Permutation
+    
+    public List<String> letterCasePermutation(String s) {
+        if (s == null || s.length() == 0)
+            return new ArrayList<String>();
+        s = s.toLowerCase();
+        // System.out.println(s);
+        List<String> ans = new ArrayList<>();
+        solve(s.toCharArray(), 0, new StringBuilder(), ans);
+        return ans;
+
+    }
+
+    private void solve(char[] arr, int idx, StringBuilder sb, List<String> ans) {
+
+        if (idx == arr.length) {
+            ans.add(sb.toString());
+            return;
+        }
+
+        char ch = arr[idx];
+        if (Character.isDigit(ch)) {
+            // 1 choice add itself and move forward
+            sb.append(ch);
+            solve(arr, idx + 1, sb, ans);
+            sb.deleteCharAt(sb.length() - 1);
+        } else {
+
+            // 2 choice add itseld in lowers and upper case
+            sb.append(ch);
+            solve(arr, idx + 1, sb, ans);
+            sb.deleteCharAt(sb.length() - 1);
+
+            ch = Character.toUpperCase(ch);
+
+            sb.append(ch);
+            solve(arr, idx + 1, sb, ans);
+            sb.deleteCharAt(sb.length() - 1);
+        }
+
+    }
 
 
 }
