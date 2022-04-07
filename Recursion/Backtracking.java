@@ -179,42 +179,47 @@ public class Backtracking {
         return count;
     }
 
-//Special Matrix : https://practice.geeksforgeeks.org/problems/special-matrix4201/1#
-  int[][] dir = { {0,1} , {1,0} };
-    public int FindWays(int n, int m, int[][] blocked_cells)
-    {
-        final int MOD = (int)1e9 +7;
-        
-        int[][] grid = new int[n+1][m+1];// 1 based indexing
-        for(int[] b: blocked_cells){
+    // Special Matrix :
+    // https://practice.geeksforgeeks.org/problems/special-matrix4201/1#
+    int[][] dir = { { 0, 1 }, { 1, 0 } };
+
+    public int FindWays(int n, int m, int[][] blocked_cells) {
+        final int MOD = (int) 1e9 + 7;
+
+        int[][] grid = new int[n + 1][m + 1];// 1 based indexing
+        for (int[] b : blocked_cells) {
             int i = b[0], j = b[1];
             // System.out.println(i+" "+j);
-            if(i == 1 && j== 1 ) return 0; // 1 based indexing
-            if(i==n && j==m) return 0;
-            grid[i][j] = 1;//blocked
-           
+            if (i == 1 && j == 1)
+                return 0; // 1 based indexing
+            if (i == n && j == m)
+                return 0;
+            grid[i][j] = 1;// blocked
+
         }
-        
-        Long[][] dp = new Long[n+1][m+1];// 1 based indexing
-        return (int)(solve(grid, 1,1,n,m, dp)%MOD);
+
+        Long[][] dp = new Long[n + 1][m + 1];// 1 based indexing
+        return (int) (solve(grid, 1, 1, n, m, dp) % MOD);
     }
-    
-    private long solve(int[][] grid, int sr, int sc, int n,int m,Long[][] dp){
-        if(sr == n && sc == m) return dp[sr][sc] = 1l;
-        
-        if(dp[sr][sc] != null) return dp[sr][sc];
-        
+
+    private long solve(int[][] grid, int sr, int sc, int n, int m, Long[][] dp) {
+        if (sr == n && sc == m)
+            return dp[sr][sc] = 1l;
+
+        if (dp[sr][sc] != null)
+            return dp[sr][sc];
+
         long count = 0;
-        for(int[] d: dir){
-            int r = sr + d[0], c= sc + d[1];
-            if(r>0 && c>0 && r<=n && c<=m && grid[r][c] != 1){
-                count+=solve(grid,r,c,n,m,dp);
+        for (int[] d : dir) {
+            int r = sr + d[0], c = sc + d[1];
+            if (r > 0 && c > 0 && r <= n && c <= m && grid[r][c] != 1) {
+                count += solve(grid, r, c, n, m, dp);
             }
         }
         return dp[sr][sc] = count;
     }
 
-    //Palindrome partitioing Letcode(Different from MCM and Knapsack) :131
+    // Palindrome partitioing Letcode(Different from MCM and Knapsack) :131
 
     public List<List<String>> partition(String s) {
         List<List<String>> ans = new ArrayList<>();
@@ -285,7 +290,7 @@ public class Backtracking {
     }
 
     // 784. Letter Case Permutation
-    
+
     public List<String> letterCasePermutation(String s) {
         if (s == null || s.length() == 0)
             return new ArrayList<String>();
@@ -326,5 +331,38 @@ public class Backtracking {
 
     }
 
+    // 1219. Path with Maximum Gold
+    // Time Complexity :
+    public int getMaximumGold(int[][] grid) {
+        int[][] dir = { { 0, -1 }, { 0, 1 }, { -1, 0 }, { 1, 0 } };
+        if (grid == null || grid.length == 0 || grid[0].length == 0)
+            return 0;
+        int n = grid.length, m = grid[0].length;
+        int max = 0;
+        boolean[][] vis = new boolean[n][m];
+
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < m; j++)
+                if (grid[i][j] > 0)
+                    max = Math.max(max, collectGold(grid, i, j, vis));
+
+        return max;
+    }
+
+    private int collectGold(int[][] grid, int sr, int sc, boolean[][] vis) {
+
+        // if(dp[][] != null) return dp[sr][sc];
+        vis[sr][sc] = true;
+        int ans = 0;
+        for (int[] d : dir) {
+            int r = sr + d[0], c = sc + d[1];
+            if (r >= 0 && c >= 0 && r < grid.length && c < grid[0].length && !vis[r][c] && grid[r][c] > 0) {
+
+                ans = Math.max(collectGold(grid, r, c, vis), ans);
+            }
+        }
+        vis[sr][sc] = false;
+        return ans + grid[sr][sc];
+    }
 
 }
