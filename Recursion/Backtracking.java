@@ -408,5 +408,46 @@ public class Backtracking {
         return true;
     }
 
+    //Word Search : 79
+    public boolean exist(char[][] board, String word) {
+        if (board == null || board.length == 0 || board[0].length == 0 || word.length() == 0)
+            return false;
+
+        int n = board.length, m = board[0].length, len = word.length();
+        boolean found = false;
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < m; j++) {
+                found = found || dfs(board, i, j, 0, len, word, new boolean[n][m]);
+                if (found)
+                    return true;
+            }
+        return false;
+    }
+
+    private boolean dfs(char[][] board, int sr, int sc, int idx, int n, String word, boolean[][] vis) {
+
+        if (idx == n)
+            return true; // put this first as in case of single haracter vis[][] is marked for next call
+                         // and false is returned directly by is Safe
+        // [["a"]] "a"
+        if (sr < 0 || sc < 0 || sr >= board.length || sc >= board[0].length || vis[sr][sc])
+            return false;
+
+        char a = word.charAt(idx), b = board[sr][sc];
+        if (a != b)
+            return false;
+
+        vis[sr][sc] = true;
+
+        boolean isValid = false;
+        for (int[] d : dir) {
+            int r = sr + d[0], c = sc + d[1];
+            isValid = isValid || dfs(board, r, c, idx + 1, n, word, vis);
+        }
+
+        vis[sr][sc] = false;
+
+        return isValid;
+    }
 
 }
