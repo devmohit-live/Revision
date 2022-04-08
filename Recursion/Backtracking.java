@@ -365,4 +365,48 @@ public class Backtracking {
         return ans + grid[sr][sc];
     }
 
+    //Unique Paths III : 980
+     public int uniquePathsIII(int[][] grid) {
+        if(grid == null  || grid.length == 0 || grid[0].length == 0) return 0;
+        int n = grid.length , m = grid[0].length, sr = -1, sc = -1,count = 0;
+        for(int i=0;i<n;i++) for(int j=0;j<m;j++){
+            if(grid[i][j] == 1){
+                 sr = i; sc = j;
+                count++; // taking one valid move from starting point too (is is also a valid cell for moveemnt just like 0)
+            }
+               
+            if(grid[i][j] == 0) count++;
+        }
+            
+        return solve(grid,sr,sc,new boolean[n][m],count);
+    }
+    
+    private int solve(int[][] grid, int sr, int sc, boolean[][] vis,int count){
+        if(grid[sr][sc] == 2 && count == 0){
+                return 1;
+        }
+        
+        int paths = 0;
+        for(int[] d: dir){
+            int r = sr + d[0];
+            int c = sc + d[1];
+            // if(r>=0 && c>=0 && r<grid.length && c<grid[0].length && grid[r][c]!=-1 && grid[r][c]!=1 && !vis[r][c]){
+            if(isSafe(grid,r,c,vis)){
+                vis[r][c] = true;
+                paths += solve(grid,r,c,vis,count-1);
+                vis[r][c] = false;
+            }
+        }
+        
+        return paths;
+    }
+    
+    private boolean isSafe(int[][] grid, int r, int c,boolean[][] vis){
+        if(r>= grid.length || c>= grid[0].length || r<0 || c<0) return false;
+        if(vis[r][c] || grid[r][c] == -1 || grid[r][c] == 1) return false;
+        
+        return true;
+    }
+
+
 }
