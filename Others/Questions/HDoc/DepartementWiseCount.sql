@@ -1,0 +1,1 @@
+SELECT emp_dept, COUNT(*) FROM emp_details GROUP BY emp_dept;
