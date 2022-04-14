@@ -1,3 +1,5 @@
+import java.util.HashMap;
+
 public class LRUCache {
 
     private class Node {
@@ -13,9 +15,10 @@ public class LRUCache {
 
     }
 
-    private HashMap<Integer, Node> map = new HashMap<>();
+    private HashMap<Integer, Node> map;
 
-    private int size, maxSize;
+    private int size;
+    private final int MAXSIZE;
     private Node head = null, tail = null;
 
     private void removeNode(Node node) {
@@ -69,7 +72,11 @@ public class LRUCache {
     }
 
     public LRUCache(int capacity) {
-        this.maxSize = capacity;
+        this.MAXSIZE = capacity;
+        this.map = new HashMap<>();
+        ;
+        this.size = 0;
+        this.head = this.tail = null;
     }
 
     public int get(int key) {
@@ -88,7 +95,7 @@ public class LRUCache {
             makeRecent(node);
         } else {
             Node node = new Node(key, value);
-            if (this.size == this.maxSize) {
+            if (this.size == this.MAXSIZE) {
                 removeNode(this.head);
             }
 
