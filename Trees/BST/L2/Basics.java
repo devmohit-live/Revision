@@ -251,7 +251,9 @@ public class Basics {
 
     }
 
-    //LC 669 : trim a bst 
+    // LC 669 : trim a bst
+    // Time Complexity =O(N)
+    // Space Complexity =O(N)
     public TreeNode trimBST(TreeNode root, int low, int high) {
         if (root == null)
             return null;
@@ -272,7 +274,5 @@ public class Basics {
 
         return root;
     }
-
-
 
 }

@@ -1,5 +1,6 @@
 import java.util.HashMap;
 
+//LC : 146
 public class LRUCache {
 
     private class Node {
@@ -47,7 +48,7 @@ public class LRUCache {
     }
 
     private void makeRecent(Node node) {
-        Node recent = new Node(node.key, node.val);
+        Node recent = new Node(node.key, node.val); // to have new address
         removeNode(node);
 
         addLast(recent);
@@ -74,7 +75,6 @@ public class LRUCache {
     public LRUCache(int capacity) {
         this.MAXSIZE = capacity;
         this.map = new HashMap<>();
-        ;
         this.size = 0;
         this.head = this.tail = null;
     }
