@@ -1,0 +1,31 @@
+/**
+ * TinyURLEncodeAndDecode
+ */
+// Leetcode 535
+public class TinyURLEncodeAndDecode {
+    Map<String, String> codeDB = new HashMap<>(), urlDB = new HashMap<>();
+    static final String chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+    private String getCode() {
+        char[] code = new char[6]; // example says 6 digits but we can have it to any no. of digits
+        for (int i = 0; i < 6; i++)
+            code[i] = chars.charAt((int) Math.random() * 62);
+        return "http://tinyurl.com/" + String.valueOf(code);
+    }
+
+    public String encode(String longUrl) {
+        if (urlDB.containsKey(longUrl))
+            return urlDB.get(longUrl);
+        String code = getCode();
+        // while this is not a uniques 6 digit number
+        while (codeDB.containsKey(code))
+            code = getCode();
+        codeDB.put(code, longUrl);
+        urlDB.put(longUrl, code);
+        return code;
+    }
+
+    public String decode(String shortUrl) {
+        return codeDB.get(shortUrl);
+    }
+}
