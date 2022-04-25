@@ -467,4 +467,77 @@ public class dsuQuestions {
 
     }
 
+    // 1584 : Min Cost to connect All Points
+    private class Pair implements Comparable<Pair> {
+        int i, j, dist;
+
+        Pair(int i, int j, int dist) {
+            this.i = i;
+            this.j = j;
+            this.dist = dist;
+        }
+
+        @Override
+        public int compareTo(Pair o) {
+            return this.dist - o.dist;
+        }
+
+        @Override
+        public String toString() {
+            return this.i + " " + this.j + " " + this.dist;
+        }
+    }
+
+    public int minCostConnectPoints(int[][] points) {
+        if (points == null || points.length == 0 || points[0].length == 0)
+            return 0;
+        int n = points.length, edges = n - 1;
+
+        PriorityQueue<Pair> pq = new PriorityQueue<>(); // minpq
+        // create all possible edges (dense graph)
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                Pair p = new Pair(i, j, distance(points, i, j));
+                pq.add(p);
+            }
+        }
+        int cost = 0, edgesCount = 0;
+        int[] parent = new int[n];
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+        }
+
+        while (edgesCount != edges) {
+            // union
+            Pair p = pq.remove();
+            int i = p.i, j = p.j, dist = p.dist;
+
+            int parA = findPar(parent, i);
+            int parB = findPar(parent, j);
+
+            if (parA == parB)
+                continue;
+            else {
+                parent[parB] = parA;
+                edgesCount++;
+                cost += dist;
+            }
+
+        }
+
+        return cost;
+    }
+
+    private int findPar(int[] parent, int idx) {
+        if (parent[idx] == idx)
+            return idx;
+        return parent[idx] = findPar(parent, parent[idx]);
+    }
+
+    private int distance(int[][] points, int i, int j) {
+        int x = (int) Math.abs(points[i][0] - points[j][0]);
+        int y = (int) Math.abs(points[i][1] - points[j][1]);
+        return x + y;
+    }
+
 }

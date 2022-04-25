@@ -13,7 +13,7 @@ public class TypeCheck
 		d.add(new ArrayList<>(new ArrayList<>(Arrays.asList(7,8,9))) );
 		System.out.println(a instanceof Integer);
 // 		System.out.println(x instanceof Integer); // error : x:int not Integer
-// 		System.out.println(a instanceof Double); // error  Integer cannot be converted to Double
+// 		System.out.println(a instanceof Double); // error  Integer cannot be converted to Double //works with if(returns true and false)
 // 		System.out.println(a instanceof Float); //error  Integer cannot be converted to Float
     	System.out.println(m instanceof Double);
     // 	System.out.println(m instanceof Integer); error
