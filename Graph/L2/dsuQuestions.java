@@ -540,4 +540,56 @@ public class dsuQuestions {
         return x + y;
     }
 
+    // 1202 :  Smallest String With Swaps
+    // Why not with permutation : bcz it its stated that swapping of pairs can be
+    // done any no of times
+    public String smallestStringWithSwaps(String s, List<List<Integer>> pairs) {
+        char[] arr = s.toCharArray();
+        int[] par = new int[arr.length];
+        for (int i = 0; i < par.length; i++)
+            par[i] = i;
+
+        // union = samllest one will be parent
+        // pairs => graph with a pair defines an undirected edge bw two nodes
+        for (List<Integer> pair : pairs) {
+            int src = pair.get(0), des = pair.get(1);
+            int parA = findParent(par, src), parB = findParent(par, des);
+            if (parA != parB) {
+                par[parB] = parA;
+            }
+        }
+
+        // to set all ids to the root parent
+        for (int i = 0; i < par.length; i++)
+            par[i] = findParent(par, i);
+
+        // devide them into gorups/connected componenets
+        // now make the map to have unique parent(root) pointing to all the characters
+        // belonging to that parent(use pq to have them in sorted order)
+        // so we don't need to sort the list every time
+        Map<Integer, PriorityQueue<Character>> map = new HashMap<>(); // root: chars belonging to the root
+
+        for (int i = 0; i < arr.length; i++) {
+            char ch = arr[i];
+            int key = par[i];
+            map.putIfAbsent(key, new PriorityQueue<Character>());
+            map.get(key).add(ch);
+        }
+
+        // System.out.println(Arrays.toString(par));
+        // System.out.println(map);
+
+        // Now create a String having those conponents characters according to the
+        // original string
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < arr.length; i++) {
+            int root = par[i];
+            char correspondingSortedChar = map.get(root).remove(); // that' swhy we have sorted them // used pq
+            sb.append(correspondingSortedChar);
+        }
+
+        return sb.toString();
+
+    }
+
 }
