@@ -540,9 +540,11 @@ public class dsuQuestions {
         return x + y;
     }
 
-    // 1202 :  Smallest String With Swaps
+    // 1202 : Smallest String With Swaps
     // Why not with permutation : bcz it its stated that swapping of pairs can be
     // done any no of times
+
+    // Time : nlogn , Space: n
     public String smallestStringWithSwaps(String s, List<List<Integer>> pairs) {
         char[] arr = s.toCharArray();
         int[] par = new int[arr.length];
