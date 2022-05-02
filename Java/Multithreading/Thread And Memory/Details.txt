@@ -1,0 +1,14 @@
+Thread's shares same heap memory but each thread have it's own stack space
+
+ie. suppose if t1 and t2 are two thread runnign a functions on a class which prints 1 to 10 using loop like this:
+for(int i=0;i<10;i++)
+
+now i is a local variable (will be made in stack) so every thrad have it's own copy of i
+
+
+But what is the function was using an glbal/instance variable of class instead of local variable
+say class have a private variable p anf th fx is doing
+for(p=10;p>0;i--)
+
+now both the thread are using the same object to call a function so they share the same memory area so same p variable refrence
+hence the both will be making chnaes to same p variable
