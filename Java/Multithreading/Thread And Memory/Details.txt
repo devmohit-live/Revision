@@ -11,4 +11,4 @@ say class have a private variable p anf th fx is doing
 for(p=10;p>0;i--)
 
 now both the thread are using the same object to call a function so they share the same memory area so same p variable refrence
-hence the both will be making chnaes to same p variable
+hence the both will be making chnaes to same p variable : causing race condition
