@@ -1,0 +1,54 @@
+//     https://stackoverflow.com/questions/8579657/whats-the-difference-between-thread-start-and-runnable-run
+What's the difference between Thread start() and Runnable run()
+
+Question description example:
+
+class R1 implements Runnable {
+    public void run() { … }
+    …
+}
+
+class R2 implements Runnable {
+    public void run() { … }
+    …
+}
+
+Then what's the difference between this:
+
+public static void main() {
+    R1 r1 = new R1();
+    R2 r2 = new R2();
+
+    r1.run();
+    r2.run();
+}
+And this:
+
+public static void main() {
+    R1 r1 = new R1();
+    R2 r2 = new R2();
+    Thread t1 = new Thread(r1);
+    Thread t2 = new Thread(r2);
+
+    t1.start();
+    t2.start();
+}
+
+
+
+
+First example: No multiple threads. Both execute in single (existing) thread. No thread creation.
+
+R1 r1 = new R1();
+R2 r2 = new R2();
+
+r1 and r2 are just two different objects of classes that implement the Runnable interface and thus implement the 
+run() method. When you call r1.run() you are executing it in the current thread.
+
+Second example: Two separate threads.
+
+Thread t1 = new Thread(r1);
+Thread t2 = new Thread(r2);
+
+t1 and t2 are objects of the class Thread. When you call t1.start(), it starts a new thread and calls the run() method of r1 internally to execute it within that new thread.
+

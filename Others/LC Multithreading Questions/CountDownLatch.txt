@@ -1,0 +1,9 @@
+CountDownLatch class is a synchronization aid which allows one or more thread to wait until the mandatory operations are performed by other threads.
+
+CountDownLatch is initialized with a given count of threads which are required to be completed before the main thread.
+
+CountDownLatch.await() method block the main thread execution until the current count reaches to zero. the count is decremented using countDown() method by executing threads when their task is completed. Any call to await returns immediately once the count is 0.
+
+https://www.tutorialspoint.com/CountDownLatch-in-Java
+
+https://www.geeksforgeeks.org/countdownlatch-in-java/
