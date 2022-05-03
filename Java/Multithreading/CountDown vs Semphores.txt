@@ -1,0 +1,62 @@
+Short summary:
+
+Semaphore and CountDownLatch serves different purpose.
+
+Use Semaphore to control thread access to resource.
+
+Use CountDownLatch to wait for completion of all threads
+
+Semaphore definition from Javadocs:
+
+A Semaphore maintains a set of permits. Each acquire() blocks if necessary until a permit is available, and then takes it. Each release() adds a permit, potentially releasing a blocking acquirer.
+
+However, no actual permit objects are used; the Semaphore just keeps a count of the number available and acts accordingly.
+
+How does it work?
+
+Semaphores are used to control the number of concurrent threads that are using a resource.That resource can be something like a shared data, or a block of code (critical section) or any file.
+
+The count on a Semaphore can go up and down as different threads call acquire() and release(). But at any point of time, you can't have more number of threads greater than Semaphore count.
+
+Semaphore Use cases:
+
+Limiting concurrent access to disk (as performance degrades due to competing disk seeks)
+Thread creation limiting
+JDBC connection pooling / limiting
+Network connection throttling
+Throttling CPU or memory intensive tasks
+Have a look at this article for semaphore uses.
+
+CountDownLatch definition from Javadocs:
+
+A synchronization aid that allows one or more threads to wait until a set of operations being performed in other threads completes.
+
+How does it work?
+
+CountDownLatch works by having a counter initialized with number of threads, which is decremented each time a thread complete its execution. When count reaches to zero, it means all threads have completed their execution, and thread waiting on latch resume the execution.
+
+CountDownLatch Use cases:
+
+Achieving Maximum Parallelism: Sometimes we want to start a number of threads at the same time to achieve maximum parallelism
+Wait N threads to completes before start execution
+Deadlock detection.
+Have a look at this article to understand CountDownLatch concepts clearly.
+
+Have a look at Fork Join Pool at this article too. It has some similarities to CountDownLatch.
+
+Good example of CountdownLatch:
+
+final CountDownLatch countdown = new CountDownLatch(num_thread);
+
+for (int i = 0; i < num_thread; ++ i) {
+   Thread t= new Thread() {    
+      public void run() {
+         doSomething();
+         countdown.countDown();
+         System.out.printf("Waiting on %d other threads.",countdown.getCount());
+         countdown.await();     //waits until everyone reaches this point
+         finish();
+      }
+   };
+   t.start();
+}

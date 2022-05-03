@@ -4,6 +4,8 @@ CountDownLatch is initialized with a given count of threads which are required t
 
 CountDownLatch.await() method block the main thread execution until the current count reaches to zero. the count is decremented using countDown() method by executing threads when their task is completed. Any call to await returns immediately once the count is 0.
 
+Video: https://youtu.be/59oQfkdn5mA
+
 https://www.tutorialspoint.com/CountDownLatch-in-Java
 
 https://www.geeksforgeeks.org/countdownlatch-in-java/
