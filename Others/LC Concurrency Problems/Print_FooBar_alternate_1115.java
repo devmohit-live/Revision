@@ -28,9 +28,8 @@ class FooBar_UsingSemaphore {
     }
 }
 
-
-//Using Synchro and wait notify
-class FooBar_UsingWaitNotigyAndSynchro{
+// Using Synchro and wait notify
+class FooBar_UsingWaitNotigyAndSynchro {
     private int n;
     private boolean runFoo;
 
@@ -76,8 +75,61 @@ class FooBar_UsingWaitNotigyAndSynchro{
     }
 }
 
-//Using Retreant Lock and Contions with volatile : faster than synchro block
-//Retrant : use to acquire lock
-//conditions: used to send awwait and signal signals
-// volatile variable : for use according to the problems statements req : ex print alternate
+// Using Retreant Lock and Contions with volatile : faster than synchro block
+// Retrant : use to acquire lock
+// conditions: used to send awwait and signal signals
+// volatile variable : for use according to the problems statements req : ex
+// print alternate
+class FooBar_UsingReentrantLock_Conditions_volatile {
+    private int n;
+    private final Lock lock;
+    private Condition fooCondition, barCondition;
+    private volatile boolean fooTurn;
 
+    public FooBar_UsingReentrantLock_Conditions_volatile(int n) {
+        this.n = n;
+        this.fooTurn = true;
+        this.lock = new ReentrantLock();
+        this.fooCondition = lock.newCondition();
+        this.barCondition = lock.newCondition();
+    }
+
+    public void foo(Runnable printFoo) throws InterruptedException {
+
+        for (int i = 0; i < n; i++) {
+
+            try {
+                lock.lock();
+                if (!this.fooTurn) { // just like wait and notify
+                    fooCondition.await();
+                }
+                printFoo.run();
+                this.fooTurn = false;
+                barCondition.signal();
+            } finally {
+                lock.unlock();
+            }
+
+        }
+    }
+
+    public void bar(Runnable printBar) throws InterruptedException {
+
+        for (int i = 0; i < n; i++) {
+
+            try {
+                lock.lock();
+                if (this.fooTurn) { // just like wait and notify
+                    barCondition.await();
+                }
+                printBar.run();
+                this.fooTurn = true;
+                fooCondition.signal();
+
+            } finally {
+                lock.unlock();
+            }
+
+        }
+    }
+}
