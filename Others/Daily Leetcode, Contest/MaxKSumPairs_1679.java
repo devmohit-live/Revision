@@ -1,10 +1,14 @@
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * MaxKSumPairs_1679
  */
 public class MaxKSumPairs_1679 {
 
-    return
-    optimal(nums,k);
+    public int maxOperations(int[] nums, int k) {
+        return optimal(nums, k);
     }
 
     // Time : nlogn, Space: O(1)
