@@ -1,3 +1,8 @@
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 class FooBar_UsingSemaphore {
     private int n;
     Semaphore foo, bar;
@@ -100,7 +105,7 @@ class FooBar_UsingReentrantLock_Conditions_volatile {
 
             try {
                 lock.lock();
-                if (!this.fooTurn) { // just like wait and notify
+                if (!this.fooTurn) { // just like wait and notify: just notify uses while
                     fooCondition.await();
                 }
                 printFoo.run();

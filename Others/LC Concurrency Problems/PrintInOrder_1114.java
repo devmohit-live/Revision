@@ -1,3 +1,6 @@
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Semaphore;
+
 public class PrintInOrder_1114 {
     // Using CountDownLatch : easisest : but not recommended(as countdown latches' usecase is different)
     class Foo_UsingCountDownLatch {
