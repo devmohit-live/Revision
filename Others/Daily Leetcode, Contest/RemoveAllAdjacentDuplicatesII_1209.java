@@ -1,7 +1,8 @@
 public class RemoveAllAdjacentDuplicatesII_1209 {
 
     public String removeDuplicates(String s, int k) {
-        return usingPairClasAndStack(s, k);
+        // return usingPairClasAndStack(s, k);
+        return UsingStringBuilderOnly(s, k);
     }
 
     private usingPairClasAndStack(String s, int k){
@@ -36,6 +37,21 @@ public class RemoveAllAdjacentDuplicatesII_1209 {
         }
         
         return sb.reverse().toString();
+    }
+
+    private UsingStringBuilderOnly(String s, int k){
+        StringBuilder sb = new StringBuilder();
+        int[] count = new int[s.length()]; //to have freq of last word
+        
+        for(char ch : s.toCharArray()){
+            sb.append(ch);
+            int lastIdx = sb.length()-1;
+            count[lastIdx] = 1 + ((lastIdx>0 && sb.charAt(lastIdx) == sb.charAt(lastIdx-1) ) ? count[lastIdx-1] : 0);
+            if(count[lastIdx] >= k) 
+                sb.delete(sb.length()-k,sb.length());
+        }
+        
+        return sb.toString();
     }
 
 }
