@@ -1,0 +1,40 @@
+class TheDiningPhilosophers_12226java{
+    //Simplest
+    class DiningPhilosophers {
+    private boolean forks[];
+    private final int N = 5;
+    public DiningPhilosophers() {
+        this.forks = new boolean[5];
+        
+    }
+
+    // call the run() method of any runnable to execute its code
+    public void wantsToEat(int philosopher,
+                           Runnable pickLeftFork,
+                           Runnable pickRightFork,
+                           Runnable eat,
+                           Runnable putLeftFork,
+                           Runnable putRightFork) throws InterruptedException {
+        
+        synchronized(this){
+            int i = philosopher, j = (philosopher-1);
+            if(j<0) j = (N+j)%N;
+            boolean leftFork = forks[i];
+            boolean rightFork = forks[j];
+            
+            while(leftFork || rightFork) wait();
+            
+            forks[i] = forks[j] = true;
+            pickLeftFork.run();
+            pickRightFork.run();
+            eat.run();
+            putLeftFork.run();
+            putRightFork.run();
+            forks[i] = forks[j] = false;
+            notifyAll();
+            
+        }
+        
+    }
+}
+}
