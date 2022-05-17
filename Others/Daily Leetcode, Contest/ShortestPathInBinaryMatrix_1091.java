@@ -1,3 +1,5 @@
+import java.util.LinkedList;
+
 public class ShortestPathInBinaryMatrix_1091 {
     int[][] dir = { { 0, -1 }, { 0, 1 }, { -1, 0 }, { 1, 0 }, { -1, -1 }, { -1, 1 }, { 1, -1 }, { 1, 1 } };
 
