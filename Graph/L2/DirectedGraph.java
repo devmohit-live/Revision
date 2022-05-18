@@ -250,6 +250,14 @@ public class DirectedGraph {
 
     // Leetcode 329: Longest Increasing Path in a Matrix
     // Kahn's on 2 d matrix
+
+
+    // bfs in directed graph gives longest path : why?
+    // bcz it starts with all the points(vtx) that does't have any dependecies and
+    // reaches to a vtx(end) that has many dependevies at the last
+    // after clearing all of it's dependencoes on the way
+
+    // it is like keep running the bfs without any specific target
     int[][] dir = { { 0, -1 }, { 0, 1 }, { -1, 0 }, { 1, 0 } };
 
     public int longestIncreasingPath(int[][] matrix) {
