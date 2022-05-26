@@ -94,4 +94,46 @@ public class BSQ {
         return time <= maxTime;
     }
 
+    // LC 1011. Capacity To Ship Packages Within D Days
+
+    public int shipWithinDays(int[] weights, int days) {
+        if (weights == null || weights.length == 0 || days == 0)
+            return -1;
+
+        int max = -1, sum = 0;
+        for (int el : weights) {
+            max = Math.max(max, el);
+            sum += el;
+        }
+
+        int si = max, ei = sum;
+        // System.out.println(si+" "+ei);
+
+        while (si < ei) {
+            int mid = si + (ei - si) / 2;
+            if (isValidCapacityOfShip(weights, mid, days))
+                ei = mid;
+            else
+                si = mid + 1;
+        }
+
+        return ei;
+    }
+
+    private boolean isValidCapacityOfShip(int[] arr, int cap, int days) {
+        int d = 1, curr = 0; //
+        for (int el : arr) {
+            if (el > cap)
+                return false;
+
+            curr += el;
+            if (curr > cap) {
+                d++;
+                curr = el;
+            }
+        }
+
+        return d <= days;
+    }
+
 }
