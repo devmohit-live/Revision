@@ -60,4 +60,7 @@ public class BSQ {
         return sum <= threshold;
     }
 
+    //Lc 875 : Kokok Eating Bananas
+    
+
 }
