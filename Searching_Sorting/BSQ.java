@@ -60,7 +60,38 @@ public class BSQ {
         return sum <= threshold;
     }
 
-    //Lc 875 : Kokok Eating Bananas
-    
+    // Lc 875 : Kokok Eating Bananas
+    public int minEatingSpeed(int[] piles, int h) {
+        if (piles == null || piles.length == 0 || h < piles.length)
+            return -1;
+
+        int si = 1, ei = maximum(piles);
+        while (si < ei) {
+            int mid = si + (ei - si) / 2;
+            if (isValidSpeed(piles, mid, h))
+                ei = mid;
+            else
+                si = mid + 1;
+        }
+
+        return ei;
+    }
+
+    private int maximum(int[] arr) {
+        int max = Integer.MIN_VALUE;
+        for (int el : arr)
+            max = Math.max(max, el);
+        return max;
+    }
+
+    private boolean isValidSpeed(int[] arr, int speed, int maxTime) {
+        int time = 0;
+
+        for (int el : arr) {
+            time += (el + speed - 1) / speed; // to avoid ceil part time+=(int)Math.ceil(el*1.0/speed);
+        }
+
+        return time <= maxTime;
+    }
 
 }
