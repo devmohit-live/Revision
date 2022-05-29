@@ -5,9 +5,6 @@ class MaximumProductOfWordsLength.318{
         return approach1_bits(words);
     }
     
-    
-    private int 
-    
         
         //time: (n*k) : mask + n*n : calculaation of max : , totoal n*n
         //space : O(n)
