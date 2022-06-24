@@ -1,4 +1,7 @@
 import java.util.*;
+// Tarjan's runtime is faster than Kosaraju ans kosaraju take 3 traversal
+// targan takes 1 traversal so , tarjan is better in big graphs
+// Time : O(v+E) in both Kosa and Tarjan
 
 public class Tarjan_SCC {
     // similar to ap and edge//uses the fact that the for any set of nodes(forming a
