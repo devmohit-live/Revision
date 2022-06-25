@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Kosaraju {
+public class Kosaraju_SCC {
     // to get the strogly connected components: All cyclic path : 1 scc, 1 single
     // node: 1 scc
 
