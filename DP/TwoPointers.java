@@ -338,4 +338,57 @@ public class TwoPointers {
 
     }
 
+
+
+    // Max sum without adjacent elements
+    // https://practice.geeksforgeeks.org/problems/max-sum-without-adjacents2430/1/
+
+     int findMaxSum(int arr[], int n) {
+    //   int[] dp = new int[n];
+    //   Arrays.fill(dp,-1);
+    //   return mem(arr, n-1,dp);
+        // return tab(arr);
+        return optimized_2pointer(arr);
+    }
+    
+    private int optimized_2pointer(int[] arr){
+        final int n = arr.length;
+        int prev = arr[0], prev2 = 0;
+        //prev = dp[i-1], prev2 = dp[i-2];
+        for(int i=1;i<n;i++){
+            int pick = arr[i] + prev2;
+            int not_pick = 0 + prev;
+            int max = Math.max(pick, not_pick);
+            //just like fibonacci
+            prev2 = prev;
+            prev = max;
+        }
+        
+        return prev; //n-1
+    }
+    
+    private int tab(int[] arr){
+        final int ZERO = 0, n = arr.length;
+        int[] dp = new int[n];
+        
+        dp[0] = arr[0];
+        for(int i=1;i<n;i++){
+            int pick = arr[i] + ((i-2<0) ? ZERO : dp[i-2]);
+            int not_pick = 0 + dp[i-1];
+            dp[i] = Math.max(pick,not_pick);
+        }
+        return dp[n-1];
+    }
+    
+    private int mem(int[] arr, int idx, int[] dp){
+        if(idx == 0) return dp[idx] = arr[idx];
+        if(idx<0) return 0;
+        if(dp[idx]!=-1)return dp[idx];
+        
+        int pick = arr[idx] + mem(arr,idx-2, dp); //can't select idx-1 elemets
+        int not_pick = 0 + mem(arr, idx-1, dp);
+        return dp[idx] = Math.max(pick,not_pick);
+    }
+    
+
 }

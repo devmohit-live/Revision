@@ -88,7 +88,7 @@ public class MedianOfTwoSortedArrays_4 {
         double ans = -1.0;
         while (si <= ei) {
             int cut1 = si + (ei - si) / 2;// mid(for cut in A)
-            int cut2 = (total + 1) / 2 - cut1; // cut for B(1 indexed counting is stored in total not index)
+            int cut2 = (total + 1) / 2 - cut1; // cut for B(+1 as it removes the headache in case of even and odd length cases)
 
             // data points
             int left1 = cut1 - 1 < 0 ? MIN : A[cut1 - 1];
