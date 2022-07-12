@@ -1,7 +1,5 @@
 public class BuyAnsSellMultiple {
     // 122. Best Time to Buy and Sell Stock II
-    // no consecutive buys and sells are allowed(BB, SS => not allowed)
-
     public int maxProfit(int[] prices) {
         // memo
         // int[][] dp = new int[prices.length][2];
@@ -10,7 +8,8 @@ public class BuyAnsSellMultiple {
 
         // tabulation
         // return tabulation(prices);
-        return spaceOptimzation(prices);
+        // return spaceOptimzation(prices);
+        return spaceOptimzation2(prices);
     }
 
     private int recursion(int[] prices, int idx, int canBuy, int[][] dp) {
@@ -82,6 +81,35 @@ public class BuyAnsSellMultiple {
 
         // return dp[0][1];
         return next[1]; // ot curr[1] both will bw same
+
+    }
+
+    private int spaceOptimzation2(int[] prices) {
+        int n = prices.length;
+        // int[] next = new int[2], curr = new int[2]; -> can be broken into 4 variables
+        int nextBuying = 0, nextNotBuying = 0, currBuying = 0, currNotBuying = 0;
+        // next[0] = nextNotBuying, next[1] = nextBuying
+
+        for (int idx = n - 1; idx >= 0; idx--) {
+            for (int buy = 0; buy <= 1; buy++) {
+                // if canbuy
+                if (buy == 1)
+                    // option : can buy today , or will not buy today
+                    currBuying = Math.max(-prices[idx] + nextNotBuying, 0 + nextBuying);
+                else
+                    // 2 options : will sell today(and can buy next) or will not sell today
+                    currNotBuying = Math.max(prices[idx] + nextBuying, 0 + nextNotBuying);
+            }
+
+            // after very succcessfull iterartion
+
+            // next = curr;
+            nextBuying = currBuying;
+            nextNotBuying = currNotBuying;
+        }
+
+        // return dp[0][1];
+        return nextBuying; // ot curr[1] both will bw same
 
     }
 
