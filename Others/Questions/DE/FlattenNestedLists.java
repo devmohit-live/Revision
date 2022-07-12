@@ -36,6 +36,7 @@ public class FlattenNestedLists {
 
     //Using isArray:
     // https://www.geeksforgeeks.org/class-isarray-method-in-java-with-examples/
+    
 
     private static void flatten(List arr, int idx) {
         if (idx == arr.size())
