@@ -1,5 +1,5 @@
 public class Tree {
-    //max path sum 
+    // max path sum
     public int maxPathSum(TreeNode root) {
         return maxPathSum_(root).maxans;
     }
@@ -31,5 +31,6 @@ public class Tree {
 
         return myans;
     }
-        
+
+    // https:// www.geeksforgeeks.org/check-mirror-n-ary-tree/
 }
