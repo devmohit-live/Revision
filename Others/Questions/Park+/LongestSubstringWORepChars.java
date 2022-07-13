@@ -5,6 +5,8 @@ public class LongestSubstringWORepChars {
         return atMostKUniqueChars(s, k)[1] - atMostKUniqueChars(s, k - 1)[1];
     }
 
+
+    // https://www.lintcode.com/problem/386/
     // 0: maxlen of string having atmost k uniq chars
     // 1: no of string having atmost k unqiue chars
     private int[] atMostKUniqueChars(String s, int k) {
