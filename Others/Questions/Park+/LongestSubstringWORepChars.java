@@ -1,40 +1,32 @@
 import java.util.HashMap;
 
 public class LongestSubstringWORepChars {
-    // LC : 9
-    public int lengthOfLongestSubstring(String s) {
-        HashMap<Character, Integer> map = new HashMap<>();
+    private int exectKuniChars(String s, int k) {
+        return atMostKUniqueChars(s, k)[1] - atMostKUniqueChars(s, k - 1)[1];
+    }
 
-        int si = 0, ei = 0, n = s.length();
-        int max = 0;
-        while (ei < n) {
-            char ch = s.charAt(ei);
-            map.put(ch, map.getOrDefault(ch, 0) + 1);
-
-            // window size and hashmap size are equals: means all the characters are
-            // unique(single occurance)
-            if (ei - si + 1 == map.size()) {
-                max = Math.max(ei - si + 1, max);
+    // 0: maxlen of string having atmost k uniq chars
+    // 1: no of string having atmost k unqiue chars
+    private int[] atMostKUniqueChars(String s, int k) {
+        Map<Character, Integer> map = new HashMap<>();
+        int count = 0, right = 0, left = 0, len = s.length(), maxLen = 0;
+        while (right < len) {
+            map.put(s.charAt(right), map.getOrDefault(s.charAt(right), 0) + 1);
+            while (map.size() > k) { // constraint is violated so we start shrinking the left window to restore the
+                                     // constraint
+                map.put(s.charAt(left), map.get(s.charAt(left)) - 1);
+                if (map.get(s.charAt(left)) == 0)
+                    map.remove(s.charAt(left));
+                left++;
             }
 
-            // while the winow size > map (some chars must habe been repeated)
-            while (ei < n && ei - si + 1 > map.size()) {
-                char rm = s.charAt(si);
-                map.put(rm, map.get(rm) - 1);
-
-                if (map.get(rm) == 0)
-                    map.remove(rm);
-
-                si++;
-
-                max = Math.max(ei - si + 1, max);
-            }
-
-            ei++;
+            int currLen = right - left + 1;
+            maxLen = Math.max(maxLen, currLen); // this is a valid window [left, right] with at most K distinct elemetns
+            right++;
+            count += currLen; // this complete window an all of it's parts have <= k uniw chars
 
         }
-
-        return max;
+        return new int[] { maxLen, count };
     }
 
 }
