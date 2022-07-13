@@ -108,7 +108,7 @@ public class Construction {
             int lr = rm.lr, rr = rm.rr;
 
             int val = LevelOrder[idx];
-            // Important: first check if it is the the current paren node's range or not
+            // Important: first check if it is the the current parent node's range or not
             if (val > rr || val < lr)
                 continue;
 
@@ -157,7 +157,7 @@ public class Construction {
                                // right )
         // range for left and right in prefix
         // Inorder:
-        // left : si->root-, right: root+1->ei
+        // left : si->root-1, right: root+1->e
         // Preorder: psi => root in preorder
         // left: no of elemets in left subtree of inorder : rootidx - si :
         // psi+1->psi+tel
@@ -172,7 +172,7 @@ public class Construction {
         return root;
     }
 
-    public static TreeNode postInBT(int[] preorder, int[] inorder) {
+    public static TreeNode postInBT(int[] postorder, int[] inorder) {
         int n = inorder.length, m = postorder.length;
         if (n != m || n == 0)
             return null;
