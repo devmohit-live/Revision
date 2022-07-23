@@ -1,0 +1,88 @@
+/*
+    Time Complexity: O(N)
+    Space Complexity: O(N)
+
+    Where 'N' is the number of cells in the maze.
+*/
+
+import java.util.ArrayList;
+
+public class Solution
+{
+    static ArrayList<Integer> visited;
+    static ArrayList<Integer> positions;
+    static int res = 0;
+    static int totalLengthCovered = 0;
+
+    static void dfs(int arr[], int currentCell)
+    {
+        // If the current cell is already visited
+        if (visited.get(currentCell) == 1)
+        {
+            return;
+        }
+
+        // If there is no exit from this cell
+        if (arr[currentCell] == -1)
+        {
+            visited.set(currentCell, 1);
+            return;
+        }
+
+        // We have found a cycle.
+        if (positions.get(currentCell) != -1)
+        {
+            
+            // Update the maximum length.
+            res = Math.max(res, totalLengthCovered - positions.get(currentCell));
+            visited.set(currentCell, 1);
+            return;
+        }
+
+
+        positions.set(currentCell, totalLengthCovered);
+        
+        // Recur for the next cell.
+        totalLengthCovered++;
+        dfs(arr, arr[currentCell]);
+
+        // Mark the current cell as visited.
+        visited.set(currentCell, 1);
+        positions.set(currentCell, -1);
+}
+
+    public static int findLongestCycle(int[] arr)
+    {
+        int n = arr.length;
+
+        // For storing the visited vertices.
+        visited = new ArrayList<Integer>(n);
+        positions = new ArrayList<Integer>(n);
+
+        for (int i = 0; i < n; i++)
+        {
+            visited.add(0);
+            positions.add(-1);
+        }
+
+        res = 0;
+
+        // Iterate through the cells.    
+        for (int i = 0; i < n; i++)
+        {
+            if (visited.get(i) == 0)
+            {
+                totalLengthCovered = 0;
+                dfs(arr, i);
+            }
+        }
+
+        // There is no cycle
+        if (res == 0)
+        {
+            return -1;
+        }
+        
+        return res;
+    }
+}
