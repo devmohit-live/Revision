@@ -40,7 +40,7 @@ int[] maxFreq = getMaxFreq(freq2);
             calculateFreq(words[i], freq[i]);
         }
 }
- 
+
     private int[] getMaxFreq(int[][] freq) {
         int [] max F re q   = n ew i nt[26];
         for (int i = 0; i < 26; i++) {
@@ -49,10 +49,10 @@ int[] maxFreq = getMaxFreq(freq2);
                 max = Math.max(max, row[i]);
             }
             maxFreq[i] = max;
-}
-
-        return maxFreq;
     }
+    return maxFreq;
+    }
+
 private boolean isValid(int[] A, int[] B)  {
         for  (int  i  =   0 ; i < A.l engt h; i++) {
 
@@ -62,9 +62,8 @@ private boolean isValid(int[] A, int[] B)  {
         }
         return true;
 
-    private void calculateFreq(String word, int[] freq)  {
-        for  (char ch : word.toCharArray()
-           )  
+    private void calculateFreq(String word, int[] freq) {
+        for (char ch : word.toCharArray())
             freq[ch - 'a']++;
     }
 }
