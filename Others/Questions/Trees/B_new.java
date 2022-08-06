@@ -160,7 +160,7 @@ public class B_new {
 
         while (!q.isEmpty()) {
             Node rm = q.remove();
-            for (Node child : rm.children) {
+            for (Node child : rm.children) { 
                 while (child.isInUse)
                     ;
 
