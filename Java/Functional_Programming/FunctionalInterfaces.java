@@ -1,5 +1,6 @@
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -83,5 +84,6 @@ public class FunctionalInterfaces {
 
         int sum3 = numbers.stream().reduce(0, binaryOperator2);
         System.out.println("OP2: Custom Implemetation " + sum3);
-    }
+
+     }
 }
