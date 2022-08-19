@@ -206,7 +206,7 @@ public class RecursionTreePermComb {
         }
 
         int count = 0;
-        int prev = -1;
+        int prev = -1; 
         for (int i = idx; i < coins.length; i++) {
             if (tar - coins[i] >= 0 && coins[i] != prev) {
                 small.add(coins[i]);
