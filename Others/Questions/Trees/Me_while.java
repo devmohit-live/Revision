@@ -191,7 +191,7 @@ public class Me_while {
                 ans = ans || nodeslocked || checkDesc(child, id);
             }
         }
-        return true;
+        return ans;
     }
 
     private static void setDesc(Node node) {
