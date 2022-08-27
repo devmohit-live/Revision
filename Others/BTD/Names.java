@@ -1,10 +1,14 @@
 import java.util.Arrays;
 
 public class Names {
-    static String[] names = { "Steven XL", "Steven XVI", "David IX", "Mary XV", "Mary VIII", "Mary XX" };
+    // static String[] names = { "Steven XL", "Steven XVI", "David IX", "Mary XV",
+    // "Mary VIII", "Mary XX" };
+    static String[] names = { "Louis IX", "Louis VIII" };
 
     // op : {"David IX", "Mary VIII" , "Mary XV",, "MaryXX" ,"Steven XVI", "Steven
     // XL"};
+
+    //op { "Louis VIII",  "Louis IX" };
     static class Pair {
         String name, ans;
         int val;
