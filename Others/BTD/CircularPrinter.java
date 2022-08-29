@@ -9,12 +9,30 @@ public class CircularPrinter {
 
     }
 
-    public static int circularPrinter(String s) {
-        int[] dp = new int[s.length() + 1];
-        Arrays.fill(dp, MAX);
-        return solve(s, 0, 'A', dp);
+    public static long circularPrinter(String s) {
+        // int[] dp = new int[s.length()+1];
+        // Arrays.fill(dp, MAX);
+        // return solve(s,0,'A',dp);
+        return solve_Tab(s); // n
     }
 
+    // O(n)
+    private static long solve_Tab(String s) {
+        char currPtr = 'A';
+        long ans = 0;
+
+        for (char ch : s.toCharArray()) {
+            int clockWise = Math.abs(ch - currPtr);
+            int anti = 26 - clockWise;
+            int time = Math.min(clockWise, anti);
+            ans += time;
+            currPtr = ch;
+        }
+
+        return ans;
+    }
+
+    // full_proof
     private static int solve(String s, int idx, char currPtr, int[] dp) {
         if (idx == s.length())
             return 0;
