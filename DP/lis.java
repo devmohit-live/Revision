@@ -1,4 +1,6 @@
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class lis {
     static int[] arr = { 0, 8, 4, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15, 14 };
@@ -387,6 +389,17 @@ public class lis {
             max = Math.max(max, dp[i]);
         }
         return max;
+    }
+
+    public static LISBinarySearch(int[] arr){
+        List<Integer> piles = new ArrayList<>();
+        for(int num: arr){
+            int idx = Collections.binarySearch(piles, num);
+            if(idx < 0) idx = ~idx;
+            if(idx == piles.size()) piles.add(num);
+            else piles.set(idx, num); //update with new val 
+        }
+        return piles.size();
     }
 
     public static void main(String[] args) {
