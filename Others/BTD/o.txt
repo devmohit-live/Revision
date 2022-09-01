@@ -1,0 +1,19 @@
+Word ho present is keywords : true present in unsafe : false
+Word hall present is keywords : false present in unsafe : false
+Word sh present is keywords : true present in unsafe : true
+Word nam present is keywords : false present in unsafe : false
+Word shore present is keywords : true present in unsafe : false
+Expected ans :  [ 1,0,-1,0,1 ] got : [1, 0, -1, 0, 1]
+
+Word campi present is keywords : true present in unsafe : false
+Word fl present is keywords : true present in unsafe : true
+Word flip present is keywords : false present in unsafe : true
+Word flop present is keywords : true present in unsafe : false
+Word b present is keywords : true present in unsafe : false
+Expected ans :  [  1,-1,0,1,1 ] got : [1, -1, 0, 1, 1]
+
+Word a present is keywords : true present in unsafe : true
+Word aba present is keywords : true present in unsafe : false
+Word abb present is keywords : false present in unsafe : true
+Word aaaaa present is keywords : true present in unsafe : false
+Expected ans :  [  -1,1,0,1 ] got : [-1, 1, 0, 1]
