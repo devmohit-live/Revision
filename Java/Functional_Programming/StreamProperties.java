@@ -172,11 +172,14 @@ public class StreamProperties {
                 new Student(5, "Ravi", 6, "CS", 1, "B.SC")
 
         );
+
+        // Article: stackabuse.com/java-8-how-to-sort-list-with-stream-sorted/
         // sort student by default order
         st.stream().sorted().forEach(System.out::println);
         System.out.println("Reverse Order");
         st.stream().sorted(Comparator.reverseOrder()).forEach(System.out::println);
-        System.out.println("Custom sort of basis of Property of Student : Works on getters on directly on properties/variables");
+        System.out.println(
+                "Custom sort of basis of Property of Student : Works on getters on directly on properties/variables");
         System.out.println("Phone : ");
         st.stream().sorted(Comparator.comparingLong(Student::getPhone)).forEach(System.out::println);
         System.out.println("Name : ");

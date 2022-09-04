@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class Basic {
     // print all even numbers
@@ -21,6 +23,7 @@ public class Basic {
         // System.out.println(calculateSum(nums));
         System.out.println(calculateMin(nums));
         sumofSqaures(nums);
+        collectingStreams();
     }
 
     private static boolean isEvene(int num) {
@@ -63,4 +66,25 @@ public class Basic {
         long ans = nums.stream().map(x -> x * x).reduce(0, Integer::sum);
         System.out.println(ans);
     }
+
+    private static void collectingStreams() {
+        // creating list/arrays from streams
+        List<Integer> nums = Arrays.asList(10, 9, 13, 4, -2, -8, 1, 15, 17);
+        List<Integer> doubleNums = doubleList(nums);
+        System.out.println(doubleNums);
+
+        // to Arrays
+        int[] arr = tripleEl(nums);
+        System.out.println(Arrays.toString(arr));
+
+    }
+
+    private static List<Integer> doubleList(List<Integer> inp) {
+        return inp.stream().map(x -> 2 * x).collect(Collectors.toList());
+    }
+
+    private static int[] tripleEl(List<Integer> inp) {
+        return inp.stream().filter(x -> x % 2 == 0).map(x -> 3 * x).mapToInt(x -> (int) x).toArray();
+    }
+
 }
