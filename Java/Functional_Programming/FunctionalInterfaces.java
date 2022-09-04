@@ -1,5 +1,6 @@
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -57,6 +58,30 @@ public class FunctionalInterfaces {
         };
 
         numbers.stream().filter(predicate2).map(function2).forEach(consumer2);
+        System.out.println();
 
+        // Wroking with termial functions : produces single or not outpur : ex: forEch:
+        // no op, reduce : single op(for complete stream)
+        int sum = numbers.stream().reduce(0, (a, b) -> a + b);
+        System.out.println("OP!: " + sum);
+
+        // BinaryOperator : takes two arguments and returns 1 : it internally extends
+        // BiFunction
+
+        BinaryOperator<Integer> binaryOperator = (a, b) -> a + b;
+        int sum2 = numbers.stream().reduce(0, binaryOperator);
+        System.out.println("OP2: Extraction " + sum2);
+
+        BinaryOperator<Integer> binaryOperator2 = new BinaryOperator<Integer>() {
+
+            @Override
+            public Integer apply(Integer a, Integer b) {
+                return a + b;
+            }
+
+        };
+
+        int sum3 = numbers.stream().reduce(0, binaryOperator2);
+        System.out.println("OP2: Custom Implemetation " + sum3);
     }
 }
