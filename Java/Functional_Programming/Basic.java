@@ -20,6 +20,7 @@ public class Basic {
 
         // System.out.println(calculateSum(nums));
         System.out.println(calculateMin(nums));
+        sumofSqaures(nums);
     }
 
     private static boolean isEvene(int num) {
@@ -56,5 +57,10 @@ public class Basic {
                                                                                                       // element
         // map,filter,reduce : perform some operations aans carry forward
 
+    }
+
+    private static void sumofSqaures(List<Integer> nums) {
+        long ans = nums.stream().map(x -> x * x).reduce(0, Integer::sum);
+        System.out.println(ans);
     }
 }
