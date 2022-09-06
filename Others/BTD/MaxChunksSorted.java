@@ -3,7 +3,7 @@
  */
 public class MaxChunksSorted {
 
-    //LC : 
+    //LC : 768
     public int maxChunksToSorted(int[] arr) {
         // array to be finally sorted, sorted after division into each chunks
         // sorted at any point => max of left <= min of right
@@ -20,7 +20,6 @@ public class MaxChunksSorted {
         for (int i = n - 2; i >= 0; i--)
             minOfRight[i] = Math.min(minOfRight[i + 1], arr[i]);
 
-        boolean selfSorted = true;
         for (int i = 0; i < n - 1; i++) {
             if (minOfRight[i + 1] >= maxOfLeft[i])
                 ans++;
