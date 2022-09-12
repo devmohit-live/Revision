@@ -1,6 +1,9 @@
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class StreamProperties {
 
@@ -132,7 +135,7 @@ public class StreamProperties {
     }
 
     public static void main(String[] args) {
-        List<Integer> nums = Arrays.asList(10, 9, 9, 9, 9, 9, -1, -1, 1, -1, 1, 13, 4, -2, -8, 1, 15, 17);
+        List<Integer> nums = Arrays.asList(10, 12, 13,14,5, 6, 7, 9, 9, 9, 9, 9, -1, -1, 1, -1, 1, 13, 4, -2, -8, 1, 15, 17);
         List<String> courses = Arrays.asList("API", "Microservices", "Java", "Locker", "Mocker", "Maven", "C++",
                 "Kubernetes", "Docker", "Python", "Linux");
         nums.stream().distinct().forEach(System.out::println);
@@ -187,6 +190,54 @@ public class StreamProperties {
         System.out.println("Year in Reverse Order : ");
         st.stream().sorted(Comparator.comparing(Student::getYear).reversed()).forEach(System.out::println);
 
+        // Using .thenComparing for Custom Sorting on multiple attributes
+        // ex: sort on basis of Course in descending and the sort in order of id
+
+        Comparator<Student> myComp = Comparator.comparing(Student::getCouse).reversed().thenComparing(Student::getId);
+        List<Student> sortedSt = st.stream().sorted(myComp).collect(Collectors.toList());
+        System.out.println("\nSorted st using cutom comparaotr ny using .thenComparing ");
+        sortedSt.stream().forEach(System.out::println);
+        System.out.println();
+
+        // Not reliable : use your own compartor like you always do
+        // ex: sort on basis of Course in descending and the sort in order of names des
+        Comparator<Student> myComp2 = Comparator.comparing(Student::getCouse).reversed().thenComparing(Student::getName)
+                .thenComparing(Comparator.reverseOrder());
+
+        List<Student> soted2 = st.stream().sorted(myComp2).collect(Collectors.toList());
+        soted2.stream().forEach(System.out::println);
+        System.out.println();
+
+        System.out.println();
+
+        // ************************************************
+        // Straeam Prop : allMathc, noneMath, anyMatch
+        Predicate<Student> p = x -> x.getName().length() < 10;
+        System.out.println("All student have name length < 10 " + st.stream().allMatch(p));
+        System.out.println("None student have name length < 10 " + st.stream().noneMatch(p));
+        System.out.println("Any student whose name length < 10 " + st.stream().anyMatch(p));
+
+        // ***********************************
+        // limit skip on answers
+
+        System.out.println(st.stream().limit(2).collect(Collectors.toList()));
+        System.out.println(st.stream().skip(2).collect(Collectors.toList()));
+        System.out.println(st.stream().skip(2).limit(2).collect(Collectors.toList()));
+        System.out.println(st.stream().limit(3).skip(1).collect(Collectors.toList()));
+
+        // ************************************
+
+        // TakeWhile: take elemets while predicate is true : stop on encounterig the
+        // first false: just like while
+
+        // Dropwhile: oppsite of takehilw => skips elemts while condition is true and
+        // take all the elemets after that (wheteher they mathc criteria or not)
+
+        // Baiscally both works untile first falacity
+        System.out.println("\nTake While");
+        System.out.println(nums.stream().takeWhile(x -> x > 5).collect(Collectors.toList()));
+        System.out.println("\nDrop While");
+        System.out.println(nums.stream().dropWhile(x -> x > 5).collect(Collectors.toList()));
     }
 
 }
