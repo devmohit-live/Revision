@@ -24,6 +24,11 @@ public class Basic {
         System.out.println(calculateMin(nums));
         sumofSqaures(nums);
         collectingStreams();
+
+        differentType(Arrays.asList(1, 2, 3, 4, 5, 6));
+
+        differentType(new Integer[] { 1, 2, 3, 4, 5, 6 });
+        // differentType(new int[] { 1, 2, 3, 4, 5, 6 });
     }
 
     private static boolean isEvene(int num) {
@@ -86,5 +91,21 @@ public class Basic {
     private static int[] tripleEl(List<Integer> inp) {
         return inp.stream().filter(x -> x % 2 == 0).map(x -> 3 * x).mapToInt(x -> (int) x).toArray();
     }
+
+    private static void differentType(List<Integer> inp) {
+        List<String> s = inp.stream().map(x -> Integer.toBinaryString((int) x)).collect(Collectors.toList());
+        System.out.println(s);
+    }
+
+    private static void differentType(Integer[] inp) {
+        List<String> s = Arrays.stream(inp).map(x -> Integer.toBinaryString((int) x)).collect(Collectors.toList());
+        System.out.println(s);
+    }
+
+    // private static void differentType(int[] inp) {
+    // Arrays.stream(inp).map(x ->
+    // Integer.toBinaryString(x)).forEach(System.out::println);
+    // gives type mismathc in case of primitives : from int to String
+    // }
 
 }

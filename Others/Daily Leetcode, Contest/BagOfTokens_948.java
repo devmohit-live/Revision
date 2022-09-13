@@ -1,3 +1,7 @@
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Deque;
+
 class BagOfToken_948 {
      public int bagOfTokensScore(int[] tokens, int power) {
         // return usingDequeue(tokens,power);
