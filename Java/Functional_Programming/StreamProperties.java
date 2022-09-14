@@ -134,8 +134,15 @@ public class StreamProperties {
 
     }
 
+    static List<Student> st = Arrays.asList(new Student(1, "Mohit", 9, "IT", 4, "B.Tech"),
+            new Student(2, "Shobhit", 7, "CS", 83, "B.Tech"), new Student(3, "Payal", 5, "IT", 7, "B.Tech"),
+            new Student(5, "Ravi", 6, "CS", 1, "B.SC")
+
+    );
+
     public static void main(String[] args) {
-        List<Integer> nums = Arrays.asList(10, 12, 13,14,5, 6, 7, 9, 9, 9, 9, 9, -1, -1, 1, -1, 1, 13, 4, -2, -8, 1, 15, 17);
+        List<Integer> nums = Arrays.asList(10, 12, 13, 14, 5, 6, 7, 9, 9, 9, 9, 9, -1, -1, 1, -1, 1, 13, 4, -2, -8, 1,
+                15, 17);
         List<String> courses = Arrays.asList("API", "Microservices", "Java", "Locker", "Mocker", "Maven", "C++",
                 "Kubernetes", "Docker", "Python", "Linux");
         nums.stream().distinct().forEach(System.out::println);
@@ -238,6 +245,39 @@ public class StreamProperties {
         System.out.println(nums.stream().takeWhile(x -> x > 5).collect(Collectors.toList()));
         System.out.println("\nDrop While");
         System.out.println(nums.stream().dropWhile(x -> x > 5).collect(Collectors.toList()));
+
+        aggregateProperties();
+    }
+
+    private static void aggregateProperties() {
+        List<Integer> nums = Arrays.asList(10, 12, 13, 14, 5, 6, 7, 9, 9, 9, 9, 9, -1, -1, 1, -1, 1, 13, 4, -2, -8, 1,
+                15, 17);
+        List<String> courses = Arrays.asList("API", "Microservices", "Java", "Locker", "Mocker", "Maven", "C++",
+                "Kubernetes", "Docker", "Python", "Linux");
+
+        // Aggreate functions return OptionalType as an default ans and the actuala ans
+        // is also wrapped in Optional Conver
+        // we can provide the Optional.empty replacement value too
+
+        // Takes comparator : default or custom : max on which criteria
+
+        System.out.println(nums.stream().max(Comparator.naturalOrder()));
+
+        Comparator<Student> myComp = Comparator.comparing(Student::getCouse).reversed().thenComparing(Student::getId);
+        System.out.println(st.stream().max(myComp));
+
+        // Optionals are way to handle null
+        // example: on filterning no result is there so min must give Optional.empty
+        // instead of null
+        System.out.println(nums.stream().filter(x -> x > 9999).min(Comparator.naturalOrder()));
+
+        // Providing default values for empty
+        System.out.println(nums.stream().filter(x -> x > 9999).min(Comparator.naturalOrder()).orElse(-1));
+
+        // find the avg marks of students from B.tech whose score > 50
+        Predicate<Student> btechScoreGt50 = x -> (x.getBranch().equals("B.Tech") && x.getYear() > 50);
+        System.out.println(st.stream().filter(btechScoreGt50).mapToInt(Student::getYear).sum());
+
     }
 
 }
