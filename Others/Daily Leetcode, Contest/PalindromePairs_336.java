@@ -244,6 +244,13 @@ public class PalindromePairs_336 {
     // Using HashMap and TreeSet : Fastest
     public List<List<Integer>> palindromePairsUsingTreeSet(String[] words) {
         HashMap<String, Integer> wordMap = new HashMap<>();
+        // Set keeps the owrd lengths in sorted order : so that we can break as soon as
+        // we found the string we are trying to make pair with according to condtion 3,4
+        // whose length is >= mine
+        // as I am checking for substring whithin me so next string should be a prt
+        // (proper subset)(length<=min)(
+        // so no use of checing further strings
+        // )
         Set<Integer> set = new TreeSet<>();
         int n = words.length;
 
@@ -254,10 +261,13 @@ public class PalindromePairs_336 {
 
         List<List<Integer>> ans = new ArrayList<>();
 
+        // System.out.println(set);
+
         for (int i = 0; i < n; i++) {
             int length = words[i].length();
-
-            if (length == 1) {
+            // For Optimal check : reverse thing will do the work but not needed
+            if (length == 1) { // as single word can only form palindrome pair with space
+                // ans it is stated in question that every word in unique
                 if (wordMap.containsKey("")) {
                     ans.add(Arrays.asList(i, wordMap.get("")));
                     ans.add(Arrays.asList(wordMap.get(""), i));
@@ -269,15 +279,19 @@ public class PalindromePairs_336 {
                 ans.add(Arrays.asList(i, wordMap.get(reverse)));
 
             for (Integer k : set) {
-                if (k == length)
+                // System.out.println(words[i]+" len "+length+" k "+k);
+                if (k == length) {
+                    // System.out.println("Breaking at above condition");
                     break;
-                if (isPalindrome(reverse, 0, length - 1 - k)) {
+                }
+
+                if (isPal(reverse, 0, length - 1 - k)) {
                     String s1 = reverse.substring(length - k);
                     if (wordMap.containsKey(s1))
                         ans.add(Arrays.asList(i, wordMap.get(s1)));
                 }
 
-                if (isPalindrome(reverse, k, length - 1)) {
+                if (isPal(reverse, k, length - 1)) {
                     String s2 = reverse.substring(0, k);
                     if (wordMap.containsKey(s2))
                         ans.add(Arrays.asList(wordMap.get(s2), i));
