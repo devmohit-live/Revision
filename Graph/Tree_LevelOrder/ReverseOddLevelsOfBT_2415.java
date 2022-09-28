@@ -38,7 +38,25 @@ public class ReverseOddLevelsOfBT_2415 {
             node.val = vals[j--]; // set in reverse order
     }
 
+    // Using DFS
+    public TreeNode reverseOddLevelsUsingDFS(TreeNode root) {
+        dfs(root.left, root.right, 1);
+        return root;
+    }
 
-    //Using DFS
-    
+    private void dfs(TreeNode leftNode, TreeNode rightNode, int level) {
+        if (leftNode == null || rightNode == null)
+            return;
+
+        if ((level & 1) == 1) {
+            int tmp = rightNode.val;
+            rightNode.val = leftNode.val;
+            leftNode.val = tmp;
+        }
+
+        // from outside to inside
+        dfs(leftNode.left, rightNode.right, level + 1);
+        dfs(leftNode.right, rightNode.left, level + 1);
+    }
+
 }
