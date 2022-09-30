@@ -8,7 +8,7 @@ class FindKClosestElement_658{
 
     private List<Integer> usingPQ(int[] arr, int k , int x){
         PriorityQueue<Integer> pq = new PriorityQueue<>((a,b)->{
-            int d1 = Math.abs(a-x);
+            int d1 = Math.abs(a-x); 
             int d2 = Math.abs(b-x);
             if(d1 == d2) return b-a; //remove b(greater)
             return d2 - d1;
