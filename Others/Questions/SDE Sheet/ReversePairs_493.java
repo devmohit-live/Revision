@@ -1,4 +1,4 @@
-class ReversePairs_493 {
+class ReversePairs_493  {
     public int reversePairs(int[] nums) {
         return mergeSort(nums, 0 , nums.length-1);
     }
