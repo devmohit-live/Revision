@@ -27,4 +27,41 @@ public class LongestConsecutiveSeq {
 
         return max;
     }
+
+    // using concept of start point : as previous on id giving tle in ninja
+    private int maxLength(int[] arr) {
+        int mx = 0;
+
+        // To store the length of current consecutive Sequence.
+        int count = 0;
+
+        // To store all the unique elements of array.
+        HashSet<Integer> set = new HashSet<>();
+
+        for (Integer element : arr) {
+            set.add(element);
+        }
+
+        for (Integer element : arr) {
+            int previousConsecutiveElement = element - 1;
+
+            if (!set.contains(previousConsecutiveElement)) {
+
+                // Element is the first value of consecutive sequence.
+                int j = element;
+
+                while (set.contains(j)) {
+                    // The next consecutive element by will be j + 1.
+                    j++;
+                }
+
+                // Update maximum length of consecutive sequence.
+                mx = Math.max(mx, j - element);
+            }
+
+        }
+
+        return mx;
+    }
+
 }
