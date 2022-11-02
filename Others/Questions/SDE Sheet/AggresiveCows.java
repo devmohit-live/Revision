@@ -43,12 +43,12 @@ public class AggresiveCows {
     private static boolean isValidMinDistance(int[] arr, int minDist, int cows) {
         int n = arr.length;
         int cowsPlaced = 1; // we have placed this cow at 0th postiton
-        int placedAt = arr[0];
+        int lastPlaced = arr[0]; //last placed at
 
         for (int i = 1; i < n; i++) {
-            if (arr[i] - placedAt >= minDist) {
+            if (arr[i] - lastPlaced >= minDist) {
                 cowsPlaced++;
-                placedAt = arr[i];
+                lastPlaced = arr[i];
             }
 
         }

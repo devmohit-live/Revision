@@ -43,7 +43,7 @@ public class MedianOfSortedArrays {
         return arr;
     }
 
-    //Bas Approach : m+n log m+n
+    //Bad Approach : m+n log m+n
     // n+m=>Q , Qlog(Q) + Q/4(log(Q/4))(balacing from left to right max->min)
     // +Q/3(log(q/3))(balacing from right to left max->min) - Q/12(log(q/12))(coomon
     // counted twice)
@@ -81,6 +81,8 @@ public class MedianOfSortedArrays {
         // System.out.println("PQ 2 (min) is " + min);
     }
 
+
+    //Correct
     private double optimal(int[] A, int[] B) {
         int n = A.length, m = B.length;
         // apply bs on smaller Array to execute it faster
