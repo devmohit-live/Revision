@@ -44,7 +44,7 @@ public class Morris {
                     // delete thread
                     rightmostNode.right = null;
                     // print curr
-                    ans.add(curr.val);
+                    ans.add(curr.val); // this line will be moved in thread creation in case of preorder
                     curr = curr.right;
                 }
 

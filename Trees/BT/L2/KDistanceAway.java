@@ -80,7 +80,7 @@ public class KDistanceAway {
 
         int rd = node2rootPath2(node.right, data, k, res);
         if (rd != -1) {
-            // it means we have found data in left side
+            // it means we have found data in right side
             kDown2(node, k - rd, node.right, res);
             return rd + 1;
         }
