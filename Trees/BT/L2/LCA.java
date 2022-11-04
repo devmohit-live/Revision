@@ -1,3 +1,5 @@
+import javax.swing.tree.TreeNode;
+
 public class LCA {
     // LC : 236
 
@@ -80,5 +82,43 @@ public class LCA {
 
         return self || left || right;
 
+    }
+
+    // Directly getting Node: 
+    TreeNode lca_directNode(TreeNode root, int a, int b) {
+        if (root == null)
+            return root;
+        if (root.data == a || root.data == b)
+            return root;
+
+        TreeNode l = lclca_directNodea(root.left, a, b);
+        TreeNode r = lca_directNode(root.right, a, b);
+        if (l != null && r != null)
+            return root;
+
+        return l != null ? l : r;
+    }
+
+    // Directly getting Node:
+    TreeNode lca_directNode_edgecase(TreeNode root, int a, int b) {
+        if (root == null)
+            return root;
+
+        TreeNode left = null, right = null;
+        if (root.data == a || root.data == b){
+            if(a==b){
+                //both are same
+                left = right = root;
+                return root;
+            }
+        }
+
+        left = left == null ? lca_directNode_edgecase(root.left, a, b): left;
+        right = right == null ? lca_directNode_edgecase(root.right, a, b): right;
+        
+        if (l != null && r != null)
+            return root;
+
+        return l != null ? l : r;
     }
 }

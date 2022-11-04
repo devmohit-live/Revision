@@ -22,4 +22,33 @@ public class MinStepsToMakePalindrome {
         return dp[n][m] = Math.max(lcs(a, b, dp, n - 1, m), lcs(a, b, dp, n, m - 1));
 
     }
+
+    // Min chars required to maek string palindrome : InterviewBit: KMP
+
+    public int solve(String A) {
+        int len = A.length();
+        String reverse = new StringBuilder(A).reverse().toString();
+        A = A + "$" + reverse;
+        return len - KMP(A);
+    }
+
+    public static int KMP(String s) {
+        int m = s.length();
+        int lps[] = new int[m];
+        int i = 1, len = 0;
+        lps[0] = 0;
+        while (i < m) {
+            if (s.charAt(i) == s.charAt(len)) {
+                len++;
+                lps[i] = len;
+                i++;
+            } else if (len != 0) {
+                len = lps[len - 1];
+            } else {
+                lps[i] = 0;
+                i++;
+            }
+        }
+        return lps[m - 1];
+    }
 }
