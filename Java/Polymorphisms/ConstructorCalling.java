@@ -23,6 +23,13 @@ public class ConstructorCalling {
         System.out.print(" B z = new C(); ");
         B z = new C();
         System.out.println();
+        System.out.print(" D z = new D(); with super() in constr");
+        D z = new D();
+        System.out.println();
+
+        System.out.print(" A k = new D(); with super() in constr");
+        A k = new D();
+        System.out.println();
 
     }
 }
@@ -42,5 +49,12 @@ class B extends A {
 class C extends B {
     C() {
         System.out.println("This is C's Constructor");
+    }
+}
+
+class D extends C {
+    D() {
+        super();
+        System.out.println("This is D's Constructor");
     }
 }
