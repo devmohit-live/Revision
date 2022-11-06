@@ -23,11 +23,11 @@ public class ConstructorCalling {
         System.out.print(" B z = new C(); ");
         B z = new C();
         System.out.println();
-        System.out.print(" D z = new D(); with super() in constr");
-        D z = new D();
+        System.out.print(" D l = new D(); with super() in constr call ");
+        D l = new D();
         System.out.println();
 
-        System.out.print(" A k = new D(); with super() in constr");
+        System.out.print(" A k = new D(); with super() in constr call ");
         A k = new D();
         System.out.println();
 
