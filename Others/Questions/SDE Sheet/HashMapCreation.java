@@ -15,6 +15,7 @@ public class HashMapCreation {
         System.out.println(map.remove(5));
         System.out.println(map.put(2, 25));
         System.out.println(map.putIfAbsent(11, 99));
+        
         System.out.println(map.put(-1, -100));
         System.out.println(map);
     }
